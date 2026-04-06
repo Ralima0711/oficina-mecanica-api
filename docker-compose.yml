@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: oficina_app
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - oficina_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: oficina_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - oficina_network
+
+  db:
+    image: postgres:15-alpine
+    container_name: oficina_db
+    environment:
+      POSTGRES_DB: oficina_mecanica
+      POSTGRES_USER: oficina_user
+      POSTGRES_PASSWORD: oficina_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - oficina_network
+
+networks:
+  oficina_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
