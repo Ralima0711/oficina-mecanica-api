@@ -54,3 +54,18 @@ Cobertura mínima exigida: **80%**
 | Gustavo Delfino | DDD/Docs | @GustavoDell |
 | David Tavares | Dev - Ordens de Serviço | @dvdt101 |
 | Johny | Dev - Gestão | — |
+
+## Banco de dados
+
+10 tabelas criadas via migrations:
+`users`, `mecanicos`, `clientes`, `veiculos`, `ordens_servico`,
+`pecas`, `insumos`, `itens_os`, `insumos_os`, `notificacoes`
+
+Para rodar as migrations:
+```bash
+docker exec -it oficina_app php artisan migrate
+```
+
+Para resetar o banco:
+```bash
+docker exec -it oficina_app php artisan migrate:fresh
