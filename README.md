@@ -33,6 +33,7 @@ php artisan key:generate
 php artisan jwt:secret
 docker-compose up -d
 php artisan migrate
+php artisan db:seed
 ```
 
 ## Endpoints
