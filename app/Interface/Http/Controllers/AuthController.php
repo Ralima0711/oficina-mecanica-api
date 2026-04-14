@@ -2,14 +2,15 @@
 
 namespace App\Interface\Http\Controllers;
 
+use App\Application\Services\AuthService;
+use App\Interface\Http\Requests\AuthRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * CAMADA DE INTERFACE
- * Autenticação JWT
+ * Autenticação JWT — apenas orquestra requisições/respostas
+ * Toda a lógica de negócio está em AuthService
  *
  * @OA\Info(
  *     title="Oficina Mecanica API",
@@ -31,6 +32,10 @@ use Tymon\JWTAuth\Facades\JWTAuth;
  */
 class AuthController extends Controller
 {
+    public function __construct(
+        private AuthService $service,
+    ) {}
+
     /**
      * @OA\Post(
      *     path="/api/auth/login",
@@ -57,18 +62,18 @@ class AuthController extends Controller
      *     @OA\Response(response=422, description="Erro de validacao")
      * )
      */
-    public function login(Request $request): JsonResponse
+    public function login(AuthRequest $request): JsonResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
-        ]);
+        try {
+            $result = $this->service->login(
+                $request->validated()['email'],
+                $request->validated()['password']
+            );
 
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Credenciais inválidas'], 401);
+            return response()->json($result, 200);
+        } catch (\RuntimeException $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
         }
-
-        return $this->respondWithToken($token);
     }
 
     /**
@@ -83,7 +88,7 @@ class AuthController extends Controller
      */
     public function me(): JsonResponse
     {
-        return response()->json(auth('api')->user());
+        return response()->json($this->service->me());
     }
 
     /**
@@ -98,7 +103,7 @@ class AuthController extends Controller
      */
     public function logout(): JsonResponse
     {
-        auth('api')->logout();
+        $this->service->logout();
         return response()->json(['message' => 'Logout realizado com sucesso']);
     }
 
@@ -122,15 +127,6 @@ class AuthController extends Controller
      */
     public function refresh(): JsonResponse
     {
-        return $this->respondWithToken(JWTAuth::refresh(JWTAuth::getToken()));
-    }
-
-    protected function respondWithToken(string $token): JsonResponse
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => (int) config('jwt.ttl', 60) * 60,
-        ]);
+        return response()->json($this->service->refresh());
     }
 }

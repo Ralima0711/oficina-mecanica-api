@@ -4,8 +4,10 @@ namespace App\Infrastructure\Providers;
 
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
 use App\Domain\Cliente\Repositories\ClienteRepositoryInterface;
+use App\Domain\User\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentOrdemServicoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentClienteRepository;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentUserRepository;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -26,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ClienteRepositoryInterface::class,
             //EloquentClienteRepository::class
+        );
+
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            EloquentUserRepository::class
         );
     }
 
