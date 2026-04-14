@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             ClienteRepositoryInterface::class,
-            EloquentClienteRepository::class
+            //EloquentClienteRepository::class
         );
     }
 
