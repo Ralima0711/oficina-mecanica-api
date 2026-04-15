@@ -39,10 +39,12 @@ class OrdemServicoService
             id: null,
             clienteId: $data['cliente_id'],
             veiculoId: $data['veiculo_id'],
+            mecanicoId: $data['mecanico_id'] ?? null,
             status: StatusOrdem::from('ABERTA'),
             descricaoProblema: $data['descricao_problema'],
-            diagnostico: null,
+            diagnostico: $data['diagnostico'] ?? null,
             valorTotal: null,
+            iniciadaEm: null,
             criadaEm: new \DateTimeImmutable(),
         );
 
@@ -52,7 +54,7 @@ class OrdemServicoService
     public function atualizar(int $id, array $data): OrdemServico
     {
         $os = $this->buscarPorId($id);
-        // TODO: mapear campos permitidos para atualização
+        $os->atualizar($data);
         return $this->repository->save($os);
     }
 
@@ -70,10 +72,16 @@ class OrdemServicoService
         return $this->repository->save($os);
     }
 
-    public function cancelar(int $id): void
+    public function cancelar(int $id): OrdemServico
     {
         $os = $this->buscarPorId($id);
         $os->cancelar();
-        $this->repository->save($os);
+        return $this->repository->save($os);
+    }
+
+    public function remover(int $id): void
+    {
+        $this->buscarPorId($id);
+        $this->repository->delete($id);
     }
 }
