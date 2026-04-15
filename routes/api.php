@@ -22,7 +22,12 @@ Route::prefix('auth')->group(function () {
 // Recursos protegidos por JWT
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('clientes',       ClienteController::class);
-    Route::apiResource('ordens-servico', OrdemServicoController::class);
+});
+
+Route::middleware(['auth:api', 'admin'])->group(function () {
+    // Ajusta o parametro para {id}, mantendo o contrato esperado da API.
+    Route::apiResource('ordens-servico', OrdemServicoController::class)
+        ->parameters(['ordens-servico' => 'id']);
 
     // Transições de estado da OS (regras de negócio)
     Route::patch('ordens-servico/{id}/iniciar',   [OrdemServicoController::class, 'iniciar']);

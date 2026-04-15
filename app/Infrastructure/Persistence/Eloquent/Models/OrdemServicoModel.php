@@ -16,15 +16,18 @@ class OrdemServicoModel extends Model
     protected $fillable = [
         'cliente_id',
         'veiculo_id',
+        'mecanico_id',
         'status',
         'descricao_problema',
         'diagnostico',
         'valor_total',
+        'iniciada_em',
         'concluida_em',
     ];
 
     protected $casts = [
         'valor_total'  => 'float',
+        'iniciada_em'  => 'datetime',
         'concluida_em' => 'datetime',
     ];
 
