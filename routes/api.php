@@ -24,13 +24,50 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('clientes',       ClienteController::class);
 });
 
-Route::middleware(['auth:api', 'admin'])->group(function () {
-    // Ajusta o parametro para {id}, mantendo o contrato esperado da API.
+/*
+|--------------------------------------------------------------------------
+| Ordem de Servico - Rotas
+|--------------------------------------------------------------------------
+*/
+
+// Rotas administrativas do recurso.
+Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::apiResource('ordens-servico', OrdemServicoController::class)
+        ->only(['index','store', 'show', 'update', 'destroy'])
+        ->parameters(['ordens-servico' => 'id']);
+});
+
+//Atendente - Abertura e entrega da OS realizadas.
+Route::middleware(['auth:api', 'role:atendente'])->group(function () {
+    Route::apiResource('ordens-servico', OrdemServicoController::class)
+        ->only(['store', 'show'])
         ->parameters(['ordens-servico' => 'id']);
 
-    // Transições de estado da OS (regras de negócio)
-    Route::patch('ordens-servico/{id}/iniciar',   [OrdemServicoController::class, 'iniciar']);
-    Route::patch('ordens-servico/{id}/concluir',  [OrdemServicoController::class, 'concluir']);
-    Route::patch('ordens-servico/{id}/cancelar',  [OrdemServicoController::class, 'cancelar']);
+    Route::patch('ordens-servico/{id}/entregar', [OrdemServicoController::class, 'entregar'])
+        ->name('ordens-servico.status.entregar');
+});
+
+//Mecanico - Transicoes tecnicas executadas.
+Route::middleware(['auth:api', 'role:mecanico'])->prefix('ordens-servico')->name('ordens-servico.status.')->group(function () {
+    Route::patch('{id}/iniciar-diagnostico', [OrdemServicoController::class, 'iniciarDiagnostico'])
+        ->name('iniciar-diagnostico');
+
+    // Fechamento do diagnostico com composicao de pecas/insumos e geracao interna do orcamento.
+    Route::post('{id}/submeter-orcamento', [OrdemServicoController::class, 'submeterOrcamento'])
+        ->name('submeter-orcamento');
+
+    Route::patch('{id}/iniciar-execucao', [OrdemServicoController::class, 'iniciarExecucao'])
+        ->name('iniciar-execucao');
+
+    Route::patch('{id}/finalizar', [OrdemServicoController::class, 'finalizar'])
+        ->name('finalizar');
+});
+
+//Cliente - Rotas publicas de aprovação/reprovação.
+Route::prefix('public/ordens-servico')->name('public.ordens-servico.')->group(function () {
+    Route::get('{id}/aprovar/{token}', [OrdemServicoController::class, 'aprovarPublico'])
+        ->name('aprovar');
+
+    Route::get('{id}/reprovar/{token}', [OrdemServicoController::class, 'reprovarPublico'])
+        ->name('reprovar');
 });
