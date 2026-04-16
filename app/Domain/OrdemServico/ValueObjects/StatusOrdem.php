@@ -14,6 +14,7 @@ final class StatusOrdem
     public const APROVADA = 'APROVADA';
     public const EM_EXECUCAO = 'EM_EXECUCAO';
     public const FINALIZADA = 'FINALIZADA';
+    public const ENTREGUE = 'ENTREGUE';
     public const CANCELADA = 'CANCELADA';
 
     private const VALID = [
@@ -23,6 +24,7 @@ final class StatusOrdem
         self::APROVADA,
         self::EM_EXECUCAO,
         self::FINALIZADA,
+        self::ENTREGUE,
         self::CANCELADA,
     ];
 

@@ -4,6 +4,7 @@ namespace App\Interface\Http\Controllers;
 
 use App\Application\Services\OrdemServicoService;
 use App\Interface\Http\Requests\OrdemServicoRequest;
+use App\Interface\Http\Requests\SubmeterOrcamentoRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -65,16 +66,60 @@ class OrdemServicoController extends Controller
         }
     }
 
-    public function iniciar(int $id): JsonResponse
+    public function iniciarDiagnostico(Request $request, int $id): JsonResponse
     {
         try {
-            return response()->json($this->service->iniciar($id));
+            $usuario = $request->user('api') ?? auth('api')->user();
+
+            return response()->json(
+                $this->service->iniciarDiagnostico($id, (int) $usuario->id)
+            );
         } catch (\Throwable $e) {
             return $this->handleException($e);
         }
     }
 
-    public function concluir(Request $request, int $id): JsonResponse
+    public function submeterOrcamento(SubmeterOrcamentoRequest $request, int $id): JsonResponse
+    {
+        try {
+            $usuario = $request->user('api') ?? auth('api')->user();
+
+            return response()->json(
+                $this->service->submeterOrcamento($id, (int) $usuario->id, $request->validated())
+            );
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function aprovarPublico(int $id, string $token): JsonResponse
+    {
+        try {
+            return response()->json($this->service->aprovarPublico($id, $token));
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function reprovarPublico(int $id, string $token): JsonResponse
+    {
+        try {
+            return response()->json($this->service->reprovarPublico($id, $token));
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function iniciarExecucao(int $id): JsonResponse
+    {
+        try {
+            return response()->json($this->service->iniciarExecucao($id));
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function finalizar(Request $request, int $id): JsonResponse
     {
         try {
             $dados = $request->validate([
@@ -82,17 +127,17 @@ class OrdemServicoController extends Controller
             ]);
 
             return response()->json(
-                $this->service->concluir($id, (float) $dados['valor_total'])
+                $this->service->finalizar($id, (float) $dados['valor_total'])
             );
         } catch (\Throwable $e) {
             return $this->handleException($e);
         }
     }
 
-    public function cancelar(int $id): JsonResponse
+    public function entregar(int $id): JsonResponse
     {
         try {
-            return response()->json($this->service->cancelar($id));
+            return response()->json($this->service->entregar($id));
         } catch (\Throwable $e) {
             return $this->handleException($e);
         }
