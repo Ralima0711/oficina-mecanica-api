@@ -55,39 +55,76 @@ class OrdemServico implements \JsonSerializable
 
         if (array_key_exists('diagnostico', $dados)) {
             $this->diagnostico = $dados['diagnostico'];
+        }
 
-            if (
-                $this->diagnostico !== null
-                && $this->diagnostico !== ''
-                && $this->status->equals(StatusOrdem::EM_DIAGNOSTICO)
-            ) {
-                $this->status = StatusOrdem::from(StatusOrdem::AGUARDANDO_APROVACAO);
-            }
+        if (array_key_exists('valor_total', $dados) && $dados['valor_total'] !== null) {
+            $this->valorTotal = (float) $dados['valor_total'];
         }
     }
 
-    public function iniciar(): void
+    public function iniciarDiagnostico(int $mecanicoId): void
     {
         if (!$this->status->equals(StatusOrdem::ABERTA)) {
-            throw new \DomainException('Somente ordens ABERTAS podem ser iniciadas.');
+            throw new \DomainException('Somente ordens ABERTAS podem iniciar diagnostico.');
         }
 
+        if ($mecanicoId <= 0) {
+            throw new \DomainException('Mecanico invalido para iniciar diagnostico.');
+        }
+
+        $this->mecanicoId = $mecanicoId;
         $this->status = StatusOrdem::from(StatusOrdem::EM_DIAGNOSTICO);
         $this->iniciadaEm ??= new \DateTimeImmutable();
     }
 
-    public function concluir(float $valorTotal): void
+    public function gerarOrcamento(): void
+    {
+        if (!$this->status->equals(StatusOrdem::EM_DIAGNOSTICO)) {
+            throw new \DomainException('Somente ordens EM_DIAGNOSTICO podem gerar orcamento.');
+        }
+
+        if ($this->diagnostico === null || trim($this->diagnostico) === '') {
+            throw new \DomainException('Informe um diagnostico antes de gerar orcamento.');
+        }
+
+        $this->status = StatusOrdem::from(StatusOrdem::AGUARDANDO_APROVACAO);
+    }
+
+    public function aprovar(): void
+    {
+        if (!$this->status->equals(StatusOrdem::AGUARDANDO_APROVACAO)) {
+            throw new \DomainException('Somente ordens AGUARDANDO_APROVACAO podem ser aprovadas.');
+        }
+
+        $this->status = StatusOrdem::from(StatusOrdem::APROVADA);
+    }
+
+    public function reprovar(): void
+    {
+        if (!$this->status->equals(StatusOrdem::AGUARDANDO_APROVACAO)) {
+            throw new \DomainException('Somente ordens AGUARDANDO_APROVACAO podem ser reprovadas.');
+        }
+
+        $this->status = StatusOrdem::from(StatusOrdem::CANCELADA);
+    }
+
+    public function iniciarExecucao(): void
+    {
+        if (!$this->status->equals(StatusOrdem::APROVADA)) {
+            throw new \DomainException('Somente ordens APROVADAS podem iniciar execucao.');
+        }
+
+        $this->status = StatusOrdem::from(StatusOrdem::EM_EXECUCAO);
+    }
+
+    public function finalizarServico(float $valorTotal): void
     {
         if ($valorTotal < 0) {
             throw new \DomainException('O valor total da ordem nao pode ser negativo.');
         }
 
-        if ($this->status->equals(StatusOrdem::CANCELADA)) {
-            throw new \DomainException('Ordens CANCELADAS nao podem ser concluidas.');
-        }
-
-        if ($this->status->equals(StatusOrdem::FINALIZADA)) {
-            throw new \DomainException('A ordem ja esta FINALIZADA.');
+        if (!$this->status->equals(StatusOrdem::EM_EXECUCAO)) {
+            throw new \DomainException('Somente ordens EM_EXECUCAO podem ser finalizadas.');
         }
 
         $this->status      = StatusOrdem::from(StatusOrdem::FINALIZADA);
@@ -96,10 +133,38 @@ class OrdemServico implements \JsonSerializable
         $this->concluidaEm = new \DateTimeImmutable();
     }
 
+    public function entregarVeiculo(): void
+    {
+        if (!$this->status->equals(StatusOrdem::FINALIZADA)) {
+            throw new \DomainException('Somente ordens FINALIZADAS podem ser entregues.');
+        }
+
+        $this->status = StatusOrdem::from(StatusOrdem::ENTREGUE);
+    }
+
+    // Compatibilidade com metodos antigos
+    public function iniciar(): void
+    {
+        if ($this->mecanicoId === null) {
+            throw new \DomainException('Mecanico deve ser informado para iniciar a ordem.');
+        }
+
+        $this->iniciarDiagnostico($this->mecanicoId);
+    }
+
+    public function concluir(float $valorTotal): void
+    {
+        $this->finalizarServico($valorTotal);
+    }
+
     public function cancelar(): void
     {
         if ($this->status->equals(StatusOrdem::FINALIZADA)) {
             throw new \DomainException('Ordens FINALIZADAS nao podem ser canceladas.');
+        }
+
+        if ($this->status->equals(StatusOrdem::ENTREGUE)) {
+            throw new \DomainException('Ordens ENTREGUES nao podem ser canceladas.');
         }
 
         if ($this->status->equals(StatusOrdem::CANCELADA)) {
