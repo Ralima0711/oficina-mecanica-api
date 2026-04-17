@@ -30,19 +30,30 @@ Route::middleware('auth:api')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+// Listagem compartilhada para admin, atendente e mecanico.
+Route::middleware(['auth:api', 'role:admin,atendente,mecanico'])->group(function () {
+    Route::get('ordens-servico', [OrdemServicoController::class, 'index'])
+        ->name('ordens-servico.index');
+});
+
+// Consulta individual compartilhada para admin e atendente.
+Route::middleware(['auth:api', 'role:admin,atendente'])->group(function () {
+    Route::post('ordens-servico', [OrdemServicoController::class, 'store'])
+        ->name('ordens-servico.store');
+
+    Route::get('ordens-servico/{id}', [OrdemServicoController::class, 'show'])
+        ->name('ordens-servico.show');
+});
+
 // Rotas administrativas do recurso.
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::apiResource('ordens-servico', OrdemServicoController::class)
-        ->only(['index','store', 'show', 'update', 'destroy'])
+        ->only(['update', 'destroy'])
         ->parameters(['ordens-servico' => 'id']);
 });
 
-//Atendente - Abertura e entrega da OS realizadas.
+// Atendente - Entrega da OS realizada.
 Route::middleware(['auth:api', 'role:atendente'])->group(function () {
-    Route::apiResource('ordens-servico', OrdemServicoController::class)
-        ->only(['store', 'show'])
-        ->parameters(['ordens-servico' => 'id']);
-
     Route::patch('ordens-servico/{id}/entregar', [OrdemServicoController::class, 'entregar'])
         ->name('ordens-servico.status.entregar');
 });

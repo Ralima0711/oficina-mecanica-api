@@ -98,7 +98,11 @@ class OrdemServicoController extends Controller
     public function aprovarPublico(int $id, string $token): JsonResponse
     {
         try {
-            return response()->json($this->service->aprovarPublico($id, $token));
+            $os = $this->service->aprovarPublico($id, $token);
+
+            return response()->json([
+                'message' => 'Status atual: ' . $os->getStatus(),
+            ]);
         } catch (\Throwable $e) {
             return $this->handleException($e);
         }
@@ -107,7 +111,11 @@ class OrdemServicoController extends Controller
     public function reprovarPublico(int $id, string $token): JsonResponse
     {
         try {
-            return response()->json($this->service->reprovarPublico($id, $token));
+            $os = $this->service->reprovarPublico($id, $token);
+
+            return response()->json([
+                'message' => 'Status atual: ' . $os->getStatus(),
+            ]);
         } catch (\Throwable $e) {
             return $this->handleException($e);
         }

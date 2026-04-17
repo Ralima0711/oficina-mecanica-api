@@ -2,6 +2,9 @@
 
 namespace App\Application\Services;
 
+use App\Domain\Cliente\Entities\Cliente;
+use App\Domain\Cliente\Repositories\ClienteRepositoryInterface;
+use App\Domain\Cliente\ValueObjects\Cpf;
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
 use App\Domain\OrdemServico\Entities\OrdemServico;
 use App\Domain\OrdemServico\ValueObjects\StatusOrdem;
@@ -23,6 +26,7 @@ class OrdemServicoService
 
     public function __construct(
         private OrdemServicoRepositoryInterface $repository,
+        private ClienteRepositoryInterface $clienteRepository,
         private OrdemServicoNotificacaoService $notificacaoService,
     ) {}
 
@@ -44,9 +48,24 @@ class OrdemServicoService
 
     public function criar(array $data): OrdemServico
     {
+        $clienteId = null;
+
+        if (array_key_exists('cliente_id', $data) && $data['cliente_id'] !== null) {
+            $clienteId = (int) $data['cliente_id'];
+        }
+
+        if ($clienteId === null && array_key_exists('cliente_cpf', $data) && $data['cliente_cpf'] !== null) {
+            $cliente = $this->buscarClientePorCpf((string) $data['cliente_cpf']);
+            $clienteId = $cliente->getId();
+        }
+
+        if ($clienteId === null) {
+            throw new \DomainException('Informe cliente_id ou cliente_cpf para criar a ordem.');
+        }
+
         $os = new OrdemServico(
             id: null,
-            clienteId: $data['cliente_id'],
+            clienteId: $clienteId,
             veiculoId: $data['veiculo_id'],
             mecanicoId: $data['mecanico_id'] ?? null,
             status: StatusOrdem::from('ABERTA'),
@@ -111,7 +130,24 @@ class OrdemServicoService
         $valorAnterior = $ordem->getValorTotal();
 
         $orcamentoDetalhado = DB::transaction(function () use ($id, $ordem, $mecanicoId, $diagnostico, $maoDeObra, $pecasInput, $insumosInput) {
-            // Reenvio da rotina sobrescreve itens anteriores da OS.
+            $itensPecasAnteriores = ItemOsModel::query()->where('ordem_servico_id', $id)->get();
+            foreach ($itensPecasAnteriores as $itemAnterior) {
+                $pecaAnterior = PecaModel::query()->whereKey($itemAnterior->peca_id)->lockForUpdate()->first();
+
+                if ($pecaAnterior) {
+                    $pecaAnterior->increment('estoque_atual', (int) $itemAnterior->quantidade);
+                }
+            }
+
+            $itensInsumosAnteriores = InsumoOsModel::query()->where('ordem_servico_id', $id)->get();
+            foreach ($itensInsumosAnteriores as $itemAnterior) {
+                $insumoAnterior = InsumoModel::query()->whereKey($itemAnterior->insumo_id)->lockForUpdate()->first();
+
+                if ($insumoAnterior) {
+                    $insumoAnterior->increment('estoque_atual', (float) $itemAnterior->quantidade);
+                }
+            }
+
             ItemOsModel::query()->where('ordem_servico_id', $id)->delete();
             InsumoOsModel::query()->where('ordem_servico_id', $id)->delete();
 
@@ -179,8 +215,7 @@ class OrdemServicoService
                 $precoUnitario = (float) $insumo->preco_unitario;
                 $subtotal = round($quantidade * $precoUnitario, 2);
 
-                $insumo->estoque_atual = round((float) $insumo->estoque_atual - $quantidade, 3);
-                $insumo->save();
+                $insumo->decrement('estoque_atual', $quantidade);
 
                 InsumoOsModel::query()->create([
                     'ordem_servico_id' => $id,
@@ -280,8 +315,7 @@ class OrdemServicoService
                 $insumo = InsumoModel::query()->whereKey($item->insumo_id)->lockForUpdate()->first();
 
                 if ($insumo) {
-                    $insumo->estoque_atual = round((float) $insumo->estoque_atual + (float) $item->quantidade, 3);
-                    $insumo->save();
+                    $insumo->increment('estoque_atual', (float) $item->quantidade);
                 }
             }
 
@@ -453,5 +487,17 @@ class OrdemServicoService
             'valor_total_anterior' => $valorAnterior,
             'valor_total_novo' => $valorNovo,
         ]);
+    }
+
+    private function buscarClientePorCpf(string $cpf): Cliente
+    {
+        $cpfValidado = new Cpf($cpf);
+        $cliente = $this->clienteRepository->findByCpf($cpfValidado->getRaw());
+
+        if (!$cliente) {
+            throw new \DomainException('Cliente nao encontrado para o CPF informado.');
+        }
+
+        return $cliente;
     }
 }
