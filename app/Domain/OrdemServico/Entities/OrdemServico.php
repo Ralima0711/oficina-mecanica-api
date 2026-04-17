@@ -32,7 +32,7 @@ class OrdemServico implements \JsonSerializable
     public function atualizar(array $dados): void
     {
         if (!$this->podeEditar()) {
-            throw new \DomainException('Ordens FINALIZADAS ou CANCELADAS nao podem ser alteradas.');
+            throw new \DomainException('Ordens FINALIZADAS ou CANCELADAS não podem ser alteradas.');
         }
 
         if (array_key_exists('cliente_id', $dados)) {
@@ -69,7 +69,7 @@ class OrdemServico implements \JsonSerializable
         }
 
         if ($mecanicoId <= 0) {
-            throw new \DomainException('Mecanico invalido para iniciar diagnostico.');
+            throw new \DomainException('Mecânico invalido para iniciar diagnostico.');
         }
 
         $this->mecanicoId = $mecanicoId;
@@ -80,11 +80,11 @@ class OrdemServico implements \JsonSerializable
     public function gerarOrcamento(): void
     {
         if (!$this->status->equals(StatusOrdem::EM_DIAGNOSTICO)) {
-            throw new \DomainException('Somente ordens EM_DIAGNOSTICO podem gerar orcamento.');
+            throw new \DomainException('Somente ordens EM_DIAGNOSTICO podem gerar orçamento.');
         }
 
         if ($this->diagnostico === null || trim($this->diagnostico) === '') {
-            throw new \DomainException('Informe um diagnostico antes de gerar orcamento.');
+            throw new \DomainException('Informe um diagnostico antes de gerar orçamento.');
         }
 
         $this->status = StatusOrdem::from(StatusOrdem::AGUARDANDO_APROVACAO);
@@ -111,7 +111,7 @@ class OrdemServico implements \JsonSerializable
     public function iniciarExecucao(): void
     {
         if (!$this->status->equals(StatusOrdem::APROVADA)) {
-            throw new \DomainException('Somente ordens APROVADAS podem iniciar execucao.');
+            throw new \DomainException('Somente ordens APROVADAS podem iniciar execução.');
         }
 
         $this->status = StatusOrdem::from(StatusOrdem::EM_EXECUCAO);
@@ -120,7 +120,7 @@ class OrdemServico implements \JsonSerializable
     public function finalizarServico(float $valorTotal): void
     {
         if ($valorTotal < 0) {
-            throw new \DomainException('O valor total da ordem nao pode ser negativo.');
+            throw new \DomainException('O valor total da ordem não pode ser negativo.');
         }
 
         if (!$this->status->equals(StatusOrdem::EM_EXECUCAO)) {
@@ -146,7 +146,7 @@ class OrdemServico implements \JsonSerializable
     public function iniciar(): void
     {
         if ($this->mecanicoId === null) {
-            throw new \DomainException('Mecanico deve ser informado para iniciar a ordem.');
+            throw new \DomainException('Mecânico deve ser informado para iniciar a ordem.');
         }
 
         $this->iniciarDiagnostico($this->mecanicoId);
@@ -160,15 +160,15 @@ class OrdemServico implements \JsonSerializable
     public function cancelar(): void
     {
         if ($this->status->equals(StatusOrdem::FINALIZADA)) {
-            throw new \DomainException('Ordens FINALIZADAS nao podem ser canceladas.');
+            throw new \DomainException('Ordens FINALIZADAS não podem ser canceladas.');
         }
 
         if ($this->status->equals(StatusOrdem::ENTREGUE)) {
-            throw new \DomainException('Ordens ENTREGUES nao podem ser canceladas.');
+            throw new \DomainException('Ordens ENTREGUES não podem ser canceladas.');
         }
 
         if ($this->status->equals(StatusOrdem::CANCELADA)) {
-            throw new \DomainException('A ordem ja esta CANCELADA.');
+            throw new \DomainException('A ordem já está CANCELADA.');
         }
 
         $this->status = StatusOrdem::from(StatusOrdem::CANCELADA);
@@ -177,7 +177,8 @@ class OrdemServico implements \JsonSerializable
     private function podeEditar(): bool
     {
         return !$this->status->equals(StatusOrdem::FINALIZADA)
-            && !$this->status->equals(StatusOrdem::CANCELADA);
+            && !$this->status->equals(StatusOrdem::CANCELADA)
+            && !$this->status->equals(StatusOrdem::ENTREGUE);
     }
 
     // ── Getters ───────────────────────────────────────────────────

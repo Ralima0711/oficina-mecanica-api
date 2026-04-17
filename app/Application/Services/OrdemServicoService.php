@@ -97,9 +97,9 @@ class OrdemServicoService
         }
 
         $ordem = $this->buscarPorId($id);
-
+        
         if (!$ordem->getStatus()->equals(StatusOrdem::EM_DIAGNOSTICO)) {
-            throw new \DomainException('Somente ordens EM_DIAGNOSTICO podem submeter orcamento.');
+            throw new \DomainException('Somente ordens EM_DIAGNOSTICO podem submeter orçamento.');
         }
 
         if ($ordem->getMecanicoId() !== null && $ordem->getMecanicoId() !== $mecanicoId) {
@@ -108,6 +108,7 @@ class OrdemServicoService
 
         $pecasInput = $dados['pecas'] ?? [];
         $insumosInput = $dados['insumos'] ?? [];
+        $valorAnterior = $ordem->getValorTotal();
 
         $orcamentoDetalhado = DB::transaction(function () use ($id, $ordem, $mecanicoId, $diagnostico, $maoDeObra, $pecasInput, $insumosInput) {
             // Reenvio da rotina sobrescreve itens anteriores da OS.
@@ -120,15 +121,25 @@ class OrdemServicoService
             $totalInsumos = 0.0;
 
             foreach ($pecasInput as $pecaInput) {
-                $peca = PecaModel::query()->find($pecaInput['peca_id']);
+                $peca = PecaModel::query()
+                    ->whereKey($pecaInput['peca_id'])
+                    ->lockForUpdate()
+                    ->first();
 
                 if (!$peca) {
-                    throw new \DomainException('Peca informada nao encontrada para composicao do orcamento.');
+                    throw new \DomainException('Peça informada nao encontrada para composicao do orcamento.');
                 }
 
                 $quantidade = (int) $pecaInput['quantidade'];
+
+                if ((int) $peca->estoque_atual < $quantidade) {
+                    throw new \DomainException("Estoque insuficiente para peça {$peca->nome}.");
+                }
+
                 $precoUnitario = (float) $peca->preco_unitario;
                 $subtotal = round($quantidade * $precoUnitario, 2);
+
+                $peca->decrement('estoque_atual', $quantidade);
 
                 ItemOsModel::query()->create([
                     'ordem_servico_id' => $id,
@@ -150,15 +161,26 @@ class OrdemServicoService
             }
 
             foreach ($insumosInput as $insumoInput) {
-                $insumo = InsumoModel::query()->find($insumoInput['insumo_id']);
+                $insumo = InsumoModel::query()
+                    ->whereKey($insumoInput['insumo_id'])
+                    ->lockForUpdate()
+                    ->first();
 
                 if (!$insumo) {
                     throw new \DomainException('Insumo informado nao encontrado para composicao do orcamento.');
                 }
 
                 $quantidade = (float) $insumoInput['quantidade'];
+
+                if ((float) $insumo->estoque_atual < $quantidade) {
+                    throw new \DomainException("Estoque insuficiente para insumo {$insumo->nome}.");
+                }
+
                 $precoUnitario = (float) $insumo->preco_unitario;
                 $subtotal = round($quantidade * $precoUnitario, 2);
+
+                $insumo->estoque_atual = round((float) $insumo->estoque_atual - $quantidade, 3);
+                $insumo->save();
 
                 InsumoOsModel::query()->create([
                     'ordem_servico_id' => $id,
@@ -205,6 +227,13 @@ class OrdemServicoService
             ];
         });
 
+        $this->logMudancaValorTotal(
+            acao: 'submeter_orcamento',
+            ordemServicoId: $id,
+            valorAnterior: $valorAnterior,
+            valorNovo: $orcamentoDetalhado['ordem']->getValorTotal(),
+        );
+
         $links = $this->gerarLinksAprovacao($orcamentoDetalhado['ordem']);
         $this->notificarMudancaStatus($orcamentoDetalhado['ordem'], $links, $orcamentoDetalhado['orcamento']);
 
@@ -227,9 +256,38 @@ class OrdemServicoService
     {
         $this->validarTokenAcaoPublica($token, $id, 'reprovar');
 
-        $os = $this->buscarPorId($id);
-        $os->reprovar();
-        $salva = $this->repository->save($os);
+        $salva = DB::transaction(function () use ($id) {
+            $os = $this->buscarPorId($id);
+            $os->reprovar();
+
+            $itensPeca = ItemOsModel::query()
+                ->where('ordem_servico_id', $id)
+                ->get();
+
+            foreach ($itensPeca as $item) {
+                $peca = PecaModel::query()->whereKey($item->peca_id)->lockForUpdate()->first();
+
+                if ($peca) {
+                    $peca->increment('estoque_atual', (int) $item->quantidade);
+                }
+            }
+
+            $itensInsumo = InsumoOsModel::query()
+                ->where('ordem_servico_id', $id)
+                ->get();
+
+            foreach ($itensInsumo as $item) {
+                $insumo = InsumoModel::query()->whereKey($item->insumo_id)->lockForUpdate()->first();
+
+                if ($insumo) {
+                    $insumo->estoque_atual = round((float) $insumo->estoque_atual + (float) $item->quantidade, 3);
+                    $insumo->save();
+                }
+            }
+
+            return $this->repository->save($os);
+        });
+
         $this->notificarMudancaStatus($salva);
 
         return $salva;
@@ -245,11 +303,30 @@ class OrdemServicoService
         return $salva;
     }
 
-    public function finalizar(int $id, float $valorTotal): OrdemServico
+    public function finalizar(int $id, ?float $valorTotalInformado = null): OrdemServico
     {
         $os = $this->buscarPorId($id);
-        $os->finalizarServico($valorTotal);
+
+        $valorAtual = $os->getValorTotal();
+
+        if ($valorAtual === null) {
+            throw new \DomainException('Nao e possivel finalizar sem valor_total definido no orcamento.');
+        }
+
+        if ($valorTotalInformado !== null && round($valorTotalInformado, 2) !== round($valorAtual, 2)) {
+            throw new \DomainException('valor_total informado na finalizacao difere do orcamento aprovado.');
+        }
+
+        $os->finalizarServico($valorAtual);
         $salva = $this->repository->save($os);
+
+        $this->logMudancaValorTotal(
+            acao: 'finalizar',
+            ordemServicoId: $id,
+            valorAnterior: $valorAtual,
+            valorNovo: $salva->getValorTotal(),
+        );
+
         $this->notificarMudancaStatus($salva);
 
         return $salva;
@@ -362,5 +439,19 @@ class OrdemServicoService
                 'erro' => $e->getMessage(),
             ]);
         }
+    }
+
+    private function logMudancaValorTotal(string $acao, int $ordemServicoId, ?float $valorAnterior, ?float $valorNovo): void
+    {
+        if ($valorAnterior === $valorNovo) {
+            return;
+        }
+
+        Log::info('ordem_servico.valor_total_alterado', [
+            'acao' => $acao,
+            'ordem_servico_id' => $ordemServicoId,
+            'valor_total_anterior' => $valorAnterior,
+            'valor_total_novo' => $valorNovo,
+        ]);
     }
 }

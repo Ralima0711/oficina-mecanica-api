@@ -7,6 +7,7 @@ use App\Interface\Http\Requests\OrdemServicoRequest;
 use App\Interface\Http\Requests\SubmeterOrcamentoRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * CAMADA DE INTERFACE
@@ -70,9 +71,10 @@ class OrdemServicoController extends Controller
     {
         try {
             $usuario = $request->user('api') ?? auth('api')->user();
+            $mecanicoId = $this->getMecanicoUserId((int) $usuario->id);
 
             return response()->json(
-                $this->service->iniciarDiagnostico($id, (int) $usuario->id)
+                $this->service->iniciarDiagnostico($id, $mecanicoId)
             );
         } catch (\Throwable $e) {
             return $this->handleException($e);
@@ -83,9 +85,10 @@ class OrdemServicoController extends Controller
     {
         try {
             $usuario = $request->user('api') ?? auth('api')->user();
+            $mecanicoId = $this->getMecanicoUserId((int) $usuario->id);
 
             return response()->json(
-                $this->service->submeterOrcamento($id, (int) $usuario->id, $request->validated())
+                $this->service->submeterOrcamento($id, $mecanicoId, $request->validated())
             );
         } catch (\Throwable $e) {
             return $this->handleException($e);
@@ -123,11 +126,15 @@ class OrdemServicoController extends Controller
     {
         try {
             $dados = $request->validate([
-                'valor_total' => ['required', 'numeric', 'min:0'],
+                'valor_total' => ['sometimes', 'numeric', 'min:0'],
             ]);
 
+            $valorTotalInformado = array_key_exists('valor_total', $dados)
+                ? (float) $dados['valor_total']
+                : null;
+
             return response()->json(
-                $this->service->finalizar($id, (float) $dados['valor_total'])
+                $this->service->finalizar($id, $valorTotalInformado)
             );
         } catch (\Throwable $e) {
             return $this->handleException($e);
@@ -154,5 +161,18 @@ class OrdemServicoController extends Controller
         }
 
         return response()->json(['message' => 'Erro interno ao processar Ordem de Servico.'], 500);
+    }
+
+    private function getMecanicoUserId(int $usuarioId): int
+    {
+        $mecanicoId = DB::table('mecanicos')
+            ->where('user_id', $usuarioId)
+            ->value('id');
+
+        if ($mecanicoId === null) {
+            throw new \DomainException('Usuario autenticado nao possui cadastro de mecanico.');
+        }
+
+        return (int) $mecanicoId;
     }
 }
