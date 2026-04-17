@@ -7,7 +7,7 @@ use App\Domain\Cliente\ValueObjects\Cpf;
 /**
  * CAMADA DE DOMÍNIO — Entidade Cliente
  */
-class Cliente
+class Cliente implements \JsonSerializable
 {
     public function __construct(
         private ?int $id,
@@ -30,4 +30,16 @@ class Cliente
     public function getCpf(): Cpf     { return $this->cpf; }
     public function getTelefone(): string { return $this->telefone; }
     public function getEmail(): string    { return $this->email; }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'cpf' => (string) $this->cpf,
+            'telefone' => $this->telefone,
+            'email' => $this->email,
+            'criado_em' => $this->criadoEm->format('Y-m-d H:i:s'),
+        ];
+    }
 }
