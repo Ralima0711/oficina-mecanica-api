@@ -5,9 +5,11 @@ namespace App\Infrastructure\Providers;
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
 use App\Domain\Cliente\Repositories\ClienteRepositoryInterface;
 use App\Domain\User\Repositories\UserRepositoryInterface;
+use App\Domain\Veiculo\Repositories\VeiculoRepositoryInterface;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentOrdemServicoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentClienteRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentUserRepository;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentVeiculoRepository;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -33,6 +35,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             EloquentUserRepository::class
+        );
+
+        $this->app->bind(
+            VeiculoRepositoryInterface::class,
+            EloquentVeiculoRepository::class
         );
     }
 
