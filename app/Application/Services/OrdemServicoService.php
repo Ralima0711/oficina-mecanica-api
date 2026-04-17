@@ -55,7 +55,7 @@ class OrdemServicoService
         }
 
         if ($clienteId === null && array_key_exists('cliente_cpf', $data) && $data['cliente_cpf'] !== null) {
-            $cliente = $this->buscarClientePorCpf((string) $data['cliente_cpf']);
+            $cliente = $this->getClienteByCpf((string) $data['cliente_cpf']);
             $clienteId = $cliente->getId();
         }
 
@@ -112,7 +112,7 @@ class OrdemServicoService
         }
 
         if ($maoDeObra < 0) {
-            throw new \DomainException('Mao de obra nao pode ser negativa.');
+            throw new \DomainException('Mão de obra não pode ser negativa.');
         }
 
         $ordem = $this->buscarPorId($id);
@@ -122,12 +122,11 @@ class OrdemServicoService
         }
 
         if ($ordem->getMecanicoId() !== null && $ordem->getMecanicoId() !== $mecanicoId) {
-            throw new \DomainException('Apenas o mecanico responsavel pode submeter este orcamento.');
+            throw new \DomainException('Apenas o mecânico responsavel pode submeter este orçamento.');
         }
 
         $pecasInput = $dados['pecas'] ?? [];
         $insumosInput = $dados['insumos'] ?? [];
-        $valorAnterior = $ordem->getValorTotal();
 
         $orcamentoDetalhado = DB::transaction(function () use ($id, $ordem, $mecanicoId, $diagnostico, $maoDeObra, $pecasInput, $insumosInput) {
             $itensPecasAnteriores = ItemOsModel::query()->where('ordem_servico_id', $id)->get();
@@ -163,7 +162,7 @@ class OrdemServicoService
                     ->first();
 
                 if (!$peca) {
-                    throw new \DomainException('Peça informada nao encontrada para composicao do orcamento.');
+                    throw new \DomainException('Peça informada não encontrada para composição do orçamento.');
                 }
 
                 $quantidade = (int) $pecaInput['quantidade'];
@@ -203,7 +202,7 @@ class OrdemServicoService
                     ->first();
 
                 if (!$insumo) {
-                    throw new \DomainException('Insumo informado nao encontrado para composicao do orcamento.');
+                    throw new \DomainException('Insumo informado não encontrado para composição do orçamento.');
                 }
 
                 $quantidade = (float) $insumoInput['quantidade'];
@@ -261,13 +260,6 @@ class OrdemServicoService
                 ],
             ];
         });
-
-        $this->logMudancaValorTotal(
-            acao: 'submeter_orcamento',
-            ordemServicoId: $id,
-            valorAnterior: $valorAnterior,
-            valorNovo: $orcamentoDetalhado['ordem']->getValorTotal(),
-        );
 
         $links = $this->gerarLinksAprovacao($orcamentoDetalhado['ordem']);
         $this->notificarMudancaStatus($orcamentoDetalhado['ordem'], $links, $orcamentoDetalhado['orcamento']);
@@ -353,14 +345,6 @@ class OrdemServicoService
 
         $os->finalizarServico($valorAtual);
         $salva = $this->repository->save($os);
-
-        $this->logMudancaValorTotal(
-            acao: 'finalizar',
-            ordemServicoId: $id,
-            valorAnterior: $valorAtual,
-            valorNovo: $salva->getValorTotal(),
-        );
-
         $this->notificarMudancaStatus($salva);
 
         return $salva;
@@ -475,21 +459,7 @@ class OrdemServicoService
         }
     }
 
-    private function logMudancaValorTotal(string $acao, int $ordemServicoId, ?float $valorAnterior, ?float $valorNovo): void
-    {
-        if ($valorAnterior === $valorNovo) {
-            return;
-        }
-
-        Log::info('ordem_servico.valor_total_alterado', [
-            'acao' => $acao,
-            'ordem_servico_id' => $ordemServicoId,
-            'valor_total_anterior' => $valorAnterior,
-            'valor_total_novo' => $valorNovo,
-        ]);
-    }
-
-    private function buscarClientePorCpf(string $cpf): Cliente
+    private function getClienteByCpf(string $cpf): Cliente
     {
         $cpfValidado = new Cpf($cpf);
         $cliente = $this->clienteRepository->findByCpf($cpfValidado->getRaw());
