@@ -142,7 +142,6 @@ class OrdemServico implements \JsonSerializable
         $this->status = StatusOrdem::from(StatusOrdem::ENTREGUE);
     }
 
-    // Compatibilidade com metodos antigos
     public function iniciar(): void
     {
         if ($this->mecanicoId === null) {
