@@ -17,7 +17,7 @@ class VeiculoRequest extends FormRequest
     {
         if ($this->has('placa')) {
             $this->merge([
-                'placa' => strtoupper(str_replace(' ', '', trim($this->input('placa')))),
+                'placa' => strtoupper(preg_replace('/[^A-Za-z0-9]/', '', (string) $this->input('placa'))),
             ]);
         }
     }
@@ -38,7 +38,7 @@ class VeiculoRequest extends FormRequest
 
         return [
             'cliente_id' => ['required', 'integer', 'exists:clientes,id'],
-            'placa'      => ['required', 'string', 'max:10', 'regex:/^[A-Z]{3}-?\d{4}$/', $placaUniqueRule],
+            'placa'      => ['required', 'string', 'size:7', 'regex:/^[A-Z]{3}(?:\d{4}|\d[A-Z]\d{2})$/', $placaUniqueRule],
             'marca'      => ['required', 'string', 'max:255'],
             'modelo'     => ['required', 'string', 'max:255'],
             'ano'        => ['required', 'integer'],
@@ -53,7 +53,7 @@ class VeiculoRequest extends FormRequest
             'cliente_id.integer'  => 'O cliente deve ser um identificador válido.',
             'cliente_id.exists'   => 'O cliente informado não existe.',
             'placa.required'      => 'A placa é obrigatória.',
-            'placa.max'           => 'A placa não pode ter mais de 10 caracteres.',
+            'placa.size'          => 'A placa deve conter 7 caracteres após a normalização.',
             'placa.regex'         => 'Placa inválida.',
             'placa.unique'        => 'Esta placa já está cadastrada.',
             'marca.required'      => 'A marca é obrigatória.',

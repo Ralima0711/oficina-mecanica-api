@@ -8,7 +8,7 @@ final class Placa
 
     public function __construct(string $placa)
     {
-        $placa = strtoupper(str_replace(' ', '', trim($placa)));
+        $placa = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', trim($placa)));
 
         if (!$this->isValid($placa)) {
             throw new \InvalidArgumentException('Placa inválida.');
@@ -23,6 +23,11 @@ final class Placa
     }
 
     public function __toString(): string
+    {
+        return $this->value;
+    }
+
+    public function getRaw(): string
     {
         return $this->value;
     }

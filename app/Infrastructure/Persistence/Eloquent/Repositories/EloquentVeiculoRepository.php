@@ -20,12 +20,13 @@ class EloquentVeiculoRepository implements VeiculoRepositoryInterface
     {
         return VeiculoModel::query()
             ->get()
-            ->map(fn($model) => $this->toEntity($model))
+            ->map(fn(VeiculoModel $model) => $this->toEntity($model))
             ->toArray();
     }
 
     public function findByPlaca(string $placa): ?Veiculo
     {
+        $placa = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', trim($placa)));
         $model = VeiculoModel::query()->where('placa', $placa)->first();
 
         return $model ? $this->toEntity($model) : null;
@@ -39,7 +40,7 @@ class EloquentVeiculoRepository implements VeiculoRepositoryInterface
 
         $model->fill([
             'cliente_id' => $veiculo->getClienteId(),
-            'placa' => (string) $veiculo->getPlaca(),
+            'placa' => $veiculo->getPlaca()->getRaw(),
             'marca' => $veiculo->getMarca(),
             'modelo' => $veiculo->getModelo(),
             'ano' => $veiculo->getAno(),
