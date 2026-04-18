@@ -20,17 +20,13 @@ class EloquentClienteRepository implements ClienteRepositoryInterface
     {
         return ClienteModel::query()
             ->get()
-            ->map(fn(ClienteModel $model) => $this->toEntity($model))
+            ->map(fn($model) => $this->toEntity($model))
             ->toArray();
     }
 
     public function findByCpf(string $cpf): ?Cliente
     {
-        $cleanCpf = preg_replace('/\D/', '', $cpf);
-
-        $model = ClienteModel::query()
-            ->whereRaw("REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '') = ?", [$cleanCpf])
-            ->first();
+        $model = ClienteModel::query()->where('cpf', $cpf)->first();
 
         return $model ? $this->toEntity($model) : null;
     }
@@ -43,7 +39,7 @@ class EloquentClienteRepository implements ClienteRepositoryInterface
 
         $model->fill([
             'nome' => $cliente->getNome(),
-            'cpf' => $cliente->getCpf()->getRaw(),
+            'cpf' => (string) $cliente->getCpf(),
             'telefone' => $cliente->getTelefone(),
             'email' => $cliente->getEmail(),
         ]);
@@ -55,7 +51,7 @@ class EloquentClienteRepository implements ClienteRepositoryInterface
 
     public function delete(int $id): void
     {
-        ClienteModel::query()->whereKey($id)->delete();
+        ClienteModel::query()->findOrFail($id)->delete();
     }
 
     private function toEntity(ClienteModel $model): Cliente
@@ -66,7 +62,7 @@ class EloquentClienteRepository implements ClienteRepositoryInterface
             cpf: new Cpf($model->cpf),
             telefone: $model->telefone,
             email: $model->email,
-            criadoEm: $model->created_at?->toDateTimeImmutable() ?? new \DateTimeImmutable(),
+            criadoEm: new \DateTimeImmutable($model->created_at),
         );
     }
 }

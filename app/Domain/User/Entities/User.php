@@ -6,7 +6,7 @@ namespace App\Domain\User\Entities;
  * CAMADA DE DOMÍNIO — Entidade User
  * Representa um usuário autenticado no sistema.
  */
-class User
+class User implements \JsonSerializable
 {
     public function __construct(
         private ?int $id,
@@ -44,5 +44,15 @@ class User
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'role' => $this->role,
+        ];
     }
 }
