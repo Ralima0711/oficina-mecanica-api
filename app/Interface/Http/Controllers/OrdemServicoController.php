@@ -160,7 +160,7 @@ class OrdemServicoController extends Controller
             return response()->json(['message' => $e->getMessage()], 422);
         }
 
-        return response()->json(['message' => 'Erro interno ao processar Ordem de Servico.'], 500);
+        return response()->json(['message' => 'Erro interno ao processar Ordem de Serviço.'], 500);
     }
 
     private function getMecanicoUserId(int $usuarioId): int
@@ -170,7 +170,7 @@ class OrdemServicoController extends Controller
             ->value('id');
 
         if ($mecanicoId === null) {
-            throw new \DomainException('Usuario autenticado nao possui cadastro de mecanico.');
+            throw new \DomainException('Usuário autenticado não possui cadastro de mecanico.');
         }
 
         return (int) $mecanicoId;
