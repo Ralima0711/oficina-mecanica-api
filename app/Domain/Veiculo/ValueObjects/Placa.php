@@ -19,7 +19,7 @@ final class Placa
 
     private function isValid(string $placa): bool
     {
-        return (bool) preg_match('/^[A-Z]{3}-?\d{4}$/', $placa);
+        return (bool) preg_match('/^[A-Z]{3}-?(?:\d{4}|\d[A-Z]\d{2})$/', $placa);
     }
 
     public function __toString(): string
