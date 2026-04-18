@@ -130,19 +130,11 @@ class OrdemServicoController extends Controller
         }
     }
 
-    public function finalizar(Request $request, int $id): JsonResponse
+    public function finalizar(int $id): JsonResponse
     {
         try {
-            $dados = $request->validate([
-                'valor_total' => ['sometimes', 'numeric', 'min:0'],
-            ]);
-
-            $valorTotalInformado = array_key_exists('valor_total', $dados)
-                ? (float) $dados['valor_total']
-                : null;
-
             return response()->json(
-                $this->service->finalizar($id, $valorTotalInformado)
+                $this->service->finalizar($id)
             );
         } catch (\Throwable $e) {
             return $this->handleException($e);
