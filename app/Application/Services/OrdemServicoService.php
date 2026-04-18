@@ -271,7 +271,7 @@ class OrdemServicoService
         return $orcamentoDetalhado['ordem'];
     }
 
-    public function aprovarpúblico(int $id, string $token): OrdemServico
+    public function aprovarPublico(int $id, string $token): OrdemServico
     {
         $this->validarTokenAcaoPublica($token, $id, 'aprovar');
 
@@ -283,7 +283,7 @@ class OrdemServicoService
         return $salva;
     }
 
-    public function reprovarpúblico(int $id, string $token): OrdemServico
+    public function reprovarPublico(int $id, string $token): OrdemServico
     {
         $this->validarTokenAcaoPublica($token, $id, 'reprovar');
 
@@ -333,7 +333,7 @@ class OrdemServicoService
         return $salva;
     }
 
-    public function finalizar(int $id, ?float $valorTotalInformado = null): OrdemServico
+    public function finalizar(int $id): OrdemServico
     {
         $os = $this->buscarPorId($id);
 
@@ -341,10 +341,6 @@ class OrdemServicoService
 
         if ($valorAtual === null) {
             throw new \DomainException('Nao e possivel finalizar sem valor_total definido no orcamento.');
-        }
-
-        if ($valorTotalInformado !== null && round($valorTotalInformado, 2) !== round($valorAtual, 2)) {
-            throw new \DomainException('valor_total informado na finalização difere do orçamento aprovado.');
         }
 
         $os->finalizarServico($valorAtual);
