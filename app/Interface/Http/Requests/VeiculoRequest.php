@@ -32,11 +32,13 @@ class VeiculoRequest extends FormRequest
 
     public function rules(): array
     {
-        $veiculoId = $this->route('veiculo');
+        $veiculoParam = $this->route('veiculo') ?? $this->route('id');
+        $veiculoId = is_object($veiculoParam) ? $veiculoParam->id : $veiculoParam;
+        $placaUniqueRule = 'unique:veiculos,placa' . ($veiculoId ? ',' . $veiculoId : '');
 
         return [
             'cliente_id' => ['required', 'integer', 'exists:clientes,id'],
-            'placa'      => ['required', 'string', 'max:10', 'regex:/^[A-Z]{3}-?\d{4}$/', 'unique:veiculos,placa,' . $veiculoId],
+            'placa'      => ['required', 'string', 'max:10', 'regex:/^[A-Z]{3}-?\d{4}$/', $placaUniqueRule],
             'marca'      => ['required', 'string', 'max:255'],
             'modelo'     => ['required', 'string', 'max:255'],
             'ano'        => ['required', 'integer'],
