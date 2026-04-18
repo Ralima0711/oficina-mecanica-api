@@ -340,7 +340,7 @@ class OrdemServicoService
         $valorAtual = $os->getValorTotal();
 
         if ($valorAtual === null) {
-            throw new \DomainException('Nao e possivel finalizar sem valor_total definido no orcamento.');
+            throw new \DomainException('Não e possível finalizar sem valor_total definido no orçamento.');
         }
 
         $os->finalizarServico($valorAtual);
