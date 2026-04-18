@@ -20,7 +20,7 @@ class EloquentClienteRepository implements ClienteRepositoryInterface
     {
         return ClienteModel::query()
             ->get()
-            ->map(fn($model) => $this->toEntity($model))
+            ->map(fn(ClienteModel $model) => $this->toEntity($model))
             ->toArray();
     }
 
@@ -39,7 +39,7 @@ class EloquentClienteRepository implements ClienteRepositoryInterface
 
         $model->fill([
             'nome' => $cliente->getNome(),
-            'cpf' => (string) $cliente->getCpf(),
+            'cpf' => $cliente->getCpf()->getRaw(),
             'telefone' => $cliente->getTelefone(),
             'email' => $cliente->getEmail(),
         ]);
