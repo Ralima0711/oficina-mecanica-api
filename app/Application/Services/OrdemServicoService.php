@@ -12,6 +12,7 @@ use App\Infrastructure\Persistence\Eloquent\Models\InsumoModel;
 use App\Infrastructure\Persistence\Eloquent\Models\InsumoOsModel;
 use App\Infrastructure\Persistence\Eloquent\Models\ItemOsModel;
 use App\Infrastructure\Persistence\Eloquent\Models\PecaModel;
+use App\Infrastructure\Persistence\Eloquent\Models\VeiculoModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -63,10 +64,13 @@ class OrdemServicoService
             throw new \DomainException('Informe cliente_id ou cliente_cpf para criar a ordem.');
         }
 
+        $veiculoId = (int) $data['veiculo_id'];
+        $this->veiculoPertenceAoCliente($veiculoId, $clienteId);
+
         $os = new OrdemServico(
             id: null,
             clienteId: $clienteId,
-            veiculoId: $data['veiculo_id'],
+            veiculoId: $veiculoId,
             mecanicoId: $data['mecanico_id'] ?? null,
             status: StatusOrdem::from('ABERTA'),
             descricaoProblema: $data['descricao_problema'],
@@ -267,7 +271,7 @@ class OrdemServicoService
         return $orcamentoDetalhado['ordem'];
     }
 
-    public function aprovarPublico(int $id, string $token): OrdemServico
+    public function aprovarpúblico(int $id, string $token): OrdemServico
     {
         $this->validarTokenAcaoPublica($token, $id, 'aprovar');
 
@@ -279,7 +283,7 @@ class OrdemServicoService
         return $salva;
     }
 
-    public function reprovarPublico(int $id, string $token): OrdemServico
+    public function reprovarpúblico(int $id, string $token): OrdemServico
     {
         $this->validarTokenAcaoPublica($token, $id, 'reprovar');
 
@@ -340,7 +344,7 @@ class OrdemServicoService
         }
 
         if ($valorTotalInformado !== null && round($valorTotalInformado, 2) !== round($valorAtual, 2)) {
-            throw new \DomainException('valor_total informado na finalizacao difere do orcamento aprovado.');
+            throw new \DomainException('valor_total informado na finalização difere do orçamento aprovado.');
         }
 
         $os->finalizarServico($valorAtual);
@@ -402,28 +406,28 @@ class OrdemServicoService
         $parts = explode('.', $token, 2);
 
         if (count($parts) !== 2) {
-            throw new \InvalidArgumentException('Token publico invalido.');
+            throw new \InvalidArgumentException('Token público invalido.');
         }
 
         [$encodedPayload, $signature] = $parts;
         $expected = hash_hmac('sha256', $encodedPayload, $this->tokenSecret());
 
         if (!hash_equals($expected, $signature)) {
-            throw new \InvalidArgumentException('Token publico invalido.');
+            throw new \InvalidArgumentException('Token público invalido.');
         }
 
         $payload = json_decode($this->base64UrlDecode($encodedPayload), true);
 
         if (!is_array($payload)) {
-            throw new \InvalidArgumentException('Token publico invalido.');
+            throw new \InvalidArgumentException('Token público invalido.');
         }
 
         if (($payload['ordem_id'] ?? null) !== $ordemId || ($payload['acao'] ?? null) !== $acao) {
-            throw new \InvalidArgumentException('Token publico invalido para esta acao.');
+            throw new \InvalidArgumentException('Token público invalido para esta ação.');
         }
 
         if ((int) ($payload['exp'] ?? 0) < time()) {
-            throw new \InvalidArgumentException('Token publico expirado.');
+            throw new \InvalidArgumentException('Token público expirado.');
         }
     }
 
@@ -452,7 +456,7 @@ class OrdemServicoService
         try {
             $this->notificacaoService->enviarMudancaStatus($ordem, $links, $orcamento);
         } catch (\Throwable $e) {
-            Log::error('Falha ao enviar notificacao de status da OS.', [
+            Log::error('Falha ao enviar notificação de status da OS.', [
                 'ordem_servico_id' => $ordem->getId(),
                 'erro' => $e->getMessage(),
             ]);
@@ -465,9 +469,21 @@ class OrdemServicoService
         $cliente = $this->clienteRepository->findByCpf($cpfValidado->getRaw());
 
         if (!$cliente) {
-            throw new \DomainException('Cliente nao encontrado para o CPF informado.');
+            throw new \DomainException('Cliente não encontrado para o CPF informado.');
         }
 
         return $cliente;
+    }
+
+    private function veiculoPertenceAoCliente(int $veiculoId, int $clienteId): void
+    {
+        $veiculoPertenceAoCliente = VeiculoModel::query()
+            ->whereKey($veiculoId)
+            ->where('cliente_id', $clienteId)
+            ->exists();
+
+        if (!$veiculoPertenceAoCliente) {
+            throw new \DomainException('O veiculo informado não pertence ao cliente selecionado.');
+        }
     }
 }
