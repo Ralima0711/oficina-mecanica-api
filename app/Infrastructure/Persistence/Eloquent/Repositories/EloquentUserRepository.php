@@ -40,6 +40,19 @@ class EloquentUserRepository implements UserRepositoryInterface
         return $this->toEntity($model->refresh());
     }
 
+    public function findAll(): array
+    {
+        return UserModel::query()
+            ->get()
+            ->map(fn($model) => $this->toEntity($model))
+            ->toArray();
+    }
+
+    public function delete(int $id): void
+    {
+        UserModel::query()->findOrFail($id)->delete();
+    }
+
     private function toEntity(UserModel $model): User
     {
         return new User(
