@@ -2,7 +2,7 @@
 
 namespace App\Domain\Cliente\Entities;
 
-use App\Domain\Cliente\ValueObjects\Cpf;
+use App\Domain\Cliente\ValueObjects\DocumentoFiscal;
 
 /**
  * CAMADA DE DOMÍNIO — Entidade Cliente
@@ -12,22 +12,32 @@ class Cliente implements \JsonSerializable
     public function __construct(
         private ?int $id,
         private string $nome,
-        private Cpf $cpf,
+        private string $tipo,
+        private DocumentoFiscal $documento,
         private string $telefone,
         private string $email,
         private \DateTimeImmutable $criadoEm,
     ) {}
 
-    public function atualizar(string $nome, string $telefone, string $email): void
+    public function atualizar(
+        string $nome,
+        string $tipo,
+        DocumentoFiscal $documento,
+        string $telefone,
+        string $email
+    ): void
     {
         $this->nome     = $nome;
+        $this->tipo     = $tipo;
+        $this->documento = $documento;
         $this->telefone = $telefone;
         $this->email    = $email;
     }
 
     public function getId(): ?int     { return $this->id; }
     public function getNome(): string { return $this->nome; }
-    public function getCpf(): Cpf     { return $this->cpf; }
+    public function getTipo(): string { return $this->tipo; }
+    public function getDocumento(): DocumentoFiscal { return $this->documento; }
     public function getTelefone(): string { return $this->telefone; }
     public function getEmail(): string    { return $this->email; }
 
@@ -36,7 +46,8 @@ class Cliente implements \JsonSerializable
         return [
             'id' => $this->id,
             'nome' => $this->nome,
-            'cpf' => (string) $this->cpf,
+            'tipo' => $this->tipo,
+            'documento' => (string) $this->documento,
             'telefone' => $this->telefone,
             'email' => $this->email,
             'criado_em' => $this->criadoEm->format('Y-m-d H:i:s'),
