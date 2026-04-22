@@ -4,6 +4,7 @@ namespace App\Application\Services;
 
 use App\Domain\Cliente\Entities\Cliente;
 use App\Domain\Cliente\Repositories\ClienteRepositoryInterface;
+use App\Domain\Cliente\ValueObjects\Cnpj;
 use App\Domain\Cliente\ValueObjects\Cpf;
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
 use App\Domain\OrdemServico\Entities\OrdemServico;
@@ -55,13 +56,13 @@ class OrdemServicoService
             $clienteId = (int) $data['cliente_id'];
         }
 
-        if ($clienteId === null && array_key_exists('cliente_cpf', $data) && $data['cliente_cpf'] !== null) {
-            $cliente = $this->getClienteByCpf((string) $data['cliente_cpf']);
+        if ($clienteId === null && array_key_exists('cliente_documento', $data) && $data['cliente_documento'] !== null) {
+            $cliente = $this->getClienteByDocumento((string) $data['cliente_documento']);
             $clienteId = $cliente->getId();
         }
 
         if ($clienteId === null) {
-            throw new \DomainException('Informe cliente_id ou cliente_cpf para criar a ordem.');
+            throw new \DomainException('Informe cliente_id ou cliente_documento para criar a ordem.');
         }
 
         $veiculoId = (int) $data['veiculo_id'];
@@ -459,16 +460,37 @@ class OrdemServicoService
         }
     }
 
-    private function getClienteByCpf(string $cpf): Cliente
+    private function getClienteByDocumento(string $documento): Cliente
     {
-        $cpfValidado = new Cpf($cpf);
-        $cliente = $this->clienteRepository->findByCpf($cpfValidado->getRaw());
+        $documentoLimpo = preg_replace('/\D/', '', $documento);
 
-        if (!$cliente) {
-            throw new \DomainException('Cliente não encontrado para o CPF informado.');
+        if ($documentoLimpo === null) {
+            throw new \DomainException('Documento do cliente inválido.');
         }
 
-        return $cliente;
+        if (strlen($documentoLimpo) === 11) {
+            $cpfValidado = new Cpf($documentoLimpo);
+            $cliente = $this->clienteRepository->findByDocumentoTipo($cpfValidado->getRaw(), 'pf');
+
+            if (!$cliente) {
+                throw new \DomainException('Cliente não encontrado para o CPF informado.');
+            }
+
+            return $cliente;
+        }
+
+        if (strlen($documentoLimpo) === 14) {
+            $cnpjValidado = new Cnpj($documentoLimpo);
+            $cliente = $this->clienteRepository->findByDocumentoTipo($cnpjValidado->getRaw(), 'pj');
+
+            if (!$cliente) {
+                throw new \DomainException('Cliente não encontrado para o CNPJ informado.');
+            }
+
+            return $cliente;
+        }
+
+        throw new \DomainException('Documento do cliente deve conter 11 dígitos (CPF) ou 14 dígitos (CNPJ).');
     }
 
     private function veiculoPertenceAoCliente(int $veiculoId, int $clienteId): void
