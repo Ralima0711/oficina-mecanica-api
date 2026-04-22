@@ -17,18 +17,25 @@ class ClienteRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('cpf')) {
+        if ($this->has('documento')) {
             $this->merge([
-                'cpf' => preg_replace('/\D/', '', (string) $this->input('cpf')),
+                'documento' => preg_replace('/\D/', '', (string) $this->input('documento')),
             ]);
         }
     }
 
     public function rules(): array
     {
+        $tipo = (string) $this->input('tipo');
+
         return [
             'nome'      => ['required', 'string', 'max:255'],
-            'cpf'       => ['required', 'string', 'regex:/^\d{11}$/'],
+            'tipo'      => ['required', 'in:pf,pj'],
+            'documento' => [
+                'required',
+                'string',
+                $tipo === 'pj' ? 'regex:/^\d{14}$/' : 'regex:/^\d{11}$/',
+            ],
             'telefone'  => ['required', 'string', 'max:20'],
             'email'     => ['required', 'email', 'max:255'],
         ];
@@ -39,8 +46,10 @@ class ClienteRequest extends FormRequest
         return [
             'nome.required'      => 'O nome é obrigatório.',
             'nome.max'           => 'O nome não pode ter mais de 255 caracteres.',
-            'cpf.required'       => 'O CPF é obrigatório.',
-            'cpf.regex'          => 'O CPF deve conter 11 dígitos válidos.',
+            'tipo.required'      => 'O tipo de cliente é obrigatório.',
+            'tipo.in'            => 'O tipo de cliente deve ser pf ou pj.',
+            'documento.required' => 'O documento é obrigatório.',
+            'documento.regex'    => 'Documento inválido para o tipo informado.',
             'telefone.required'  => 'O telefone é obrigatório.',
             'telefone.max'       => 'O telefone não pode ter mais de 20 caracteres.',
             'email.required'     => 'O email é obrigatório.',

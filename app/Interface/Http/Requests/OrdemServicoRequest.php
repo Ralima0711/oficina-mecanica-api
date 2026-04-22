@@ -11,12 +11,21 @@ class OrdemServicoRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('cliente_documento')) {
+            $this->merge([
+                'cliente_documento' => preg_replace('/\D/', '', (string) $this->input('cliente_documento')),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         if ($this->isMethod('post')) {
             return [
-                'cliente_id' => ['nullable', 'integer', 'exists:clientes,id', 'required_without:cliente_cpf', 'prohibits:cliente_cpf'],
-                'cliente_cpf' => ['nullable', 'string', 'max:20', 'required_without:cliente_id', 'prohibits:cliente_id'],
+                'cliente_id' => ['nullable', 'integer', 'exists:clientes,id', 'required_without:cliente_documento', 'prohibits:cliente_documento'],
+                'cliente_documento' => ['nullable', 'string', 'regex:/^(\d{11}|\d{14})$/', 'required_without:cliente_id', 'prohibits:cliente_id'],
                 'veiculo_id' => ['required', 'integer', 'exists:veiculos,id'],
                 'mecanico_id' => ['sometimes', 'nullable', 'integer', 'exists:mecanicos,id'],
                 'descricao_problema' => ['required', 'string', 'max:5000'],
