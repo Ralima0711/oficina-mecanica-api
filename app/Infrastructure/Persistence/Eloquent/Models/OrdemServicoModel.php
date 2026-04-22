@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Eloquent\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * CAMADA DE INFRAESTRUTURA — Eloquent Model
@@ -16,15 +17,18 @@ class OrdemServicoModel extends Model
     protected $fillable = [
         'cliente_id',
         'veiculo_id',
+        'mecanico_id',
         'status',
         'descricao_problema',
         'diagnostico',
         'valor_total',
+        'iniciada_em',
         'concluida_em',
     ];
 
     protected $casts = [
         'valor_total'  => 'float',
+        'iniciada_em'  => 'datetime',
         'concluida_em' => 'datetime',
     ];
 
@@ -36,5 +40,15 @@ class OrdemServicoModel extends Model
     public function veiculo(): BelongsTo
     {
         return $this->belongsTo(VeiculoModel::class, 'veiculo_id');
+    }
+
+    public function itensOs(): HasMany
+    {
+        return $this->hasMany(ItemOsModel::class, 'ordem_servico_id');
+    }
+
+    public function insumosOs(): HasMany
+    {
+        return $this->hasMany(InsumoOsModel::class, 'ordem_servico_id');
     }
 }
