@@ -23,14 +23,14 @@ class EloquentOrdemServicoRepository implements OrdemServicoRepositoryInterface
     public function findAll(): array
     {
         return OrdemServicoModel::all()
-            ->map(fn($m) => $this->toEntity($m))
+            ->map(fn(OrdemServicoModel $m) => $this->toEntity($m))
             ->toArray();
     }
 
     public function findByCliente(int $clienteId): array
     {
         return OrdemServicoModel::where('cliente_id', $clienteId)->get()
-            ->map(fn($m) => $this->toEntity($m))
+            ->map(fn(OrdemServicoModel $m) => $this->toEntity($m))
             ->toArray();
     }
 
@@ -43,9 +43,13 @@ class EloquentOrdemServicoRepository implements OrdemServicoRepositoryInterface
         $model->fill([
             'cliente_id'        => $ordem->getClienteId(),
             'veiculo_id'        => $ordem->getVeiculoId(),
+            'mecanico_id'       => $ordem->getMecanicoId(),
             'status'            => (string) $ordem->getStatus(),
             'descricao_problema'=> $ordem->getDescricao(),
+            'diagnostico'       => $ordem->getDiagnostico(),
             'valor_total'       => $ordem->getValorTotal(),
+            'iniciada_em'       => $ordem->getIniciadaEm()?->format('Y-m-d H:i:s'),
+            'concluida_em'      => $ordem->getConcluidaEm()?->format('Y-m-d H:i:s'),
         ]);
 
         $model->save();
@@ -63,14 +67,15 @@ class EloquentOrdemServicoRepository implements OrdemServicoRepositoryInterface
             id: $model->id,
             clienteId: $model->cliente_id,
             veiculoId: $model->veiculo_id,
+            mecanicoId: $model->mecanico_id,
             status: StatusOrdem::from($model->status),
             descricaoProblema: $model->descricao_problema,
             diagnostico: $model->diagnostico,
-            valorTotal: $model->valor_total,
-            criadaEm: new \DateTimeImmutable($model->created_at),
-            concluidaEm: $model->concluida_em
-                ? new \DateTimeImmutable($model->concluida_em)
-                : null,
+            valorTotal: $model->valor_total !== null ? (float) $model->valor_total : null,
+            iniciadaEm: $model->iniciada_em?->toDateTimeImmutable(),
+            criadaEm: $model->created_at?->toDateTimeImmutable() ?? new \DateTimeImmutable(),
+            atualizadaEm: $model->updated_at?->toDateTimeImmutable(),
+            concluidaEm: $model->concluida_em?->toDateTimeImmutable(),
         );
     }
 }
