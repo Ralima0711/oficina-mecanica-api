@@ -6,7 +6,7 @@ namespace App\Domain\Cliente\ValueObjects;
  * CAMADA DE DOMÍNIO — Value Object CPF
  * Garante que nenhum CPF inválido entre no sistema.
  */
-final class Cpf
+final class Cpf implements DocumentoFiscal
 {
     private string $value;
 
