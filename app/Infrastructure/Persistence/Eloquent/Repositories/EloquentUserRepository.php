@@ -22,6 +22,15 @@ class EloquentUserRepository implements UserRepositoryInterface
         return $model ? $this->toEntity($model) : null;
     }
 
+    public function findByRole(string $role): array
+    {
+        return UserModel::query()
+            ->where('role', strtolower(trim($role)))
+            ->get()
+            ->map(fn(UserModel $model) => $this->toEntity($model))
+            ->toArray();
+    }
+
     public function save(User $user): User
     {
         $model = $user->getId()
@@ -44,7 +53,7 @@ class EloquentUserRepository implements UserRepositoryInterface
     {
         return UserModel::query()
             ->get()
-            ->map(fn($model) => $this->toEntity($model))
+            ->map(fn(UserModel $model) => $this->toEntity($model))
             ->toArray();
     }
 
