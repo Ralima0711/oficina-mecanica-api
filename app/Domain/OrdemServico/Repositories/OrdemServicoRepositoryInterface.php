@@ -14,6 +14,7 @@ interface OrdemServicoRepositoryInterface
     public function findById(int $id): ?OrdemServico;
     public function findAll(): array;
     public function findByCliente(int $clienteId): array;
+    public function findAbertas24Horas(): array;
     public function save(OrdemServico $ordem): OrdemServico;
     public function delete(int $id): void;
 }

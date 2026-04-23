@@ -32,7 +32,10 @@ class OrdemServicoController extends Controller
     public function store(OrdemServicoRequest $request): JsonResponse
     {
         try {
-            $os = $this->service->criar($request->validated());
+            $usuario = $request->user('api') ?? auth('api')->user();
+            $role = $usuario?->role;
+
+            $os = $this->service->criar($request->validated(), is_string($role) ? $role : null);
             return response()->json($os, 201);
         } catch (\Throwable $e) {
             return $this->handleException($e);
