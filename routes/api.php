@@ -3,6 +3,7 @@
 use App\Interface\Http\Controllers\AuthController;
 use App\Interface\Http\Controllers\OrdemServicoController;
 use App\Interface\Http\Controllers\ClienteController;
+use App\Interface\Http\Controllers\NotificacaoController;
 use App\Interface\Http\Controllers\VeiculoController;
 use App\Interface\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('usuarios',       UserController::class);
     Route::apiResource('clientes',       ClienteController::class);
     Route::apiResource('veiculos',       VeiculoController::class);
+    Route::get('notificacoes/minhas', [NotificacaoController::class, 'index'])
+        ->name('notificacoes.minhas');
+    Route::patch('notificacoes/{id}/lida', [NotificacaoController::class, 'marcarComoLida'])
+        ->name('notificacoes.marcar-como-lida');
 });
 
 /*

@@ -3,9 +3,11 @@
 namespace App\Infrastructure\Providers;
 
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
+use App\Domain\Notificacao\Repositories\NotificacaoRepositoryInterface;
 use App\Domain\Cliente\Repositories\ClienteRepositoryInterface;
 use App\Domain\User\Repositories\UserRepositoryInterface;
 use App\Domain\Veiculo\Repositories\VeiculoRepositoryInterface;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentNotificacaoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentOrdemServicoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentClienteRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentUserRepository;
@@ -25,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             OrdemServicoRepositoryInterface::class,
             EloquentOrdemServicoRepository::class
+        );
+
+        $this->app->bind(
+            NotificacaoRepositoryInterface::class,
+            EloquentNotificacaoRepository::class
         );
 
         $this->app->bind(
