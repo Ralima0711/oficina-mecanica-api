@@ -30,6 +30,7 @@ class OrdemServicoService
         private OrdemServicoRepositoryInterface $repository,
         private ClienteRepositoryInterface $clienteRepository,
         private OrdemServicoNotificacaoService $notificacaoService,
+        private SistemaNotificacaoService $sistemaNotificacaoService,
     ) {}
 
     public function listarTodas(): array
@@ -48,7 +49,7 @@ class OrdemServicoService
         return $os;
     }
 
-    public function criar(array $data): OrdemServico
+    public function criar(array $data, ?string $abertoPorRole = null): OrdemServico
     {
         $clienteId = null;
 
@@ -83,6 +84,14 @@ class OrdemServicoService
 
         $salva = $this->repository->save($os);
         $this->notificarMudancaStatus($salva);
+
+        if (strtolower((string) $abertoPorRole) === 'atendente') {
+            $this->notificarSistema(
+                fn() => $this->sistemaNotificacaoService->notificarOsAbertaParaMecanicos($salva),
+                $salva,
+                'OS_ABERTA'
+            );
+        }
 
         return $salva;
     }
@@ -268,6 +277,11 @@ class OrdemServicoService
 
         $links = $this->gerarLinksAprovacao($orcamentoDetalhado['ordem']);
         $this->notificarMudancaStatus($orcamentoDetalhado['ordem'], $links, $orcamentoDetalhado['orcamento']);
+        $this->notificarSistema(
+            fn() => $this->sistemaNotificacaoService->notificarOsAguardandoAprovacaoParaAtendentes($orcamentoDetalhado['ordem']),
+            $orcamentoDetalhado['ordem'],
+            'OS_AGUARDANDO_APROVACAO'
+        );
 
         return $orcamentoDetalhado['ordem'];
     }
@@ -280,6 +294,11 @@ class OrdemServicoService
         $os->aprovar();
         $salva = $this->repository->save($os);
         $this->notificarMudancaStatus($salva);
+        $this->notificarSistema(
+            fn() => $this->sistemaNotificacaoService->notificarMecanicoResponsavel($salva, 'OS_APROVADA'),
+            $salva,
+            'OS_APROVADA'
+        );
 
         return $salva;
     }
@@ -320,6 +339,11 @@ class OrdemServicoService
         });
 
         $this->notificarMudancaStatus($salva);
+        $this->notificarSistema(
+            fn() => $this->sistemaNotificacaoService->notificarMecanicoResponsavel($salva, 'OS_CANCELADA'),
+            $salva,
+            'OS_CANCELADA'
+        );
 
         return $salva;
     }
@@ -347,8 +371,18 @@ class OrdemServicoService
         $os->finalizarServico($valorAtual);
         $salva = $this->repository->save($os);
         $this->notificarMudancaStatus($salva);
+        $this->notificarSistema(
+            fn() => $this->sistemaNotificacaoService->notificarOsFinalizadaParaAtendentes($salva),
+            $salva,
+            'OS_FINALIZADA'
+        );
 
         return $salva;
+    }
+
+    public function processarLembretesOsAbertasSemDiagnostico(): int
+    {
+        return $this->sistemaNotificacaoService->processarLembretesOsAbertasSemDiagnostico();
     }
 
     public function entregar(int $id): OrdemServico
@@ -460,6 +494,20 @@ class OrdemServicoService
         }
     }
 
+    private function notificarSistema(callable $callback, OrdemServico $ordem, string $tipo): void
+    {
+        try {
+            $callback();
+        } catch (\Throwable $e) {
+            Log::error('Falha ao persistir notificação de sistema da OS.', [
+                'ordem_servico_id' => $ordem->getId(),
+                'tipo' => $tipo,
+                'erro' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    
     private function getClienteByDocumento(string $documento): Cliente
     {
         $documentoLimpo = preg_replace('/\D/', '', $documento);
