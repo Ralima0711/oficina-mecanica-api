@@ -159,6 +159,1514 @@
                     }
                 ]
             }
+        },
+        "/api/clientes": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Lista todos os clientes",
+                "operationId": "3bb45b611231b07b1ecde6d162bf0dce",
+                "responses": {
+                    "200": {
+                        "description": "Lista de clientes retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "nome": {
+                                                "type": "string",
+                                                "example": "João Silva"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "joao@email.com"
+                                            },
+                                            "telefone": {
+                                                "type": "string",
+                                                "example": "11999999999"
+                                            },
+                                            "documento_tipo": {
+                                                "type": "string",
+                                                "example": "cpf"
+                                            },
+                                            "documento": {
+                                                "type": "string",
+                                                "example": "123.456.789-00"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Cria um novo cliente",
+                "operationId": "0581cf9c60ea7ff237ea606e68db1c55",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "email",
+                                    "telefone",
+                                    "documento_tipo",
+                                    "documento"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@email.com"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "11999999999"
+                                    },
+                                    "documento_tipo": {
+                                        "type": "string",
+                                        "example": "cpf",
+                                        "enum": [
+                                            "cpf",
+                                            "cnpj"
+                                        ]
+                                    },
+                                    "documento": {
+                                        "type": "string",
+                                        "example": "123.456.789-00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cliente criado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/clientes/{id}": {
+            "get": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Busca um cliente pelo ID",
+                "operationId": "822e7019259f505b95da5644515c5278",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cliente encontrado"
+                    },
+                    "404": {
+                        "description": "Cliente não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Atualiza um cliente",
+                "operationId": "3bd8ce628f6f411f73df4f23d725eecb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "João Silva Atualizado"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@email.com"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "example": "11999999999"
+                                    },
+                                    "documento_tipo": {
+                                        "type": "string",
+                                        "example": "cpf",
+                                        "enum": [
+                                            "cpf",
+                                            "cnpj"
+                                        ]
+                                    },
+                                    "documento": {
+                                        "type": "string",
+                                        "example": "123.456.789-00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cliente atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Cliente não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Remove um cliente",
+                "operationId": "9e4a745c17a934d177d849bfea03551f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do cliente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Cliente removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Cliente não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/notificacoes/minhas": {
+            "get": {
+                "tags": [
+                    "Notificacoes"
+                ],
+                "summary": "Lista as notificações do usuário autenticado",
+                "operationId": "d3452424165a0045bb235919761b1d18",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Itens por página (padrão: 20)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 20
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notificações retornadas com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "tipo": {
+                                                        "type": "string",
+                                                        "example": "OS_CRIADA"
+                                                    },
+                                                    "mensagem": {
+                                                        "type": "string",
+                                                        "example": "Nova OS criada para diagnóstico"
+                                                    },
+                                                    "lida": {
+                                                        "type": "boolean",
+                                                        "example": false
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 20
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/notificacoes/{id}/lida": {
+            "patch": {
+                "tags": [
+                    "Notificacoes"
+                ],
+                "summary": "Marca uma notificação como lida",
+                "operationId": "dfe39b7fbdd56bbd95f4f23e400ad8e9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da notificação",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notificação marcada como lida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "lida": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notificação não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ordens-servico": {
+            "get": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Lista todas as ordens de serviço",
+                "operationId": "fd23457d2284e6c9aba32f32d737724e",
+                "responses": {
+                    "200": {
+                        "description": "Lista de OS retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "cliente_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "veiculo_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "em_diagnostico",
+                                                "enum": [
+                                                    "em_diagnostico",
+                                                    "aguardando_aprovacao",
+                                                    "aprovada",
+                                                    "em_execucao",
+                                                    "finalizada",
+                                                    "entregue",
+                                                    "recusada"
+                                                ]
+                                            },
+                                            "descricao_problema": {
+                                                "type": "string",
+                                                "example": "Carro não liga"
+                                            },
+                                            "valor_total": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 350
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Cria uma nova ordem de serviço",
+                "operationId": "f9cf944ca331a51ce6617828f613c954",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cliente_id",
+                                    "veiculo_id",
+                                    "descricao_problema"
+                                ],
+                                "properties": {
+                                    "cliente_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "veiculo_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "descricao_problema": {
+                                        "type": "string",
+                                        "example": "Carro não liga, possível problema na bateria"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OS criada com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ordens-servico/{id}": {
+            "get": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Busca uma OS pelo ID",
+                "operationId": "511d00ac3e587bac026a5f901d0c893b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OS encontrada"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Atualiza uma OS",
+                "operationId": "d4199378b4dbf6b5004b022db4c66368",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "descricao_problema": {
+                                        "type": "string",
+                                        "example": "Problema na bateria e alternador"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OS atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Remove uma OS",
+                "operationId": "d2dc16639eab2bcdfc56e26d96d8bbe3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "OS removida com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ordens-servico/{id}/iniciar-diagnostico": {
+            "patch": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Inicia o diagnóstico — status muda para em_diagnostico",
+                "operationId": "b9d9ffba752a6fd9575087df63c23d56",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Diagnóstico iniciado com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "422": {
+                        "description": "Usuário não possui cadastro de mecânico"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ordens-servico/{id}/submeter-orcamento": {
+            "post": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Submete orçamento — status muda para aguardando_aprovacao",
+                "operationId": "58c9ca080c81e5c245f286149d293cfc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "valor_total",
+                                    "itens"
+                                ],
+                                "properties": {
+                                    "valor_total": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 350
+                                    },
+                                    "itens": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "peca_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "quantidade": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "valor_unitario": {
+                                                    "type": "number",
+                                                    "example": 50
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Orçamento submetido com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/public/ordens-servico/{id}/aprovar/{token}": {
+            "get": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Aprovação pública da OS pelo cliente via link de e-mail",
+                "operationId": "85669677ccb9349bc19bc1e8dac29230",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "Token de aprovação enviado por e-mail",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "abc123token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OS aprovada com sucesso"
+                    },
+                    "404": {
+                        "description": "OS ou token inválido"
+                    }
+                }
+            }
+        },
+        "/api/public/ordens-servico/{id}/reprovar/{token}": {
+            "get": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Reprovação pública da OS pelo cliente via link de e-mail",
+                "operationId": "9191c6574f77da4bfc4bf806503b8175",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "Token de reprovação enviado por e-mail",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "abc123token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OS reprovada com sucesso"
+                    },
+                    "404": {
+                        "description": "OS ou token inválido"
+                    }
+                }
+            }
+        },
+        "/api/ordens-servico/{id}/iniciar-execucao": {
+            "patch": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Inicia execução — status muda para em_execucao",
+                "operationId": "b7e83e25e8271a16c148ecdd93030726",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Execução iniciada com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ordens-servico/{id}/finalizar": {
+            "patch": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Finaliza a OS — status muda para finalizada",
+                "operationId": "3f10f058ffb7f9a0f895b4902d1ea1cb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OS finalizada com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ordens-servico/{id}/entregar": {
+            "patch": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Registra entrega do veículo — status muda para entregue",
+                "operationId": "23d3f17ac7c726c099e3bd3a4516ec6b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Veículo entregue com sucesso"
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/usuarios": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Lista todos os usuários",
+                "operationId": "cbd20e4757c81aa20f9b08211bb76b9a",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuários retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Admin"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "admin@oficina.local"
+                                            },
+                                            "role": {
+                                                "type": "string",
+                                                "example": "admin",
+                                                "enum": [
+                                                    "admin",
+                                                    "atendente",
+                                                    "mecanico"
+                                                ]
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Cria um novo usuário",
+                "operationId": "c4250ac2742d6d5784d18adf8e1424ed",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João Mecânico"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@oficina.local"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "mecanico",
+                                        "enum": [
+                                            "admin",
+                                            "atendente",
+                                            "mecanico"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/usuarios/{id}": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Busca um usuário pelo ID",
+                "operationId": "b00e061a8405676c9d510919f69b8f26",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário encontrado"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Atualiza um usuário",
+                "operationId": "7a2b622ad09833c6c8f92be6eddfe3cc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João Mecânico"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@oficina.local"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "novasenha123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "mecanico",
+                                        "enum": [
+                                            "admin",
+                                            "atendente",
+                                            "mecanico"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Remove um usuário",
+                "operationId": "8f552d2a3ff12de489e79d6850cd608e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Usuário removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/veiculos": {
+            "get": {
+                "tags": [
+                    "Veiculos"
+                ],
+                "summary": "Lista todos os veículos",
+                "operationId": "e57625eb59fd0cf8bcbdf08755046283",
+                "responses": {
+                    "200": {
+                        "description": "Lista de veículos retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "cliente_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "placa": {
+                                                "type": "string",
+                                                "example": "ABC1D23"
+                                            },
+                                            "marca": {
+                                                "type": "string",
+                                                "example": "Toyota"
+                                            },
+                                            "modelo": {
+                                                "type": "string",
+                                                "example": "Corolla"
+                                            },
+                                            "ano": {
+                                                "type": "integer",
+                                                "example": 2020
+                                            },
+                                            "cor": {
+                                                "type": "string",
+                                                "example": "Prata"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Veiculos"
+                ],
+                "summary": "Cadastra um novo veículo",
+                "operationId": "481fd67f9eb3d1eedd61f5f30aeddec4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cliente_id",
+                                    "placa",
+                                    "marca",
+                                    "modelo",
+                                    "ano"
+                                ],
+                                "properties": {
+                                    "cliente_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "placa": {
+                                        "type": "string",
+                                        "example": "ABC1D23"
+                                    },
+                                    "marca": {
+                                        "type": "string",
+                                        "example": "Toyota"
+                                    },
+                                    "modelo": {
+                                        "type": "string",
+                                        "example": "Corolla"
+                                    },
+                                    "ano": {
+                                        "type": "integer",
+                                        "example": 2020
+                                    },
+                                    "cor": {
+                                        "type": "string",
+                                        "example": "Prata"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Veículo cadastrado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/veiculos/{id}": {
+            "get": {
+                "tags": [
+                    "Veiculos"
+                ],
+                "summary": "Busca um veículo pelo ID",
+                "operationId": "cf1daa01872799c0847cf7b3b0a4a896",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do veículo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Veículo encontrado"
+                    },
+                    "404": {
+                        "description": "Veículo não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Veiculos"
+                ],
+                "summary": "Atualiza um veículo",
+                "operationId": "247fc69e35d0115b247bb6f72d87691d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do veículo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cliente_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "placa": {
+                                        "type": "string",
+                                        "example": "ABC1D23"
+                                    },
+                                    "marca": {
+                                        "type": "string",
+                                        "example": "Toyota"
+                                    },
+                                    "modelo": {
+                                        "type": "string",
+                                        "example": "Corolla"
+                                    },
+                                    "ano": {
+                                        "type": "integer",
+                                        "example": 2020
+                                    },
+                                    "cor": {
+                                        "type": "string",
+                                        "example": "Prata"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Veículo atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Veículo não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Veiculos"
+                ],
+                "summary": "Remove um veículo",
+                "operationId": "fb4829b546b403dbcb24655a3f22c26e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do veículo",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Veículo removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Veículo não encontrado"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -174,6 +1682,26 @@
         {
             "name": "Auth",
             "description": "Endpoints de autenticacao JWT"
+        },
+        {
+            "name": "Clientes",
+            "description": "Gerenciamento de clientes (pessoa física e jurídica)"
+        },
+        {
+            "name": "Notificacoes",
+            "description": "Notificações do usuário autenticado"
+        },
+        {
+            "name": "Ordens de Servico",
+            "description": "Ciclo de vida completo das Ordens de Serviço"
+        },
+        {
+            "name": "Usuarios",
+            "description": "Gerenciamento de usuários do sistema"
+        },
+        {
+            "name": "Veiculos",
+            "description": "Gerenciamento de veículos dos clientes"
         }
     ]
 }
