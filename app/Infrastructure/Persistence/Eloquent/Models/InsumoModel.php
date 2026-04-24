@@ -20,5 +20,7 @@ class InsumoModel extends Model
         'preco_unitario' => 'float',
         'estoque_atual' => 'float',
         'estoque_minimo' => 'float',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }
