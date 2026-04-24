@@ -21,5 +21,7 @@ class PecaModel extends Model
         'preco_unitario' => 'float',
         'estoque_atual' => 'integer',
         'estoque_minimo' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }
