@@ -8,7 +8,7 @@ namespace App\Domain\OrdemServico\ValueObjects;
  */
 final class StatusOrdem
 {
-    public const ABERTA = 'ABERTA';
+    public const RECEBIDA = 'RECEBIDA';
     public const EM_DIAGNOSTICO = 'EM_DIAGNOSTICO';
     public const AGUARDANDO_APROVACAO = 'AGUARDANDO_APROVACAO';
     public const APROVADA = 'APROVADA';
@@ -17,7 +17,7 @@ final class StatusOrdem
     public const ENTREGUE = 'ENTREGUE';
 
     private const VALID = [
-        self::ABERTA,
+        self::RECEBIDA,
         self::EM_DIAGNOSTICO,
         self::AGUARDANDO_APROVACAO,
         self::APROVADA,

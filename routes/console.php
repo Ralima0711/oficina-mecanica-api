@@ -10,10 +10,10 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('notificacoes:processar-lembretes-os', function (OrdemServicoService $service) {
-    $processadas = $service->processarLembretesOsAbertasSemDiagnostico();
+    $processadas = $service->processarLembretesOsRecebidasSemDiagnostico();
 
     $this->info("Lembretes processados: {$processadas}");
-})->purpose('Processa lembretes de OS aberta sem diagnostico a cada 24h');
+})->purpose('Processa lembretes de OS recebida sem diagnostico a cada 24h');
 
 Schedule::command('notificacoes:processar-lembretes-os')
     ->hourly()

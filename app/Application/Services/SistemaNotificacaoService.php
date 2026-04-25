@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class SistemaNotificacaoService
 {
-    public const TIPO_OS_ABERTA = 'OS_ABERTA';
-    public const TIPO_OS_ABERTA_LEMBRETE_24H = 'OS_ABERTA_LEMBRETE_24H';
+    public const TIPO_OS_RECEBIDA = 'OS_RECEBIDA';
+    public const TIPO_OS_RECEBIDA_LEMBRETE_24H = 'OS_RECEBIDA_LEMBRETE_24H';
     public const TIPO_OS_AGUARDANDO_APROVACAO = 'OS_AGUARDANDO_APROVACAO';
     public const TIPO_OS_APROVADA = 'OS_APROVADA';
     public const TIPO_OS_FINALIZADA = 'OS_FINALIZADA';
@@ -45,9 +45,9 @@ class SistemaNotificacaoService
         return $marcada;
     }
 
-    public function notificarOsAbertaParaMecanicos(OrdemServico $ordem): void
+    public function notificarOsRecebidaParaMecanicos(OrdemServico $ordem): void
     {
-        $this->notificarPorRole($ordem, 'mecanico', self::TIPO_OS_ABERTA);
+        $this->notificarPorRole($ordem, 'mecanico', self::TIPO_OS_RECEBIDA);
     }
 
     public function notificarOsAguardandoAprovacaoParaAtendentes(OrdemServico $ordem): void
@@ -80,9 +80,9 @@ class SistemaNotificacaoService
         $this->notificacaoRepository->createForUsers($ordemId, [(int) $userId], $tipo);
     }
 
-    public function processarLembretesOsAbertasSemDiagnostico(): int
+    public function processarLembretesOsRecebidasSemDiagnostico(): int
     {
-        $ordens = $this->ordemServicoRepository->findAbertas24Horas();
+        $ordens = $this->ordemServicoRepository->findRecebidas24Horas();
         $total = 0;
 
         foreach ($ordens as $ordem) {
@@ -95,7 +95,7 @@ class SistemaNotificacaoService
 
                 $ultimaNotificacao = $this->notificacaoRepository->findLastByOrdemAndTipo(
                     $ordemId,
-                    self::TIPO_OS_ABERTA_LEMBRETE_24H
+                    self::TIPO_OS_RECEBIDA_LEMBRETE_24H
                 );
 
                 if ($ultimaNotificacao !== null && $ultimaNotificacao->getCriadaEm() > now()->subHours(24)->toDateTimeImmutable()) {
@@ -112,10 +112,10 @@ class SistemaNotificacaoService
                 $total += $this->notificacaoRepository->createForUsers(
                     $ordemId,
                     $userIds,
-                    self::TIPO_OS_ABERTA_LEMBRETE_24H
+                    self::TIPO_OS_RECEBIDA_LEMBRETE_24H
                 );
             } catch (\Throwable $e) {
-                Log::error('Falha ao processar lembrete de OS aberta sem diagnóstico.', [
+                Log::error('Falha ao processar lembrete de OS recebida sem diagnóstico.', [
                     'ordem_servico_id' => $ordem->getId(),
                     'erro' => $e->getMessage(),
                 ]);

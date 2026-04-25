@@ -74,7 +74,7 @@ class OrdemServicoService
             clienteId: $clienteId,
             veiculoId: $veiculoId,
             mecanicoId: $data['mecanico_id'] ?? null,
-            status: StatusOrdem::from('ABERTA'),
+            status: StatusOrdem::from('RECEBIDA'),
             descricaoProblema: $data['descricao_problema'],
             diagnostico: $data['diagnostico'] ?? null,
             valorTotal: null,
@@ -87,9 +87,9 @@ class OrdemServicoService
 
         if (strtolower((string) $abertoPorRole) === 'atendente') {
             $this->notificarSistema(
-                fn() => $this->sistemaNotificacaoService->notificarOsAbertaParaMecanicos($salva),
+                fn() => $this->sistemaNotificacaoService->notificarOsRecebidaParaMecanicos($salva),
                 $salva,
-                'OS_ABERTA'
+                'OS_RECEBIDA'
             );
         }
 
@@ -381,9 +381,9 @@ class OrdemServicoService
         return $salva;
     }
 
-    public function processarLembretesOsAbertasSemDiagnostico(): int
+    public function processarLembretesOsRecebidasSemDiagnostico(): int
     {
-        return $this->sistemaNotificacaoService->processarLembretesOsAbertasSemDiagnostico();
+        return $this->sistemaNotificacaoService->processarLembretesOsRecebidasSemDiagnostico();
     }
 
     public function entregar(int $id): OrdemServico

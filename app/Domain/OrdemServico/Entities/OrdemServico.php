@@ -64,8 +64,8 @@ class OrdemServico implements \JsonSerializable
 
     public function iniciarDiagnostico(int $mecanicoId): void
     {
-        if (!$this->status->equals(StatusOrdem::ABERTA)) {
-            throw new \DomainException('Somente ordens ABERTAS podem iniciar diagnostico.');
+        if (!$this->status->equals(StatusOrdem::RECEBIDA)) {
+            throw new \DomainException('Somente ordens RECEBIDAS podem iniciar diagnostico.');
         }
 
         if ($mecanicoId <= 0) {
