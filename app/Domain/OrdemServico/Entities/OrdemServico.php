@@ -32,7 +32,7 @@ class OrdemServico implements \JsonSerializable
     public function atualizar(array $dados): void
     {
         if (!$this->podeEditar()) {
-            throw new \DomainException('Ordens FINALIZADAS ou CANCELADAS não podem ser alteradas.');
+            throw new \DomainException('Ordens FINALIZADAS não podem ser alteradas.');
         }
 
         if (array_key_exists('cliente_id', $dados)) {
@@ -104,8 +104,8 @@ class OrdemServico implements \JsonSerializable
         if (!$this->status->equals(StatusOrdem::AGUARDANDO_APROVACAO)) {
             throw new \DomainException('Somente ordens AGUARDANDO_APROVACAO podem ser reprovadas.');
         }
-
-        $this->status = StatusOrdem::from(StatusOrdem::CANCELADA);
+        $this->diagnostico .= "(Orçamento rescusado)";
+        $this->status = StatusOrdem::from(StatusOrdem::FINALIZADA);
     }
 
     public function iniciarExecucao(): void
@@ -156,27 +156,9 @@ class OrdemServico implements \JsonSerializable
         $this->finalizarServico($valorTotal);
     }
 
-    public function cancelar(): void
-    {
-        if ($this->status->equals(StatusOrdem::FINALIZADA)) {
-            throw new \DomainException('Ordens FINALIZADAS não podem ser canceladas.');
-        }
-
-        if ($this->status->equals(StatusOrdem::ENTREGUE)) {
-            throw new \DomainException('Ordens ENTREGUES não podem ser canceladas.');
-        }
-
-        if ($this->status->equals(StatusOrdem::CANCELADA)) {
-            throw new \DomainException('A ordem já está CANCELADA.');
-        }
-
-        $this->status = StatusOrdem::from(StatusOrdem::CANCELADA);
-    }
-
     private function podeEditar(): bool
     {
         return !$this->status->equals(StatusOrdem::FINALIZADA)
-            && !$this->status->equals(StatusOrdem::CANCELADA)
             && !$this->status->equals(StatusOrdem::ENTREGUE);
     }
 

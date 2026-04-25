@@ -118,6 +118,7 @@ class OrdemServicoService
 
     public function submeterOrcamento(int $id, int $mecanicoId, array $dados): OrdemServico
     {
+
         $diagnostico = trim((string) ($dados['diagnostico'] ?? ''));
         $maoDeObra = (float) ($dados['mao_de_obra'] ?? 0);
 
@@ -340,9 +341,9 @@ class OrdemServicoService
 
         $this->notificarMudancaStatus($salva);
         $this->notificarSistema(
-            fn() => $this->sistemaNotificacaoService->notificarMecanicoResponsavel($salva, 'OS_CANCELADA'),
+            fn() => $this->sistemaNotificacaoService->notificarMecanicoResponsavel($salva, 'OS_RECUSADA'),
             $salva,
-            'OS_CANCELADA'
+            'OS_RECUSADA'
         );
 
         return $salva;

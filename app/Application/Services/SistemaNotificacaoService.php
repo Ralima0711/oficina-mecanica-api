@@ -15,7 +15,6 @@ class SistemaNotificacaoService
     public const TIPO_OS_ABERTA_LEMBRETE_24H = 'OS_ABERTA_LEMBRETE_24H';
     public const TIPO_OS_AGUARDANDO_APROVACAO = 'OS_AGUARDANDO_APROVACAO';
     public const TIPO_OS_APROVADA = 'OS_APROVADA';
-    public const TIPO_OS_CANCELADA = 'OS_CANCELADA';
     public const TIPO_OS_FINALIZADA = 'OS_FINALIZADA';
 
     public function __construct(
