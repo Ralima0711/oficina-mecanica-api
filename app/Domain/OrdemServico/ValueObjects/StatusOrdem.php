@@ -15,7 +15,6 @@ final class StatusOrdem
     public const EM_EXECUCAO = 'EM_EXECUCAO';
     public const FINALIZADA = 'FINALIZADA';
     public const ENTREGUE = 'ENTREGUE';
-    public const CANCELADA = 'CANCELADA';
 
     private const VALID = [
         self::ABERTA,
@@ -25,7 +24,6 @@ final class StatusOrdem
         self::EM_EXECUCAO,
         self::FINALIZADA,
         self::ENTREGUE,
-        self::CANCELADA,
     ];
 
     private function __construct(private string $value) {}
