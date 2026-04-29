@@ -8,24 +8,22 @@ namespace App\Domain\OrdemServico\ValueObjects;
  */
 final class StatusOrdem
 {
-    public const ABERTA = 'ABERTA';
+    public const RECEBIDA = 'RECEBIDA';
     public const EM_DIAGNOSTICO = 'EM_DIAGNOSTICO';
     public const AGUARDANDO_APROVACAO = 'AGUARDANDO_APROVACAO';
     public const APROVADA = 'APROVADA';
     public const EM_EXECUCAO = 'EM_EXECUCAO';
     public const FINALIZADA = 'FINALIZADA';
     public const ENTREGUE = 'ENTREGUE';
-    public const CANCELADA = 'CANCELADA';
 
     private const VALID = [
-        self::ABERTA,
+        self::RECEBIDA,
         self::EM_DIAGNOSTICO,
         self::AGUARDANDO_APROVACAO,
         self::APROVADA,
         self::EM_EXECUCAO,
         self::FINALIZADA,
         self::ENTREGUE,
-        self::CANCELADA,
     ];
 
     private function __construct(private string $value) {}

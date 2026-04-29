@@ -15,7 +15,6 @@ class NotificacaoModel extends Model
         'ordem_servico_id',
         'user_id',
         'tipo',
-        'canal',
         'status',
         'enviada_em',
         'lida',

@@ -74,7 +74,7 @@ class OrdemServicoService
             clienteId: $clienteId,
             veiculoId: $veiculoId,
             mecanicoId: $data['mecanico_id'] ?? null,
-            status: StatusOrdem::from('ABERTA'),
+            status: StatusOrdem::from('RECEBIDA'),
             descricaoProblema: $data['descricao_problema'],
             diagnostico: $data['diagnostico'] ?? null,
             valorTotal: null,
@@ -87,9 +87,9 @@ class OrdemServicoService
 
         if (strtolower((string) $abertoPorRole) === 'atendente') {
             $this->notificarSistema(
-                fn() => $this->sistemaNotificacaoService->notificarOsAbertaParaMecanicos($salva),
+                fn() => $this->sistemaNotificacaoService->notificarOsRecebidaParaMecanicos($salva),
                 $salva,
-                'OS_ABERTA'
+                'OS_RECEBIDA'
             );
         }
 
@@ -118,6 +118,7 @@ class OrdemServicoService
 
     public function submeterOrcamento(int $id, int $mecanicoId, array $dados): OrdemServico
     {
+
         $diagnostico = trim((string) ($dados['diagnostico'] ?? ''));
         $maoDeObra = (float) ($dados['mao_de_obra'] ?? 0);
 
@@ -340,9 +341,9 @@ class OrdemServicoService
 
         $this->notificarMudancaStatus($salva);
         $this->notificarSistema(
-            fn() => $this->sistemaNotificacaoService->notificarMecanicoResponsavel($salva, 'OS_CANCELADA'),
+            fn() => $this->sistemaNotificacaoService->notificarMecanicoResponsavel($salva, 'OS_RECUSADA'),
             $salva,
-            'OS_CANCELADA'
+            'OS_RECUSADA'
         );
 
         return $salva;
@@ -380,9 +381,9 @@ class OrdemServicoService
         return $salva;
     }
 
-    public function processarLembretesOsAbertasSemDiagnostico(): int
+    public function processarLembretesOsRecebidasSemDiagnostico(): int
     {
-        return $this->sistemaNotificacaoService->processarLembretesOsAbertasSemDiagnostico();
+        return $this->sistemaNotificacaoService->processarLembretesOsRecebidasSemDiagnostico();
     }
 
     public function entregar(int $id): OrdemServico
