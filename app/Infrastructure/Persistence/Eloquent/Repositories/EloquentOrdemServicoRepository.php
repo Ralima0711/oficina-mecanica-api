@@ -34,10 +34,10 @@ class EloquentOrdemServicoRepository implements OrdemServicoRepositoryInterface
             ->toArray();
     }
 
-    public function findAbertas24Horas(): array
+    public function findRecebidas24Horas(): array
     {
         return OrdemServicoModel::query()
-            ->where('status', StatusOrdem::ABERTA)
+            ->where('status', StatusOrdem::RECEBIDA)
             ->where('created_at', '<=', now()->subHours(24))
             ->get()
             ->map(fn(OrdemServicoModel $m) => $this->toEntity($m))

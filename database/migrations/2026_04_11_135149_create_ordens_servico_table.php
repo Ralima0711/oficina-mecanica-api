@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('restrict');
             $table->foreignId('veiculo_id')->constrained('veiculos')->onDelete('restrict');
             $table->foreignId('mecanico_id')->nullable()->constrained('mecanicos')->onDelete('set null');
-            $table->string('status')->default('ABERTA');
+            $table->string('status')->default('RECEBIDA');
             $table->text('descricao_problema');
             $table->text('diagnostico')->nullable();
             $table->decimal('valor_total', 10, 2)->nullable();
