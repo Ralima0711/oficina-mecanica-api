@@ -22,8 +22,7 @@ class EloquentNotificacaoRepository implements NotificacaoRepositoryInterface
             'ordem_servico_id' => $ordemServicoId,
             'user_id' => $userId,
             'tipo' => $tipo,
-            'canal' => 'push',//TODO: mockado para fins do MPV
-            'status' => 'enviada',//TODO: mockado para fins do MPV
+            'status' => 'enviada',
             'enviada_em' => $now,
             'lida' => false,
             'created_at' => $now,
@@ -96,7 +95,7 @@ class EloquentNotificacaoRepository implements NotificacaoRepositoryInterface
             ordemServicoId: (int) $model->ordem_servico_id,
             userId: (int) $model->user_id,
             tipo: (string) $model->tipo,
-            canal: (string) $model->canal,
+            canal: (string) ($model->canal ?? 'email'),
             status: (string) $model->status,
             enviadaEm: $model->enviada_em?->toDateTimeImmutable(),
             lida: (bool) $model->lida,
