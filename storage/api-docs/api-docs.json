@@ -436,6 +436,399 @@
                 ]
             }
         },
+        "/api/insumos": {
+            "get": {
+                "tags": [
+                    "Insumos"
+                ],
+                "summary": "Lista todos os insumos",
+                "operationId": "9fb4f7d5277b252d0bf2a4b2987b534a",
+                "responses": {
+                    "200": {
+                        "description": "Lista de insumos retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "nome": {
+                                                "type": "string",
+                                                "example": "Óleo de Motor"
+                                            },
+                                            "unidade_medida": {
+                                                "type": "string",
+                                                "example": "L"
+                                            },
+                                            "preco_unitario": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 25.9
+                                            },
+                                            "estoque_atual": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 50
+                                            },
+                                            "estoque_minimo": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 10
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Insumos"
+                ],
+                "summary": "Cadastra um novo insumo",
+                "operationId": "cd73a9a2a3e986de0a8d88a1f5eaeb2b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "unidade_medida",
+                                    "preco_unitario",
+                                    "estoque_atual",
+                                    "estoque_minimo"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Óleo de Motor",
+                                        "maxLength": 255
+                                    },
+                                    "unidade_medida": {
+                                        "type": "string",
+                                        "example": "L",
+                                        "maxLength": 20
+                                    },
+                                    "preco_unitario": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 25.9,
+                                        "minimum": 0.01
+                                    },
+                                    "estoque_atual": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50,
+                                        "minimum": 0
+                                    },
+                                    "estoque_minimo": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10,
+                                        "minimum": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Insumo criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Óleo de Motor"
+                                        },
+                                        "unidade_medida": {
+                                            "type": "string",
+                                            "example": "L"
+                                        },
+                                        "preco_unitario": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 25.9
+                                        },
+                                        "estoque_atual": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 50
+                                        },
+                                        "estoque_minimo": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "422": {
+                        "description": "Erro de validacao"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/insumos/{id}": {
+            "get": {
+                "tags": [
+                    "Insumos"
+                ],
+                "summary": "Busca um insumo pelo ID",
+                "operationId": "7126180d0adf768d2b8e2c0e40ebd9f9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Insumo encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Óleo de Motor"
+                                        },
+                                        "unidade_medida": {
+                                            "type": "string",
+                                            "example": "L"
+                                        },
+                                        "preco_unitario": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 25.9
+                                        },
+                                        "estoque_atual": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 50
+                                        },
+                                        "estoque_minimo": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "404": {
+                        "description": "Insumo nao encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Insumos"
+                ],
+                "summary": "Atualiza um insumo existente",
+                "operationId": "ad8d13d2c7c912d0c1afb99749ef4d2c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "unidade_medida",
+                                    "preco_unitario",
+                                    "estoque_atual",
+                                    "estoque_minimo"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Óleo de Motor 5W30",
+                                        "maxLength": 255
+                                    },
+                                    "unidade_medida": {
+                                        "type": "string",
+                                        "example": "L",
+                                        "maxLength": 20
+                                    },
+                                    "preco_unitario": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 27.5,
+                                        "minimum": 0.01
+                                    },
+                                    "estoque_atual": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 45,
+                                        "minimum": 0
+                                    },
+                                    "estoque_minimo": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10,
+                                        "minimum": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Insumo atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Óleo de Motor 5W30"
+                                        },
+                                        "unidade_medida": {
+                                            "type": "string",
+                                            "example": "L"
+                                        },
+                                        "preco_unitario": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 27.5
+                                        },
+                                        "estoque_atual": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 45
+                                        },
+                                        "estoque_minimo": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 10
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "404": {
+                        "description": "Insumo nao encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validacao"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Insumos"
+                ],
+                "summary": "Remove um insumo",
+                "operationId": "445ac5bbf3c5c80ad3511113f89902ca",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Insumo removido com sucesso"
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "404": {
+                        "description": "Insumo nao encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/notificacoes/minhas": {
             "get": {
                 "tags": [
@@ -1126,6 +1519,419 @@
                 ]
             }
         },
+        "/api/pecas": {
+            "get": {
+                "tags": [
+                    "Pecas"
+                ],
+                "summary": "Lista todas as pecas",
+                "operationId": "612737d4d36dbddcf22ba284a10c5fe6",
+                "responses": {
+                    "200": {
+                        "description": "Lista de pecas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "nome": {
+                                                "type": "string",
+                                                "example": "Filtro de Óleo"
+                                            },
+                                            "codigo": {
+                                                "type": "string",
+                                                "example": "FO-001"
+                                            },
+                                            "categoria": {
+                                                "type": "string",
+                                                "example": "Filtros",
+                                                "nullable": true
+                                            },
+                                            "preco_unitario": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 35.9
+                                            },
+                                            "estoque_atual": {
+                                                "type": "integer",
+                                                "example": 20
+                                            },
+                                            "estoque_minimo": {
+                                                "type": "integer",
+                                                "example": 5
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pecas"
+                ],
+                "summary": "Cadastra uma nova peca",
+                "operationId": "e9aaa44ec481bd480e2047925eccb9de",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "codigo",
+                                    "preco_unitario",
+                                    "estoque_atual",
+                                    "estoque_minimo"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Filtro de Óleo",
+                                        "maxLength": 255
+                                    },
+                                    "codigo": {
+                                        "type": "string",
+                                        "example": "FO-001",
+                                        "maxLength": 255
+                                    },
+                                    "categoria": {
+                                        "type": "string",
+                                        "example": "Filtros",
+                                        "nullable": true,
+                                        "maxLength": 255
+                                    },
+                                    "preco_unitario": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 35.9,
+                                        "minimum": 0.01
+                                    },
+                                    "estoque_atual": {
+                                        "type": "integer",
+                                        "example": 20,
+                                        "minimum": 0
+                                    },
+                                    "estoque_minimo": {
+                                        "type": "integer",
+                                        "example": 5,
+                                        "minimum": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Peca criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Filtro de Óleo"
+                                        },
+                                        "codigo": {
+                                            "type": "string",
+                                            "example": "FO-001"
+                                        },
+                                        "categoria": {
+                                            "type": "string",
+                                            "example": "Filtros",
+                                            "nullable": true
+                                        },
+                                        "preco_unitario": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 35.9
+                                        },
+                                        "estoque_atual": {
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "estoque_minimo": {
+                                            "type": "integer",
+                                            "example": 5
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "422": {
+                        "description": "Erro de validacao"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pecas/{id}": {
+            "get": {
+                "tags": [
+                    "Pecas"
+                ],
+                "summary": "Busca uma peca pelo ID",
+                "operationId": "633873b12ecd9bdb2b9da277dcf2c40f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Peca encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Filtro de Óleo"
+                                        },
+                                        "codigo": {
+                                            "type": "string",
+                                            "example": "FO-001"
+                                        },
+                                        "categoria": {
+                                            "type": "string",
+                                            "example": "Filtros",
+                                            "nullable": true
+                                        },
+                                        "preco_unitario": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 35.9
+                                        },
+                                        "estoque_atual": {
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "estoque_minimo": {
+                                            "type": "integer",
+                                            "example": 5
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "404": {
+                        "description": "Peca nao encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Pecas"
+                ],
+                "summary": "Atualiza uma peca existente",
+                "operationId": "b834939e28f2922a1c6eda01fc784381",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "codigo",
+                                    "preco_unitario",
+                                    "estoque_atual",
+                                    "estoque_minimo"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Filtro de Óleo Premium",
+                                        "maxLength": 255
+                                    },
+                                    "codigo": {
+                                        "type": "string",
+                                        "example": "FO-001",
+                                        "maxLength": 255
+                                    },
+                                    "categoria": {
+                                        "type": "string",
+                                        "example": "Filtros",
+                                        "nullable": true,
+                                        "maxLength": 255
+                                    },
+                                    "preco_unitario": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 39.9,
+                                        "minimum": 0.01
+                                    },
+                                    "estoque_atual": {
+                                        "type": "integer",
+                                        "example": 18,
+                                        "minimum": 0
+                                    },
+                                    "estoque_minimo": {
+                                        "type": "integer",
+                                        "example": 5,
+                                        "minimum": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Peca atualizada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Filtro de Óleo Premium"
+                                        },
+                                        "codigo": {
+                                            "type": "string",
+                                            "example": "FO-001"
+                                        },
+                                        "categoria": {
+                                            "type": "string",
+                                            "example": "Filtros",
+                                            "nullable": true
+                                        },
+                                        "preco_unitario": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 39.9
+                                        },
+                                        "estoque_atual": {
+                                            "type": "integer",
+                                            "example": 18
+                                        },
+                                        "estoque_minimo": {
+                                            "type": "integer",
+                                            "example": 5
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "404": {
+                        "description": "Peca nao encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validacao"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pecas"
+                ],
+                "summary": "Remove uma peca",
+                "operationId": "25ddd855a625190fee10b1e23c0a5661",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Peca removida com sucesso"
+                    },
+                    "401": {
+                        "description": "Nao autenticado"
+                    },
+                    "404": {
+                        "description": "Peca nao encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/usuarios": {
             "get": {
                 "tags": [
@@ -1688,12 +2494,20 @@
             "description": "Gerenciamento de clientes (pessoa física e jurídica)"
         },
         {
+            "name": "Insumos",
+            "description": "Gerenciamento de insumos da oficina"
+        },
+        {
             "name": "Notificacoes",
             "description": "Notificações do usuário autenticado"
         },
         {
             "name": "Ordens de Servico",
             "description": "Ciclo de vida completo das Ordens de Serviço"
+        },
+        {
+            "name": "Pecas",
+            "description": "Gerenciamento de pecas da oficina"
         },
         {
             "name": "Usuarios",
