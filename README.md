@@ -62,12 +62,12 @@ cd oficina-mecanica-api
 
 cp .env.example .env
 
-docker-compose up -d
+docker compose up -d
 
-docker-compose exec app php artisan key:generate
-docker-compose exec app php artisan jwt:secret
-docker-compose exec app php artisan migrate
-docker-compose exec app php artisan db:seed
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan jwt:secret
+docker compose exec app php artisan migrate
+docker compose exec app php artisan db:seed
 ```
 
 ### Verificar se está rodando
@@ -94,7 +94,7 @@ Documentação interativa disponível em `http://localhost:8080/api/documentatio
 | **Ordens de Serviço** | Criação, diagnóstico, orçamento, aprovação, execução, finalização e entrega | ✅ Disponível |
 | **Peças** | Cadastro e controle de estoque de peças | ✅ Disponível |
 | **Insumos** | Cadastro e controle de estoque de insumos | ✅ Disponível |
-| **Estoque** | Gerenciamento de estoque | 🔄 Em desenvolvimento |
+| **Estoque** | Gerenciamento de estoque com alertas de mínimo | ✅ Disponível |
 | **Usuários** | Gerenciamento de usuários do sistema | ✅ Disponível |
 | **Notificações** | Notificações do usuário autenticado | ✅ Disponível |
 
@@ -103,8 +103,8 @@ Documentação interativa disponível em `http://localhost:8080/api/documentatio
 ## Ciclo de vida da Ordem de Serviço
 
 ```
-Criada → Em Diagnóstico → Aguardando Aprovação → Aprovada → Em Execução → Finalizada → Entregue
-                                                ↘ Recusada
+RECEBIDA → EM_DIAGNOSTICO → AGUARDANDO_APROVACAO → APROVADA → EM_EXECUCAO → FINALIZADA → ENTREGUE
+                                                  ↘ FINALIZADA (orçamento recusado)
 ```
 
 ---
@@ -122,16 +122,16 @@ Diagrama ER disponível em: https://dbdiagram.io/d/69d95a740f7c9ef2c0ccc1ba
 
 ```bash
 # Rodar migrations
-docker-compose exec app php artisan migrate
+docker compose exec app php artisan migrate
 
 # Resetar banco
-docker-compose exec app php artisan migrate:fresh
+docker compose exec app php artisan migrate:fresh
 
 # Resetar banco com seeds
-docker-compose exec app php artisan migrate:fresh --seed
+docker compose exec app php artisan migrate:fresh --seed
 
 # Gerar documentação Swagger
-docker-compose exec app php artisan l5-swagger:generate
+docker compose exec app php artisan l5-swagger:generate
 ```
 
 ---
@@ -140,13 +140,20 @@ docker-compose exec app php artisan l5-swagger:generate
 
 ```bash
 # Rodar todos os testes
-docker-compose exec app php artisan test
+docker compose exec app php artisan test
 
-# Rodar com relatório de cobertura
-docker-compose exec app php artisan test --coverage-clover=coverage.xml
+# Rodar com relatório de cobertura (requer Xdebug — já incluído no Dockerfile)
+docker compose exec app bash -c "XDEBUG_MODE=coverage php artisan test --coverage"
 ```
 
-Cobertura mínima exigida: **80%**
+Cobertura nos domínios críticos (Domain + Application): **acima de 80%** ✅
+
+| Camada | Cobertura |
+|---|---|
+| Domain/OrdemServico | 84–85% |
+| Domain/Estoque | 87–100% |
+| Domain/Cliente, Veiculo, Peca, Insumo | 100% |
+| Application/Services (Cliente, Veiculo, Peca, Insumo) | 100% |
 
 ---
 
@@ -177,10 +184,7 @@ Análise estática realizada com **SonarQube Community Edition 26.4.0** em 24/04
 | Confiabilidade | 0 issues | **A** | ✅ Aprovado |
 | Manutenibilidade | 120 code smells | **A** | ✅ Aprovado |
 | Security Hotspots | 3 (falsos positivos) | E | ⚠️ Revisados |
-| Cobertura de Testes | Pendente | — | 🔄 Em implementação |
 | Duplicações | 6,3% | — | ✅ Aceitável |
-
-Os 3 Security Hotspots identificados foram avaliados como falsos positivos no contexto de desenvolvimento local — detalhes no relatório completo.
 
 Relatórios completos disponíveis na pasta `/docs`.
 
