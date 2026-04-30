@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatório de Vulnerabilidades - Oficina Mecânica API </title>
+<link
+	href="2026-04-23-ZAP-Report-localhost/normalize/normalize.css" rel="stylesheet">
+<link
+	href="2026-04-23-ZAP-Report-localhost/themes/original/main.css" rel="stylesheet">
+<link
+	href="2026-04-23-ZAP-Report-localhost/themes/original/colors.css" rel="stylesheet">
+</head>
+<body>
+	<header>
+		<h1>Relatório de Vulnerabilidades - Oficina Mecânica API </h1>
+		<p>
+			<span>Generated with</span> <a href="https://zaproxy.org"><img
+				src="2026-04-23-ZAP-Report-localhost/zap32x32.png" alt="The ZAP logo" class="zap-logo">ZAP</a>
+			<span>on qui. 23 abr. 2026, at 17:35:34</span>
+		</p>
+		<p>ZAP Version: 2.17.0</p>
+		<p>
+			ZAP by <a href="https://checkmarx.com/">Checkmarx</a>
+		</p>
+	</header>
+
+	<main>
+
+		<section id="contents" class="contents">
+			<h2>Contents</h2>
+			<nav>
+				<ol>
+					<li><a
+						href="#about-this-report">About This Report</a>
+						<ol>
+							
+							<li><a
+								href="#report-parameters">Report Parameters</a></li>
+						</ol></li>
+					<data-th-block>
+					<li><a
+						href="#summaries">Summaries</a>
+						<ol>
+							<li><a
+								href="#risk-confidence-counts">Alert Counts by Risk and Confidence</a></li>
+							<li><a
+								href="#site-risk-counts">Alert Counts by Site and Risk</a></li>
+							<li><a
+								href="#alert-type-counts">Alert Counts by Alert Type</a></li>
+							<li><a
+								href="#insights">Insights</a></li>
+						</ol></li>
+					<li><a
+						href="#alerts">Alerts</a>
+						<ol>
+							
+							 
+							
+							
+							
+							
+							<li><a
+								href="#alerts--risk-2-confidence-3"><span>Risk</span>=<span
+									class="risk-level">Médio</span>, <span>Confidence</span>=<span
+									class="confidence-level">Alto</span> <span>(1)</span></a></li>
+							
+							
+							
+							
+							  
+							 
+							
+							
+							
+							
+							
+							
+							<li><a
+								href="#alerts--risk-0-confidence-2"><span>Risk</span>=<span
+									class="risk-level">Informativo</span>, <span>Confidence</span>=<span
+									class="confidence-level">Médio</span> <span>(1)</span></a></li>
+							
+							<li><a
+								href="#alerts--risk-0-confidence-1"><span>Risk</span>=<span
+									class="risk-level">Informativo</span>, <span>Confidence</span>=<span
+									class="confidence-level">Baixo</span> <span>(2)</span></a></li>
+							  
+						</ol></li>
+					<li><a
+						href="#appendix">Appendix</a>
+						<ol>
+							<li><a
+								href="#alert-types">Alert Types</a></li>
+						</ol></li>
+					</data-th-block>
+				</ol>
+			</nav>
+		</section>
+
+		<section
+			id="about-this-report" class="about-this-report">
+			<h2>About This Report</h2>
+
+			
+
+			<section
+				id="report-parameters">
+				<h3>Report Parameters</h3>
+				<div class="report-parameters--container">
+					<h4>Contexts</h4>
+					
+					
+					<p>No contexts were selected, so all contexts were included by default.</p>
+					  
+
+					<h4>Sites</h4>
+					
+					<p>The following sites were included:</p>
+					<ul class="sites-list">
+						<li><span class="site">http://localhost:8080</span></li>
+					</ul>
+					
+					<p>(If no sites were selected, all sites were included by default.)</p>
+					<p>An included site must also be within one of the included contexts for its data to be included in the report.</p>
+
+					<h4>Risk levels</h4>
+					<p>
+						<span>Included</span>:
+						 
+						<span class="included-risk-codes"><span class="risk-level">Alto</span>, <span class="risk-level">Médio</span>, <span class="risk-level">Baixo</span>, <span class="risk-level">Informativo</span></span>
+					</p>
+					<p>
+						<span>Excluded</span>:
+						 <span>None</span>
+						
+					</p>
+
+					<h4>Confidence levels</h4>
+					<p>
+						<span>Included</span>:
+						
+						
+						<span class="included-confidence-codes"><span class="confidence-level">User Confirmed</span>, <span class="confidence-level">Alto</span>, <span class="confidence-level">Médio</span>, <span class="confidence-level">Baixo</span></span>
+					</p>
+					<p>
+						<span>Excluded</span>:
+						
+						
+						<span class="included-confidence-codes"> <span class="confidence-level">User Confirmed</span>, <span class="confidence-level">Alto</span>, <span class="confidence-level">Médio</span>, <span class="confidence-level">Baixo</span>, <span class="confidence-level">Falso Positivo</span></span>
+					</p>
+				</div>
+			</section>
+		</section>
+
+		
+		<section>
+			
+		</section>
+		
+		<section id="summaries" class="summaries">
+			<h2>Summaries</h2>
+
+			<section
+				id="risk-confidence-counts">
+				<h3>Alert Counts by Risk and Confidence</h3>
+				<table class="risk-confidence-counts-table">
+					<caption>
+						<p>This table shows the number of alerts for each level of risk and confidence included in the report.</p>
+						<p>(The percentages in brackets represent the count as a percentage of the total number of alerts included in the report, rounded to one decimal place.)</p>
+					</caption>
+					<colgroup>
+						<col>
+						<col>
+					</colgroup>
+					<colgroup>
+						<col
+							style="width: 14.0%"><col
+							style="width: 14.0%"><col
+							style="width: 14.0%"><col
+							style="width: 14.0%">
+						<col style="width: 14.0%">
+					</colgroup>
+					<thead>
+						<tr>
+							<td colspan="2" rowspan="2"></td>
+							<th scope="colgroup"
+								colspan="5">Confidence</th>
+						</tr>
+						<tr>
+							<th scope="col">User Confirmed</th>
+							<th scope="col">Alto</th>
+							<th scope="col">Médio</th>
+							<th scope="col">Baixo</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="rowgroup"
+								rowspan="5">Risk</th>
+							<th scope="row">Alto</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span class="additional-info-percentages">(0,0%)</span></td>
+						</tr>
+						<tr>
+							
+							<th scope="row">Médio</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(25,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>1</span><br> <span class="additional-info-percentages">(25,0%)</span></td>
+						</tr>
+						<tr>
+							
+							<th scope="row">Baixo</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span class="additional-info-percentages">(0,0%)</span></td>
+						</tr>
+						<tr>
+							
+							<th scope="row">Informativo</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(25,0%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(50,0%)</span></td>
+							<td><span>3</span><br> <span class="additional-info-percentages">(75,0%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row">Total</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0,0%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(25,0%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(25,0%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(50,0%)</span></td>
+							<td><span>4</span><br> <span
+								class="additional-info-percentages">(100%)</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section
+				id="site-risk-counts">
+				<h3>Alert Counts by Site and Risk</h3>
+				<table class="site-risk-counts-table">
+					<caption>
+						<p>This table shows, for each site for which one or more alerts were raised, the number of alerts raised at each risk level.</p>
+						<p>Alerts with a confidence level of &quot;False Positive&quot; have been excluded from these counts.</p>
+						<p>(The numbers in brackets are the number of alerts raised for the site at or above that risk level.)</p>
+					</caption>
+					<colgroup>
+						<col>
+						<col>
+					</colgroup>
+					<colgroup>
+						<col
+							style="width: 16.25%"><col
+							style="width: 16.25%"><col
+							style="width: 16.25%"><col
+							style="width: 16.25%">
+					</colgroup>
+					<thead>
+						<tr>
+							<td colspan="2" rowspan="2"></td>
+							<th scope="colgroup" colspan="4">Risk</th>
+						</tr>
+						<tr>
+							<th scope="col">
+								<span>Alto</span><br>  <span
+									class="additional-info-percentages">(= Alto)</span>  
+							</th>
+							<th scope="col">
+								<span>Médio</span><br>   <span
+									class="additional-info-percentages">(&gt;= Médio)</span> 
+							</th>
+							<th scope="col">
+								<span>Baixo</span><br>   <span
+									class="additional-info-percentages">(&gt;= Baixo)</span> 
+							</th>
+							<th scope="col">
+								<span>Informativo</span><br>   <span
+									class="additional-info-percentages">(&gt;= Informativo)</span> 
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="rowgroup"
+								rowspan="1">Site</th>
+							<th scope="row">http://localhost:8080</th>
+							
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(1)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(1)</span></td>
+							<td><span>3</span><br> <span
+								class="additional-info-percentages">(4)</span></td>
+							
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section
+				id="alert-type-counts">
+				<h3>Alert Counts by Alert Type</h3>
+				<table class="alert-type-counts-table">
+					<caption>
+						<p>This table shows the number of alerts of each alert type, together with the alert type&#39;s risk level.</p>
+						<p>(The percentages in brackets represent each count as a percentage, rounded to one decimal place, of the total number of alerts included in this report.)</p>
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">Alert type</th>
+							<th scope="col">Risk</th>
+							<th scope="col">Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-0">CSP: Failure to Define Directive with No Fallback</a></th>
+							<td class="risk-level">Médio</td>
+							<td><span>5</span><br> <span
+								class="additional-info-percentages">(125,0%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-1">Information Disclosure - Sensitive Information in URL</a></th>
+							<td class="risk-level">Informativo</td>
+							<td><span>5</span><br> <span
+								class="additional-info-percentages">(125,0%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-2">Solicitação de autenticação identificada</a></th>
+							<td class="risk-level">Informativo</td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(50,0%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-3">User Controllable HTML Element Attribute (Potential XSS)</a></th>
+							<td class="risk-level">Informativo</td>
+							<td><span>1514</span><br> <span
+								class="additional-info-percentages">(37.850,0%)</span></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row">Total</th>
+							<td></td>
+							<td>4</td>
+						</tr>
+					</tfoot>
+				</table>
+			</section>
+			
+			<section
+				id="insights">
+				<h3 class="left-header">Insights</h3>
+				<table class="insights-table">
+						<caption>
+						<p>This table shows information that is likely to be very relevant to you, but which is not related to vulnerabilities, or potentially even related to the application in question.</p>
+					</caption>
+					<thead>
+					<tr>
+						<th scope="col">Level</th>
+						<th scope="col">Motivo</th>
+						<th scope="col">Site</th>
+						<th scope="col">Descrição</th>
+						<th scope="col">Statistic</th>
+					</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+						<td class="risk-2">
+							<div>Médio</div>
+						</td>
+						<td>
+							<div>Exceeded Low</div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div>Percentage of memory used</div>
+						</td>
+						<td align="center">
+							<div>94   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-1">
+							<div>Baixo</div>
+						</td>
+						<td>
+							<div>Atenção</div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div>ZAP errors logged - see the zap.log file for details</div>
+						</td>
+						<td align="center">
+							<div>1.596   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-1">
+							<div>Baixo</div>
+						</td>
+						<td>
+							<div>Atenção</div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div>ZAP warnings logged - see the zap.log file for details</div>
+						</td>
+						<td align="center">
+							<div>2.584   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://100.100.100.200</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/plain</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://100.100.100.200</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://100.100.100.200</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>1   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://169.254.169.254</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/plain</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://169.254.169.254</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://169.254.169.254</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>7   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://alibaba.zaproxy.org</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/plain</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://alibaba.zaproxy.org</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://alibaba.zaproxy.org</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>1   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://aws.zaproxy.org</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/plain</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://aws.zaproxy.org</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://aws.zaproxy.org</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>1   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://localhost:8080</div>
+						</td>
+						<td>
+							<div>Percentage of responses with status code 2xx</div>
+						</td>
+						<td align="center">
+							<div>99 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://localhost:8080</div>
+						</td>
+						<td>
+							<div>Percentage of responses with status code 4xx</div>
+						</td>
+						<td align="center">
+							<div>1 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://localhost:8080</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/html</div>
+						</td>
+						<td align="center">
+							<div>99 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://localhost:8080</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://localhost:8080</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>1.494   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://metadata.google.internal</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/plain</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://metadata.google.internal</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://metadata.google.internal</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>1   </div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://metadata.oraclecloud.com</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with content type text/plain</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://metadata.oraclecloud.com</div>
+						</td>
+						<td>
+							<div>Percentage of endpoints with method GET</div>
+						</td>
+						<td align="center">
+							<div>100 %</div>
+						</td>
+						</tr>
+					
+						<tr>
+						<td class="risk-0">
+							<div>Informações</div>
+						</td>
+						<td>
+							<div>Informativo</div>
+						</td>
+						<td>
+							<div>http://metadata.oraclecloud.com</div>
+						</td>
+						<td>
+							<div>Count of total endpoints</div>
+						</td>
+						<td align="center">
+							<div>2   </div>
+						</td>
+						</tr>
+					
+					</tbody>
+				</table>
+			</section>
+		</section>
+
+		<section id="alerts" class="alerts">
+			<h2>Alerts</h2>
+			<ol>
+				
+				 
+				 
+				
+				
+				<li id="alerts--risk-2-confidence-3">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Médio</span>, <span>Confidence</span>=<span
+							class="confidence-level">Alto</span> <span>(1)</span>
+					</h3>
+					<ol>
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:8080</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-0">CSP: Failure to Define Directive with No Fallback</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:8080</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP_2021_A05</a></span> 
+				</li>
+				<li>
+					 <span>POLICY_QA_STD = </span>
+				</li>
+				<li>
+					 <span>POLICY_PENTEST = </span>
+				</li>
+				<li>
+					<span><a href="https://www.zaproxy.org/docs/desktop/addons/common-library/alerttags/#systemic">SYSTEMIC</a></span> 
+				</li>
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/693.html">CWE-693</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP_2017_A06</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/2025/A02_2025-Security_Misconfiguration/">OWASP_2025_A02</a></span> 
+				</li>
+				<li>
+					 <span>POLICY_DEV_STD = </span>
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>The directive(s): frame-ancestors, form-action is/are among the directives that do not fallback to default-src.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (228 bytes)</summary>
+				
+				<pre><code>GET http://localhost:8080 HTTP/1.1
+host: localhost:8080
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (565 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Pragma: no-cache
+Cache-Control: no-cache, no-store, must-revalidate
+Content-Security-Policy: default-src &#39;none&#39;; script-src &#39;self&#39;; connect-src &#39;self&#39;; child-src &#39;self&#39;; img-src &#39;self&#39; data:; font-src &#39;self&#39; data:; style-src &#39;self&#39;
+Referrer-Policy: no-referrer
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Access-Control-Allow-Headers: ZAP-Header
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Clacks-Overhead: GNU Terry Pratchett
+content-length: 1646
+Content-Type: text/html; charset=UTF-8
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (1646 bytes)</summary>
+				
+				<pre><code>&lt;head&gt;
+&lt;title&gt;ZAP API UI&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Bem-vindo ao Proxy de ataque Zed (ZAP)&lt;/h1&gt;&lt;p&gt;O ZAP é uma ferramenta de teste de penetração integrada e fácil de usar para encontrar vulnerabilidades em aplicativos da web.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Esteja ciente de que você só deve atacar aplicativos para os quais tenha permissão específica para testar.&lt;/p&gt;&lt;h2&gt;Configuração de proxy&lt;/h2&gt;&lt;p&gt;Para usar o ZAP de forma eficaz, é recomendável que você configure seu navegador para fazer proxy via ZAP.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;A maneira mais fácil de fazer isso é iniciar seu navegador a partir do ZAP por meio do painel &quot;Início rápido / Exploração manual&quot; - ele será configurado para fazer proxy via ZAP e ignorar quaisquer avisos de certificado.&lt;br&gt;Alternativamente, você pode configurar seu navegador manualmente ou usar o &lt;a href=&quot;/OTHER/network/other/proxy.pac/?apinonce=968ce6d0f9a5d158&quot;&gt;arquivo PAC&lt;/a&gt; gerado.&lt;/p&gt;&lt;h2&gt;Prevenção de avisos HTTPS&lt;/h2&gt;&lt;p&gt;Para evitar avisos HTTPS, &lt;a href=&quot;/OTHER/network/other/rootCaCert/?apinonce=506cf50441ae1847&quot;&gt;baixe&lt;/a&gt; e &lt;a href=&quot;https://www.zaproxy.org/docs/desktop/addons/network/options/servercertificates/#install&quot; target=&quot;_blank&quot;&gt;instale o certificado raiz da CA&lt;/a&gt; no seu dispositivo móvel ou computador.&lt;/p&gt;&lt;h2&gt;Links&lt;/h2&gt;&lt;li&gt;&lt;a href=&quot;/UI&quot;&gt;API Local&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://www.zaproxy.org/&quot;&gt;Site ZAP&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://groups.google.com/group/zaproxy-users&quot;&gt;Grupo de usuários ZAP&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://groups.google.com/group/zaproxy-develop&quot;&gt;Grupo de desenvolvedores ZAP&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://github.com/zaproxy/zaproxy/issues&quot;&gt;Reportar um problema&lt;/a&gt;&lt;/li&gt;&lt;/body&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>Content-Security-Policy</code></pre></td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>default-src &#39;none&#39;; script-src &#39;self&#39;; connect-src &#39;self&#39;; child-src &#39;self&#39;; img-src &#39;self&#39; data:; font-src &#39;self&#39; data:; style-src &#39;self&#39;</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				
+				
+				
+				
+				  
+				 
+				 
+				
+				
+				
+				
+				<li id="alerts--risk-0-confidence-2">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Informativo</span>, <span>Confidence</span>=<span
+							class="confidence-level">Médio</span> <span>(1)</span>
+					</h3>
+					<ol>
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:8080</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-1">Information Disclosure - Sensitive Information in URL</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:8080/UI/clientSpider/action/scan/override?apikey=ZAP&amp;browser=ZAP&amp;contextName=ZAP&amp;logoutAvoidance=ZAP&amp;maxCrawlDepth=ZAP&amp;numberOfBrowsers=ZAP&amp;pageLoadTime=ZAP&amp;scopeCheck=ZAP&amp;subtreeOnly=ZAP&amp;url=https%3A%2F%2Fzap.example.com&amp;userName=ZAP</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/598.html">CWE-598</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP_2021_A01</a></span> 
+				</li>
+				<li>
+					 <span>POLICY_QA_STD = </span>
+				</li>
+				<li>
+					 <span>POLICY_PENTEST = </span>
+				</li>
+				<li>
+					<span><a href="https://www.zaproxy.org/docs/desktop/addons/common-library/alerttags/#systemic">SYSTEMIC</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure.html">OWASP_2017_A03</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/">OWASP_2025_A01</a></span> 
+				</li>
+				<li>
+					 <span>POLICY_DEV_STD = </span>
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>A solicitação parecia conter informações confidenciais vazadas no URL. Isso pode violar a PCI e a maioria das políticas de conformidade organizacional. Você pode configurar a lista de strings para esta verificação para adicionar ou remover valores específicos para seu ambiente.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>The URL contains potentially sensitive information. The following string was found via the pattern: user</p>
+
+<p>userName</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (519 bytes)</summary>
+				
+				<pre><code>GET http://localhost:8080/UI/clientSpider/action/scan/override?apikey=ZAP&amp;browser=ZAP&amp;contextName=ZAP&amp;logoutAvoidance=ZAP&amp;maxCrawlDepth=ZAP&amp;numberOfBrowsers=ZAP&amp;pageLoadTime=ZAP&amp;scopeCheck=ZAP&amp;subtreeOnly=ZAP&amp;url=https%3A%2F%2Fzap.example.com&amp;userName=ZAP HTTP/1.1
+host: localhost:8080
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+referer: http://localhost:8080/UI/clientSpider/action/scan/
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (565 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Pragma: no-cache
+Cache-Control: no-cache, no-store, must-revalidate
+Content-Security-Policy: default-src &#39;none&#39;; script-src &#39;self&#39;; connect-src &#39;self&#39;; child-src &#39;self&#39;; img-src &#39;self&#39; data:; font-src &#39;self&#39; data:; style-src &#39;self&#39;
+Referrer-Policy: no-referrer
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Access-Control-Allow-Headers: ZAP-Header
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Clacks-Overhead: GNU Terry Pratchett
+content-length: 2377
+Content-Type: text/html; charset=UTF-8
+
+</code></pre>
+				
+				
+			</details> <details class="response-body">
+				<summary>Response body (2377 bytes)</summary>
+				
+				<pre><code>&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+&lt;title&gt;ZAP API UI&lt;/title&gt;
+&lt;script src=&quot;/script.js/?v=2&amp;apinonce=9f2679a282412ea9&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;&lt;a href=&quot;/UI/&quot;&gt;ZAP API UI&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;/UI/clientSpider/&quot;&gt;Componente: clientSpider&lt;/a&gt;&lt;/h2&gt;
+&lt;h3&gt;Ação: scan&lt;/h3&gt;
+Starts a client spider scan.
+&lt;form id=&quot;zapform&quot; name=&quot;zapform&quot; action=&quot;override&quot;&gt;&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Formato de saída&lt;/td&gt;&lt;td&gt;
+&lt;select id=&quot;zapapiformat&quot;&gt;
+&lt;option value=&quot;JSON&quot;&gt;JSON&lt;/option&gt;
+&lt;option value=&quot;JSONP&quot; disabled&gt;JSONP&lt;/option&gt;
+&lt;option value=&quot;HTML&quot;&gt;HTML&lt;/option&gt;
+&lt;option value=&quot;XML&quot;&gt;XML&lt;/option&gt;
+&lt;/select&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;apikey*&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;apikey&quot; name=&quot;apikey&quot; value=&quot;&quot;/&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Método de formulário&lt;/td&gt;&lt;td&gt;&lt;select id=&quot;formMethod&quot;&gt;
+&lt;option value=&quot;GET&quot; selected&gt;GET&lt;/option&gt;
+&lt;option value=&quot;POST&quot;&gt;POST&lt;/option&gt;
+&lt;/select&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;browser&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;browser&quot; name=&quot;browser&quot;/&gt;&lt;/td&gt;&lt;td&gt;The ID of the browser. See Selenium documentation for valid IDs.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;url&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;url&quot; name=&quot;url&quot;/&gt;&lt;/td&gt;&lt;td&gt;The URL from where to start the spider.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;contextName&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;contextName&quot; name=&quot;contextName&quot;/&gt;&lt;/td&gt;&lt;td&gt;The name of the context.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;userName&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;userName&quot; name=&quot;userName&quot;/&gt;&lt;/td&gt;&lt;td&gt;The name of the user.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;subtreeOnly&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;subtreeOnly&quot; name=&quot;subtreeOnly&quot;/&gt;&lt;/td&gt;&lt;td&gt;true to spider only under the subtree, false otherwise.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;maxCrawlDepth&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;maxCrawlDepth&quot; name=&quot;maxCrawlDepth&quot;/&gt;&lt;/td&gt;&lt;td&gt;Maximum Crawl Depth (0 is unlimited).&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;pageLoadTime&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;pageLoadTime&quot; name=&quot;pageLoadTime&quot;/&gt;&lt;/td&gt;&lt;td&gt;Page Load Time (seconds).&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;numberOfBrowsers&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;numberOfBrowsers&quot; name=&quot;numberOfBrowsers&quot;/&gt;&lt;/td&gt;&lt;td&gt;Number of Browser Windows to Open (concurrency).&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;scopeCheck&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;scopeCheck&quot; name=&quot;scopeCheck&quot;/&gt;&lt;/td&gt;&lt;td&gt;Scope Check (FLEXIBLE or STRICT).&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;logoutAvoidance&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;logoutAvoidance&quot; name=&quot;logoutAvoidance&quot;/&gt;&lt;/td&gt;&lt;td&gt;Whether or not the spider should avoid clicking logout elements (default is true).&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;button&quot; value=&quot;scan&quot; type=&quot;submit&quot; zap-component=&quot;clientSpider&quot; zap-type=&quot;action&quot; zap-name=&quot;scan&quot;/&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>userName</code></pre></td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>userName</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Não passe informações confidenciais em URIs.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				
+				<li id="alerts--risk-0-confidence-1">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Informativo</span>, <span>Confidence</span>=<span
+							class="confidence-level">Baixo</span> <span>(2)</span>
+					</h3>
+					<ol>
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:8080</span> <span>(2)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-2">Solicitação de autenticação identificada</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:8080/UI/network/action/setHttpProxy/override?apikey=ZAP&amp;host=ZAP&amp;password=ZAP&amp;port=ZAP&amp;realm=ZAP&amp;username=ZAP</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>A solicitação em questão foi identificada como uma solicitação de autenticação. O campo &quot;Outras Informações&quot; contém um conjunto de linhas chave=valor que identificam quaisquer campos relevantes. Se a solicitação estiver em um contexto com um Método de Autenticação definido como &quot;Detecção Automática&quot;, esta regra alterará a autenticação para corresponder à solicitação identificada.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>userParam=username</p>
+
+<p>userValue=ZAP</p>
+
+<p>passwordParam=password</p>
+
+<p>referer=http://localhost:8080/UI/network/action/setHttpProxy/</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (397 bytes)</summary>
+				
+				<pre><code>GET http://localhost:8080/UI/network/action/setHttpProxy/override?apikey=ZAP&amp;host=ZAP&amp;password=ZAP&amp;port=ZAP&amp;realm=ZAP&amp;username=ZAP HTTP/1.1
+host: localhost:8080
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+referer: http://localhost:8080/UI/network/action/setHttpProxy/
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (565 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Pragma: no-cache
+Cache-Control: no-cache, no-store, must-revalidate
+Content-Security-Policy: default-src &#39;none&#39;; script-src &#39;self&#39;; connect-src &#39;self&#39;; child-src &#39;self&#39;; img-src &#39;self&#39; data:; font-src &#39;self&#39; data:; style-src &#39;self&#39;
+Referrer-Policy: no-referrer
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Access-Control-Allow-Headers: ZAP-Header
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Clacks-Overhead: GNU Terry Pratchett
+content-length: 1527
+Content-Type: text/html; charset=UTF-8
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (1527 bytes)</summary>
+				
+				<pre><code>&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+&lt;title&gt;ZAP API UI&lt;/title&gt;
+&lt;script src=&quot;/script.js/?v=2&amp;apinonce=a98b8df1f54e4411&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;&lt;a href=&quot;/UI/&quot;&gt;ZAP API UI&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;/UI/network/&quot;&gt;Componente: network&lt;/a&gt;&lt;/h2&gt;
+&lt;h3&gt;Ação: setHttpProxy&lt;/h3&gt;
+Sets the HTTP proxy configuration.
+&lt;form id=&quot;zapform&quot; name=&quot;zapform&quot; action=&quot;override&quot;&gt;&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Formato de saída&lt;/td&gt;&lt;td&gt;
+&lt;select id=&quot;zapapiformat&quot;&gt;
+&lt;option value=&quot;JSON&quot;&gt;JSON&lt;/option&gt;
+&lt;option value=&quot;JSONP&quot; disabled&gt;JSONP&lt;/option&gt;
+&lt;option value=&quot;HTML&quot;&gt;HTML&lt;/option&gt;
+&lt;option value=&quot;XML&quot;&gt;XML&lt;/option&gt;
+&lt;/select&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;apikey*&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;apikey&quot; name=&quot;apikey&quot; value=&quot;&quot;/&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Método de formulário&lt;/td&gt;&lt;td&gt;&lt;select id=&quot;formMethod&quot;&gt;
+&lt;option value=&quot;GET&quot; selected&gt;GET&lt;/option&gt;
+&lt;option value=&quot;POST&quot;&gt;POST&lt;/option&gt;
+&lt;/select&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;host*&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;host&quot; name=&quot;host&quot;/&gt;&lt;/td&gt;&lt;td&gt;The host, name or address.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;port*&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;port&quot; name=&quot;port&quot;/&gt;&lt;/td&gt;&lt;td&gt;The port.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;realm&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;realm&quot; name=&quot;realm&quot;/&gt;&lt;/td&gt;&lt;td&gt;The authentication realm.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;username&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;username&quot; name=&quot;username&quot;/&gt;&lt;/td&gt;&lt;td&gt;The user name.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;password&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;password&quot; name=&quot;password&quot;/&gt;&lt;/td&gt;&lt;td&gt;The password.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;button&quot; value=&quot;setHttpProxy&quot; type=&quot;submit&quot; zap-component=&quot;network&quot; zap-type=&quot;action&quot; zap-name=&quot;setHttpProxy&quot;/&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>username</code></pre></td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>password</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Este é um alerta informativo e não uma vulnerabilidade, portanto não há nada a ser corrigido.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-3">User Controllable HTML Element Attribute (Potential XSS)</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:8080/UI/acsrf/view/optionPartialMatchingEnabled/override?apikey=ZAP</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://owasp.org/Top10/2025/A05_2025-Injection/">OWASP_2025_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A1_2017-Injection.html">OWASP_2017_A01</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A03_2021-Injection/">OWASP_2021_A03</a></span> 
+				</li>
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/20.html">CWE-20</a></span> 
+				</li>
+				<li>
+					 <span>POLICY_PENTEST = </span>
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>User-controlled HTML attribute values were found. Try injecting special characters to see if XSS might be possible. The page at the following URL:</p>
+
+<p>http://localhost:8080/UI/acsrf/view/optionPartialMatchingEnabled/override?apikey=ZAP</p>
+
+<p>appears to include user input in:</p>
+
+<p>a(n) [form] tag [id] attribute</p>
+
+<p>The user input found was:</p>
+
+<p>apikey=ZAP</p>
+
+<p>The user-controlled value was:</p>
+
+<p>zapform</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (367 bytes)</summary>
+				
+				<pre><code>GET http://localhost:8080/UI/acsrf/view/optionPartialMatchingEnabled/override?apikey=ZAP HTTP/1.1
+host: localhost:8080
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+referer: http://localhost:8080/UI/acsrf/view/optionPartialMatchingEnabled/
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (565 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Pragma: no-cache
+Cache-Control: no-cache, no-store, must-revalidate
+Content-Security-Policy: default-src &#39;none&#39;; script-src &#39;self&#39;; connect-src &#39;self&#39;; child-src &#39;self&#39;; img-src &#39;self&#39; data:; font-src &#39;self&#39; data:; style-src &#39;self&#39;
+Referrer-Policy: no-referrer
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Access-Control-Allow-Headers: ZAP-Header
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Clacks-Overhead: GNU Terry Pratchett
+content-length: 1147
+Content-Type: text/html; charset=UTF-8
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (1147 bytes)</summary>
+				
+				<pre><code>&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+&lt;title&gt;ZAP API UI&lt;/title&gt;
+&lt;script src=&quot;/script.js/?v=2&amp;apinonce=ade801b323569db&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;&lt;a href=&quot;/UI/&quot;&gt;ZAP API UI&lt;/a&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;a href=&quot;/UI/acsrf/&quot;&gt;Componente: acsrf&lt;/a&gt;&lt;/h2&gt;
+&lt;h3&gt;Visualizar:optionPartialMatchingEnabled&lt;/h3&gt;
+Defina se o ZAP deve detectar tokens CSRF procurando por correspondências parciais
+&lt;form id=&quot;zapform&quot; name=&quot;zapform&quot; action=&quot;override&quot;&gt;&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Formato de saída&lt;/td&gt;&lt;td&gt;
+&lt;select id=&quot;zapapiformat&quot;&gt;
+&lt;option value=&quot;JSON&quot;&gt;JSON&lt;/option&gt;
+&lt;option value=&quot;JSONP&quot; disabled&gt;JSONP&lt;/option&gt;
+&lt;option value=&quot;HTML&quot;&gt;HTML&lt;/option&gt;
+&lt;option value=&quot;XML&quot;&gt;XML&lt;/option&gt;
+&lt;/select&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;apikey*&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;apikey&quot; name=&quot;apikey&quot; value=&quot;&quot;/&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Método de formulário&lt;/td&gt;&lt;td&gt;&lt;select id=&quot;formMethod&quot;&gt;
+&lt;option value=&quot;GET&quot; selected&gt;GET&lt;/option&gt;
+&lt;option value=&quot;POST&quot;&gt;POST&lt;/option&gt;
+&lt;/select&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;input id=&quot;button&quot; value=&quot;optionPartialMatchingEnabled&quot; type=&quot;submit&quot; zap-component=&quot;acsrf&quot; zap-type=&quot;view&quot; zap-name=&quot;optionPartialMatchingEnabled&quot;/&gt;
+&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>apikey</code></pre></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Validate all input and sanitize output it before writing to any HTML attributes.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				  
+			</ol>
+		</section>
+
+		<section id="appendix" class="appendix">
+			<h2>Appendix</h2>
+
+			<section id="alert-types" class="alert-types">
+				<h3>Alert Types</h3>
+				<p class="alert-types-intro">This section contains additional information on the types of alerts in the report.</p>
+				<ol>
+					<li
+						id="alert-type-0">
+						<h4>CSP: Failure to Define Directive with No Fallback</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10055/">CSP</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/693.html">693</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://www.w3.org/TR/CSP/">https://www.w3.org/TR/CSP/</a></li>
+										<li><a
+											href="https://caniuse.com/#search=content+security+policy">https://caniuse.com/#search=content+security+policy</a></li>
+										<li><a
+											href="https://content-security-policy.com/">https://content-security-policy.com/</a></li>
+										<li><a
+											href="https://github.com/HtmlUnit/htmlunit-csp">https://github.com/HtmlUnit/htmlunit-csp</a></li>
+										<li><a
+											href="https://web.dev/articles/csp#resource-options">https://web.dev/articles/csp#resource-options</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-1">
+						<h4>Information Disclosure - Sensitive Information in URL</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10024/">Information Disclosure - Sensitive Information in URL</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/598.html">598</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>13</td>
+							</tr>
+							
+						</table>
+					</li>
+					<li
+						id="alert-type-2">
+						<h4>Solicitação de autenticação identificada</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10111/">Solicitação de autenticação identificada</a>)
+									</span>   
+								</td>
+							</tr>
+							
+							
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/">https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-3">
+						<h4>User Controllable HTML Element Attribute (Potential XSS)</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10031/">User Controllable HTML Element Attribute (Potential XSS)</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/20.html">20</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>20</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+				</ol>
+			</section>
+		</section>
+		 
+	</main>
+</body>
+</html>
+
+
+
