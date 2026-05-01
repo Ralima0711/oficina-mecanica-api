@@ -75,8 +75,76 @@ docker compose exec app php artisan db:seed
 Acesse `http://localhost:8080/api/documentation` para visualizar os endpoints no Swagger UI.
 
 **Credenciais padrão (admin):**
-- Email: configurado no `.env` via `DEFAULT_ADMIN_EMAIL`
-- Senha: configurada no `.env` via `DEFAULT_ADMIN_PASSWORD`
+- Email: configurado no `.env` via `DEFAULT_USER_EMAIL`
+- Senha: configurada no `.env` via `DEFAULT_USER_PASSWORD`
+
+---
+
+## Como Autenticar
+
+Após os seeders serem executados, o sistema é populado com os seguintes usuários por perfil:
+
+### 👨‍💼 Admin
+Usuário administrador do sistema (padrão configurável via `.env`):
+- **Email:** `admin@oficina.local`
+- **Senha:** `admin123`
+
+### 👨‍🔧 Mecanicos (3 usuários)
+
+| Nome | Email | Senha | Especialidade |
+|---|---|---|---|
+| João Silva | `joao.silva@oficina.local` | `mecanico123` | Motor |
+| Carlos Santos | `carlos.santos@oficina.local` | `mecanico123` | Suspensão e Freios |
+| Pedro Oliveira | `pedro.oliveira@oficina.local` | `mecanico123` | Elétrica |
+
+### 👩‍💼 Atendentes (3 usuários)
+
+| Nome | Email | Senha |
+|---|---|---|
+| Maria Costa | `maria.costa@oficina.local` | `atendente123` |
+| Ana Ferreira | `ana.ferreira@oficina.local` | `atendente123` |
+| Juliana Martins | `juliana.martins@oficina.local` | `atendente123` |
+
+### Fluxo de Autenticação
+
+1. **Enviar POST para `/api/auth/login`** com email e senha:
+```json
+{
+  "email": "joao.silva@oficina.local",
+  "password": "mecanico123"
+}
+```
+
+2. **Resposta com token JWT:**
+```json
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "token_type": "bearer",
+  "expires_in": 3600
+}
+```
+
+3. **Usar o token em requests subsequentes** no header:
+```
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGc...
+```
+
+4. **Endpoints úteis:**
+   - `GET /api/auth/me` — Obter dados do usuário autenticado
+   - `POST /api/auth/refresh` — Renovar o token JWT
+   - `POST /api/auth/logout` — Realizar logout
+
+### Gerar novos seeds
+
+Para popular o banco com os usuários padrão:
+```bash
+docker compose exec app php artisan db:seed --class=UsersSeeder
+```
+
+Ou resetar completamente o banco com todos os seeds:
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
 
 ---
 
