@@ -1,0 +1,47 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Dependências (reinstaladas no build)
+vendor/
+node_modules/
+
+# Ambiente local
+.env
+.env.*
+!.env.example
+
+# Testes e cobertura
+tests/
+phpunit.xml
+.phpunit.result.cache
+
+# Documentação e ferramentas de análise
+docs/
+*.md
+.scannerwork/
+
+# Docker
+docker-compose*.yml
+docker/
+
+# Assets de desenvolvimento
+vite.config.js
+tailwind.config.js
+postcss.config.js
+package.json
+package-lock.json
+resources/js/
+resources/css/
+
+# Storage (gerado em runtime)
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+
+# IDE
+.idea/
+.vscode/
+*.swp
