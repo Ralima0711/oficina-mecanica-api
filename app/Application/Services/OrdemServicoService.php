@@ -9,12 +9,8 @@ use App\Domain\Cliente\ValueObjects\Cpf;
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
 use App\Domain\OrdemServico\Entities\OrdemServico;
 use App\Domain\OrdemServico\ValueObjects\StatusOrdem;
-use App\Infrastructure\Persistence\Eloquent\Models\InsumoModel;
-use App\Infrastructure\Persistence\Eloquent\Models\InsumoOsModel;
-use App\Infrastructure\Persistence\Eloquent\Models\ItemOsModel;
-use App\Infrastructure\Persistence\Eloquent\Models\PecaModel;
-use App\Infrastructure\Persistence\Eloquent\Models\VeiculoModel;
-use Illuminate\Support\Facades\DB;
+use App\Domain\Veiculo\Repositories\VeiculoRepositoryInterface;
+use App\Domain\Mecanico\Repositories\MecanicoRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -29,6 +25,8 @@ class OrdemServicoService
     public function __construct(
         private OrdemServicoRepositoryInterface $repository,
         private ClienteRepositoryInterface $clienteRepository,
+        private VeiculoRepositoryInterface $veiculoRepository,
+        private MecanicoRepositoryInterface $mecanicoRepository,
         private OrdemServicoNotificacaoService $notificacaoService,
         private SistemaNotificacaoService $sistemaNotificacaoService,
     ) {}
@@ -116,6 +114,17 @@ class OrdemServicoService
         return $salva;
     }
 
+    public function resolverMecanicoId(int $usuarioId): int
+    {
+        $mecanicoId = $this->mecanicoRepository->findIdByUserId($usuarioId);
+
+        if ($mecanicoId === null) {
+            throw new \DomainException('Usuário autenticado não possui cadastro de mecanico.');
+        }
+
+        return (int) $mecanicoId;
+    }
+
     public function submeterOrcamento(int $id, int $mecanicoId, array $dados): OrdemServico
     {
 
@@ -143,138 +152,15 @@ class OrdemServicoService
         $pecasInput = $dados['pecas'] ?? [];
         $insumosInput = $dados['insumos'] ?? [];
 
-        $orcamentoDetalhado = DB::transaction(function () use ($id, $ordem, $mecanicoId, $diagnostico, $maoDeObra, $pecasInput, $insumosInput) {
-            $itensPecasAnteriores = ItemOsModel::query()->where('ordem_servico_id', $id)->get();
-            foreach ($itensPecasAnteriores as $itemAnterior) {
-                $pecaAnterior = PecaModel::query()->whereKey($itemAnterior->peca_id)->lockForUpdate()->first();
-
-                if ($pecaAnterior) {
-                    $pecaAnterior->increment('estoque_atual', (int) $itemAnterior->quantidade);
-                }
-            }
-
-            $itensInsumosAnteriores = InsumoOsModel::query()->where('ordem_servico_id', $id)->get();
-            foreach ($itensInsumosAnteriores as $itemAnterior) {
-                $insumoAnterior = InsumoModel::query()->whereKey($itemAnterior->insumo_id)->lockForUpdate()->first();
-
-                if ($insumoAnterior) {
-                    $insumoAnterior->increment('estoque_atual', (float) $itemAnterior->quantidade);
-                }
-            }
-
-            ItemOsModel::query()->where('ordem_servico_id', $id)->delete();
-            InsumoOsModel::query()->where('ordem_servico_id', $id)->delete();
-
-            $itensPecas = [];
-            $itensInsumos = [];
-            $totalPecas = 0.0;
-            $totalInsumos = 0.0;
-
-            foreach ($pecasInput as $pecaInput) {
-                $peca = PecaModel::query()
-                    ->whereKey($pecaInput['peca_id'])
-                    ->lockForUpdate()
-                    ->first();
-
-                if (!$peca) {
-                    throw new \DomainException('Peça informada não encontrada para composição do orçamento.');
-                }
-
-                $quantidade = (int) $pecaInput['quantidade'];
-
-                if ((int) $peca->estoque_atual < $quantidade) {
-                    throw new \DomainException("Estoque insuficiente para peça {$peca->nome}.");
-                }
-
-                $precoUnitario = (float) $peca->preco_unitario;
-                $subtotal = round($quantidade * $precoUnitario, 2);
-
-                $peca->decrement('estoque_atual', $quantidade);
-
-                ItemOsModel::query()->create([
-                    'ordem_servico_id' => $id,
-                    'peca_id' => $peca->id,
-                    'quantidade' => $quantidade,
-                    'preco_unitario' => $precoUnitario,
-                    'subtotal' => $subtotal,
-                ]);
-
-                $itensPecas[] = [
-                    'id' => $peca->id,
-                    'nome' => $peca->nome,
-                    'quantidade' => $quantidade,
-                    'preco_unitario' => $precoUnitario,
-                    'subtotal' => $subtotal,
-                ];
-
-                $totalPecas += $subtotal;
-            }
-
-            foreach ($insumosInput as $insumoInput) {
-                $insumo = InsumoModel::query()
-                    ->whereKey($insumoInput['insumo_id'])
-                    ->lockForUpdate()
-                    ->first();
-
-                if (!$insumo) {
-                    throw new \DomainException('Insumo informado não encontrado para composição do orçamento.');
-                }
-
-                $quantidade = (float) $insumoInput['quantidade'];
-
-                if ((float) $insumo->estoque_atual < $quantidade) {
-                    throw new \DomainException("Estoque insuficiente para insumo {$insumo->nome}.");
-                }
-
-                $precoUnitario = (float) $insumo->preco_unitario;
-                $subtotal = round($quantidade * $precoUnitario, 2);
-
-                $insumo->decrement('estoque_atual', $quantidade);
-
-                InsumoOsModel::query()->create([
-                    'ordem_servico_id' => $id,
-                    'insumo_id' => $insumo->id,
-                    'quantidade' => $quantidade,
-                    'preco_unitario' => $precoUnitario,
-                    'subtotal' => $subtotal,
-                ]);
-
-                $itensInsumos[] = [
-                    'id' => $insumo->id,
-                    'nome' => $insumo->nome,
-                    'quantidade' => $quantidade,
-                    'preco_unitario' => $precoUnitario,
-                    'subtotal' => $subtotal,
-                    'unidade_medida' => $insumo->unidade_medida,
-                ];
-
-                $totalInsumos += $subtotal;
-            }
-
-            $totalOrcamento = round($totalPecas + $totalInsumos + $maoDeObra, 2);
-
-            $ordem->atualizar([
-                'mecanico_id' => $mecanicoId,
-                'diagnostico' => $diagnostico,
-                'valor_total' => $totalOrcamento,
-            ]);
-            $ordem->gerarOrcamento();
-
-            $ordemSalva = $this->repository->save($ordem);
-
-            return [
-                'ordem' => $ordemSalva,
-                'orcamento' => [
-                    'diagnostico' => $diagnostico,
-                    'mao_de_obra' => $maoDeObra,
-                    'pecas' => $itensPecas,
-                    'insumos' => $itensInsumos,
-                    'total_pecas' => round($totalPecas, 2),
-                    'total_insumos' => round($totalInsumos, 2),
-                    'valor_total' => $totalOrcamento,
-                ],
-            ];
-        });
+        $orcamentoDetalhado = $this->repository->processarOrcamento(
+            $id,
+            $ordem,
+            $mecanicoId,
+            $diagnostico,
+            $maoDeObra,
+            $pecasInput,
+            $insumosInput
+        );
 
         $links = $this->gerarLinksAprovacao($orcamentoDetalhado['ordem']);
         $this->notificarMudancaStatus($orcamentoDetalhado['ordem'], $links, $orcamentoDetalhado['orcamento']);
@@ -308,36 +194,10 @@ class OrdemServicoService
     {
         $this->validarTokenAcaoPublica($token, $id, 'reprovar');
 
-        $salva = DB::transaction(function () use ($id) {
-            $os = $this->buscarPorId($id);
-            $os->reprovar();
+        $os = $this->buscarPorId($id);
+        $os->reprovar();
 
-            $itensPeca = ItemOsModel::query()
-                ->where('ordem_servico_id', $id)
-                ->get();
-
-            foreach ($itensPeca as $item) {
-                $peca = PecaModel::query()->whereKey($item->peca_id)->lockForUpdate()->first();
-
-                if ($peca) {
-                    $peca->increment('estoque_atual', (int) $item->quantidade);
-                }
-            }
-
-            $itensInsumo = InsumoOsModel::query()
-                ->where('ordem_servico_id', $id)
-                ->get();
-
-            foreach ($itensInsumo as $item) {
-                $insumo = InsumoModel::query()->whereKey($item->insumo_id)->lockForUpdate()->first();
-
-                if ($insumo) {
-                    $insumo->increment('estoque_atual', (float) $item->quantidade);
-                }
-            }
-
-            return $this->repository->save($os);
-        });
+        $salva = $this->repository->reprovarOrcamento($id, $os);
 
         $this->notificarMudancaStatus($salva);
         $this->notificarSistema(
@@ -544,12 +404,7 @@ class OrdemServicoService
 
     private function veiculoPertenceAoCliente(int $veiculoId, int $clienteId): void
     {
-        $veiculoPertenceAoCliente = VeiculoModel::query()
-            ->whereKey($veiculoId)
-            ->where('cliente_id', $clienteId)
-            ->exists();
-
-        if (!$veiculoPertenceAoCliente) {
+        if (!$this->veiculoRepository->existsByIdAndClienteId($veiculoId, $clienteId)) {
             throw new \DomainException('O veiculo informado não pertence ao cliente selecionado.');
         }
     }

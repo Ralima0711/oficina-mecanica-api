@@ -6,7 +6,7 @@ use App\Domain\Notificacao\Repositories\NotificacaoRepositoryInterface;
 use App\Domain\OrdemServico\Entities\OrdemServico;
 use App\Domain\OrdemServico\Repositories\OrdemServicoRepositoryInterface;
 use App\Domain\User\Repositories\UserRepositoryInterface;
-use Illuminate\Support\Facades\DB;
+use App\Domain\Mecanico\Repositories\MecanicoRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 
 class SistemaNotificacaoService
@@ -21,6 +21,7 @@ class SistemaNotificacaoService
         private NotificacaoRepositoryInterface $notificacaoRepository,
         private UserRepositoryInterface $userRepository,
         private OrdemServicoRepositoryInterface $ordemServicoRepository,
+        private MecanicoRepositoryInterface $mecanicoRepository,
     ) {}
 
     public function listarMinhas(int $userId, int $perPage = 20): array
@@ -69,9 +70,7 @@ class SistemaNotificacaoService
             return;
         }
 
-        $userId = DB::table('mecanicos')
-            ->where('id', $mecanicoId)
-            ->value('user_id');
+        $userId = $this->mecanicoRepository->findUserIdByMecanicoId($mecanicoId);
 
         if ($userId === null) {
             return;
