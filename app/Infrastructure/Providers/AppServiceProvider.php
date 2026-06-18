@@ -9,6 +9,7 @@ use App\Domain\Peca\Repositories\PecaRepositoryInterface;
 use App\Domain\Insumo\Repositories\InsumoRepositoryInterface;
 use App\Domain\User\Repositories\UserRepositoryInterface;
 use App\Domain\Veiculo\Repositories\VeiculoRepositoryInterface;
+use App\Domain\Mecanico\Repositories\MecanicoRepositoryInterface;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentNotificacaoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentOrdemServicoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentClienteRepository;
@@ -16,6 +17,7 @@ use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentPecaRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentInsumoRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentUserRepository;
 use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentVeiculoRepository;
+use App\Infrastructure\Persistence\Eloquent\Repositories\EloquentMecanicoRepository;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -61,6 +63,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             VeiculoRepositoryInterface::class,
             EloquentVeiculoRepository::class
+        );
+
+        $this->app->bind(
+            MecanicoRepositoryInterface::class,
+            EloquentMecanicoRepository::class
         );
     }
 

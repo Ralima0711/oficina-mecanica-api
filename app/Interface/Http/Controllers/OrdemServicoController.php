@@ -7,7 +7,6 @@ use App\Interface\Http\Requests\OrdemServicoRequest;
 use App\Interface\Http\Requests\SubmeterOrcamentoRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 /**
  * CAMADA DE INTERFACE
@@ -74,7 +73,7 @@ class OrdemServicoController extends Controller
     {
         try {
             $usuario = $request->user('api') ?? auth('api')->user();
-            $mecanicoId = $this->getMecanicoUserId((int) $usuario->id);
+            $mecanicoId = $this->service->resolverMecanicoId((int) $usuario->id);
 
             return response()->json(
                 $this->service->iniciarDiagnostico($id, $mecanicoId)
@@ -88,7 +87,7 @@ class OrdemServicoController extends Controller
     {
         try {
             $usuario = $request->user('api') ?? auth('api')->user();
-            $mecanicoId = $this->getMecanicoUserId((int) $usuario->id);
+            $mecanicoId = $this->service->resolverMecanicoId((int) $usuario->id);
 
             return response()->json(
                 $this->service->submeterOrcamento($id, $mecanicoId, $request->validated())
@@ -166,16 +165,4 @@ class OrdemServicoController extends Controller
         return response()->json(['message' => 'Erro interno ao processar Ordem de Serviço.'], 500);
     }
 
-    private function getMecanicoUserId(int $usuarioId): int
-    {
-        $mecanicoId = DB::table('mecanicos')
-            ->where('user_id', $usuarioId)
-            ->value('id');
-
-        if ($mecanicoId === null) {
-            throw new \DomainException('Usuário autenticado não possui cadastro de mecanico.');
-        }
-
-        return (int) $mecanicoId;
-    }
 }

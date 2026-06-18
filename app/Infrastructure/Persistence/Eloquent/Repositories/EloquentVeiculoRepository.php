@@ -16,6 +16,14 @@ class EloquentVeiculoRepository implements VeiculoRepositoryInterface
         return $model ? $this->toEntity($model) : null;
     }
 
+    public function existsByIdAndClienteId(int $veiculoId, int $clienteId): bool
+    {
+        return VeiculoModel::query()
+            ->whereKey($veiculoId)
+            ->where('cliente_id', $clienteId)
+            ->exists();
+    }
+
     public function findAll(): array
     {
         return VeiculoModel::query()
