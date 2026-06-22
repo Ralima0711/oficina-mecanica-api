@@ -26,7 +26,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U postgres -d oficina_mecanica_test"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -107,11 +107,11 @@ jobs:
 
       - name: Apply K8s manifests
         run: |
-          kubectl apply -f k8s/configmap.yaml
-          kubectl apply -f k8s/secret.yaml
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
-          kubectl apply -f k8s/hpa.yaml
+          # kubectl apply -f k8s/configmap.yaml
+          # kubectl apply -f k8s/secret.yaml
+          # kubectl apply -f k8s/deployment.yaml
+          # kubectl apply -f k8s/service.yaml
+          # kubectl apply -f k8s/hpa.yaml
 
       - name: Wait for rollout
-        run: kubectl rollout status deployment/oficina-mecanica-api
+        run: # kubectl rollout status deployment/oficina-mecanica-api
