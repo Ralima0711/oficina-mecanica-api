@@ -24,7 +24,11 @@ docs/
 
 # Docker
 docker-compose*.yml
-docker/
+docker/*
+!docker/Dockerfile
+!docker/opcache.ini
+!docker/nginx.conf
+!docker/start.sh
 
 # Assets de desenvolvimento
 vite.config.js
