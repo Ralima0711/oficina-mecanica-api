@@ -34,7 +34,7 @@ RUN mkdir -p storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-COPY docker/nginx.conf /etc/nginx/sites-available/default
+COPY docker/nginx-k8s.conf /etc/nginx/sites-available/default
 
 COPY docker/start.sh /usr/local/bin/start.sh
 
