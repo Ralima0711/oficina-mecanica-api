@@ -262,6 +262,11 @@ class OrdemServicoService
         $this->repository->delete($id);
     }
 
+    public function tempoMedioExecucao(): array
+    {
+        return $this->repository->tempoMedioExecucao();
+    }
+
     private function gerarLinksAprovacao(OrdemServico $ordem): array
     {
         $id = $ordem->getId();
