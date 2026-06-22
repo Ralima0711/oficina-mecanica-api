@@ -7,6 +7,7 @@ use App\Domain\Veiculo\Entities\Veiculo;
 interface VeiculoRepositoryInterface
 {
     public function findById(int $id): ?Veiculo;
+    public function existsByIdAndClienteId(int $veiculoId, int $clienteId): bool;
     public function findAll(): array;
     public function findByPlaca(string $placa): ?Veiculo;
     public function save(Veiculo $veiculo): Veiculo;
