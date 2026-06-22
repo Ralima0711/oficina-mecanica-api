@@ -10,6 +10,7 @@ use App\Infrastructure\Persistence\Eloquent\Models\InsumoOsModel;
 use App\Infrastructure\Persistence\Eloquent\Models\ItemOsModel;
 use App\Infrastructure\Persistence\Eloquent\Models\OrdemServicoModel;
 use App\Infrastructure\Persistence\Eloquent\Models\PecaModel;
+use Illuminate\Support\Facades\DB;
 
 /**
  * CAMADA DE INFRAESTRUTURA — Implementação do Repositório
@@ -68,6 +69,23 @@ class EloquentOrdemServicoRepository implements OrdemServicoRepositoryInterface
 
         $model->save();
         return $this->toEntity($model);
+    }
+
+    public function tempoMedioExecucao(): array
+    {
+        $resultado = DB::selectOne("
+            SELECT
+                ROUND(AVG(EXTRACT(EPOCH FROM (concluida_em - iniciada_em)) / 60)::numeric, 2) AS media_minutos,
+                COUNT(*) AS total_concluidas
+            FROM ordens_servico
+            WHERE concluida_em IS NOT NULL
+              AND iniciada_em IS NOT NULL
+        ");
+
+        return [
+            'media_minutos'    => $resultado->media_minutos !== null ? (float) $resultado->media_minutos : null,
+            'total_concluidas' => (int) $resultado->total_concluidas,
+        ];
     }
 
     public function delete(int $id): void

@@ -152,6 +152,41 @@ class OrdemServicoController extends Controller
         }
     }
 
+    /**
+     * Consulta pública da OS pelo cliente (sem autenticação).
+     * Permite acompanhar o progresso da OS pelo número.
+     */
+    public function consultarPublico(int $id): JsonResponse
+    {
+        try {
+            $os = $this->service->buscarPorId($id);
+            return response()->json([
+                'id'                 => $os->getId(),
+                'status'             => (string) $os->getStatus(),
+                'descricao_problema' => $os->getDescricao(),
+                'diagnostico'        => $os->getDiagnostico(),
+                'valor_total'        => $os->getValorTotal(),
+                'iniciada_em'        => $os->getIniciadaEm()?->format('Y-m-d H:i:s'),
+                'concluida_em'       => $os->getConcluidaEm()?->format('Y-m-d H:i:s'),
+                'criada_em'          => $os->getCriadaEm()->format('Y-m-d H:i:s'),
+            ]);
+        } catch (\RuntimeException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    /**
+     * Monitoramento do tempo médio de execução das OS (admin).
+     */
+    public function metricas(): JsonResponse
+    {
+        try {
+            return response()->json($this->service->tempoMedioExecucao());
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
+        }
+    }
+
     private function handleException(\Throwable $e): JsonResponse
     {
         if ($e instanceof \RuntimeException) {
