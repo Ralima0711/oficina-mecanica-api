@@ -93,18 +93,21 @@ O projeto também conta com os manifestos necessários para ser executado em um 
 minikube start
 ```
 
-2. Aplique os manifestos do Kubernetes (A imagem será baixada automaticamente do Docker Hub):
+2. Configure as credenciais no Kubernetes:
+Antes de aplicar os manifestos, preencha os valores obrigatórios no arquivo `k8s/secret.yaml` (`APP_KEY`, `DB_PASSWORD`, `JWT_SECRET` e `MAIL_PASSWORD`) com seus respectivos valores codificados em **base64**. Alternativamente, crie o secret via linha de comando (`kubectl create secret generic...`) para não versionar credenciais locais.
+
+3. Aplique os manifestos do Kubernetes (A imagem será baixada automaticamente do Docker Hub):
 ```bash
 kubectl apply -f k8s/
 ```
 
-3. Verifique o status dos pods e aguarde até que estejam rodando:
+4. Verifique o status dos pods e aguarde até que estejam rodando:
 ```bash
 kubectl get pods
 ```
 > O pod da API se encarrega de rodar as migrations automaticamente em sua inicialização e aguarda o PostgreSQL.
 
-4. Exponha o serviço da API para acesso local:
+5. Exponha o serviço da API para acesso local:
 ```bash
 minikube service oficina-api-service
 ```
