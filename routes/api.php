@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+// Checagem de saude (pública)
+Route::get('health', function () {
+    return response()->json([
+        'status' => 'ok'
+    ]);
+});
+
 // Autenticação (pública)
 Route::prefix('auth')->group(function () {
     Route::post('/login',   [AuthController::class, 'login'])->name('login');
