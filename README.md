@@ -94,7 +94,7 @@ minikube start
 ```
 
 2. Configure as credenciais no Kubernetes:
-Antes de aplicar os manifestos, preencha os valores obrigatórios no arquivo `k8s/secret.yaml` (`APP_KEY`, `DB_PASSWORD`, `JWT_SECRET` e `MAIL_PASSWORD`) com seus respectivos valores codificados em **base64**. Alternativamente, crie o secret via linha de comando (`kubectl create secret generic...`) para não versionar credenciais locais.
+Antes de aplicar os manifestos, copie o arquivo `k8s/secret.example.yaml` para `k8s/secret.yaml` e preencha os valores obrigatórios (`APP_KEY`, `DB_PASSWORD`, `JWT_SECRET` e `MAIL_PASSWORD`) com seus respectivos valores codificados em **base64**. Alternativamente, crie o secret via linha de comando (`kubectl create secret generic...`) para não versionar credenciais locais.
 
 3. Aplique os manifestos do Kubernetes (A imagem será baixada automaticamente do Docker Hub):
 ```bash
