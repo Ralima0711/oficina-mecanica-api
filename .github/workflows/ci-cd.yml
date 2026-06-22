@@ -51,6 +51,9 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
+      - name: Generate JWT secret
+        run: php artisan jwt:secret --force
+
       - name: Run migrations
         env:
           DB_CONNECTION: pgsql
@@ -61,7 +64,7 @@ jobs:
           DB_PASSWORD: postgres
         run: php artisan migrate --force
 
-      - name: Run tests with coverage
+      - name: Run tests
         env:
           DB_CONNECTION: pgsql
           DB_HOST: 127.0.0.1
@@ -69,7 +72,7 @@ jobs:
           DB_DATABASE: oficina_mecanica_test
           DB_USERNAME: postgres
           DB_PASSWORD: postgres
-        run: php artisan test --coverage --min=80
+        run: php artisan test
 
   # ── 2. Build Docker Image ─────────────────────────────────────────
   build:

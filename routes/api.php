@@ -8,6 +8,7 @@ use App\Interface\Http\Controllers\PecaController;
 use App\Interface\Http\Controllers\InsumoController;
 use App\Interface\Http\Controllers\VeiculoController;
 use App\Interface\Http\Controllers\UserController;
+use App\Interface\Http\Controllers\ServicoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('veiculos',       VeiculoController::class);
     Route::apiResource('pecas',          PecaController::class);
     Route::apiResource('insumos',        InsumoController::class);
+    Route::apiResource('servicos',       ServicoController::class);
     Route::get('notificacoes/minhas', [NotificacaoController::class, 'index'])
         ->name('notificacoes.minhas');
     Route::patch('notificacoes/{id}/lida', [NotificacaoController::class, 'marcarComoLida'])
@@ -94,11 +96,21 @@ Route::middleware(['auth:api', 'role:mecanico'])->prefix('ordens-servico')->name
         ->name('finalizar');
 });
 
-//Cliente - Rotas publicas de aprovação/reprovação.
+//Cliente - Rotas publicas de aprovação/reprovação e acompanhamento.
 Route::prefix('public/ordens-servico')->name('public.ordens-servico.')->group(function () {
     Route::get('{id}/aprovar/{token}', [OrdemServicoController::class, 'aprovarPublico'])
         ->name('aprovar');
 
     Route::get('{id}/reprovar/{token}', [OrdemServicoController::class, 'reprovarPublico'])
         ->name('reprovar');
+
+    // Consulta pública da OS pelo cliente (sem autenticação)
+    Route::get('{id}', [OrdemServicoController::class, 'consultarPublico'])
+        ->name('consultar');
+});
+
+// Métricas administrativas — tempo médio de execução das OS
+Route::middleware(['auth:api', 'role:admin'])->group(function () {
+    Route::get('ordens-servico/metricas/tempo-medio', [OrdemServicoController::class, 'metricas'])
+        ->name('ordens-servico.metricas.tempo-medio');
 });
