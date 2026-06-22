@@ -179,7 +179,7 @@ class OrdemServico implements \JsonSerializable
 
     public function toArray(): array
     {
-        $dados = [
+        return [
             'id' => $this->id,
             'cliente_id' => $this->clienteId,
             'veiculo_id' => $this->veiculoId,
@@ -193,28 +193,10 @@ class OrdemServico implements \JsonSerializable
             'created_at' => $this->criadaEm->format('Y-m-d H:i:s'),
             'updated_at' => $this->atualizadaEm?->format('Y-m-d H:i:s'),
         ];
-
-        if ($this->iniciadaEm !== null && $this->concluidaEm !== null) {
-            $dados['duracao'] = $this->formatarDuracao($this->iniciadaEm, $this->concluidaEm);
-        }
-
-        return $dados;
     }
 
     public function jsonSerialize(): array
     {
         return $this->toArray();
-    }
-
-    private function formatarDuracao(
-        \DateTimeImmutable $iniciadaEm,
-        \DateTimeImmutable $concluidaEm
-    ): string {
-        $segundos = max(0, $concluidaEm->getTimestamp() - $iniciadaEm->getTimestamp());
-        $horas = intdiv($segundos, 3600);
-        $minutos = intdiv($segundos % 3600, 60);
-        $restante = $segundos % 60;
-
-        return sprintf('%02d:%02d:%02d', $horas, $minutos, $restante);
     }
 }

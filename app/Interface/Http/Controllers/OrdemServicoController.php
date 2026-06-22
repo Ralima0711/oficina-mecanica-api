@@ -7,7 +7,6 @@ use App\Interface\Http\Requests\OrdemServicoRequest;
 use App\Interface\Http\Requests\SubmeterOrcamentoRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 /**
  * CAMADA DE INTERFACE
@@ -74,7 +73,7 @@ class OrdemServicoController extends Controller
     {
         try {
             $usuario = $request->user('api') ?? auth('api')->user();
-            $mecanicoId = $this->getMecanicoUserId((int) $usuario->id);
+            $mecanicoId = $this->service->resolverMecanicoId((int) $usuario->id);
 
             return response()->json(
                 $this->service->iniciarDiagnostico($id, $mecanicoId)
@@ -88,7 +87,7 @@ class OrdemServicoController extends Controller
     {
         try {
             $usuario = $request->user('api') ?? auth('api')->user();
-            $mecanicoId = $this->getMecanicoUserId((int) $usuario->id);
+            $mecanicoId = $this->service->resolverMecanicoId((int) $usuario->id);
 
             return response()->json(
                 $this->service->submeterOrcamento($id, $mecanicoId, $request->validated())
@@ -153,6 +152,41 @@ class OrdemServicoController extends Controller
         }
     }
 
+    /**
+     * Consulta pública da OS pelo cliente (sem autenticação).
+     * Permite acompanhar o progresso da OS pelo número.
+     */
+    public function consultarPublico(int $id): JsonResponse
+    {
+        try {
+            $os = $this->service->buscarPorId($id);
+            return response()->json([
+                'id'                 => $os->getId(),
+                'status'             => (string) $os->getStatus(),
+                'descricao_problema' => $os->getDescricao(),
+                'diagnostico'        => $os->getDiagnostico(),
+                'valor_total'        => $os->getValorTotal(),
+                'iniciada_em'        => $os->getIniciadaEm()?->format('Y-m-d H:i:s'),
+                'concluida_em'       => $os->getConcluidaEm()?->format('Y-m-d H:i:s'),
+                'criada_em'          => $os->getCriadaEm()->format('Y-m-d H:i:s'),
+            ]);
+        } catch (\RuntimeException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    /**
+     * Monitoramento do tempo médio de execução das OS (admin).
+     */
+    public function metricas(): JsonResponse
+    {
+        try {
+            return response()->json($this->service->tempoMedioExecucao());
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
+        }
+    }
+
     private function handleException(\Throwable $e): JsonResponse
     {
         if ($e instanceof \RuntimeException) {
@@ -166,16 +200,4 @@ class OrdemServicoController extends Controller
         return response()->json(['message' => 'Erro interno ao processar Ordem de Serviço.'], 500);
     }
 
-    private function getMecanicoUserId(int $usuarioId): int
-    {
-        $mecanicoId = DB::table('mecanicos')
-            ->where('user_id', $usuarioId)
-            ->value('id');
-
-        if ($mecanicoId === null) {
-            throw new \DomainException('Usuário autenticado não possui cadastro de mecanico.');
-        }
-
-        return (int) $mecanicoId;
-    }
 }
