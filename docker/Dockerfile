@@ -29,12 +29,13 @@ WORKDIR /var/www/html
 COPY --from=builder --chown=www-data:www-data /var/www/html .
 
 # Ensure storage and cache directories exist and are owned by www-data
-RUN mkdir -p storage/logs bootstrap/cache \
+RUN mkdir -p storage/logs bootstrap/cache storage/framework/views storage/framework/cache storage/framework/sessions \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY docker/nginx-k8s.conf /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default && rm -f /etc/nginx/conf.d/default.conf
 
 COPY docker/start.sh /usr/local/bin/start.sh
 
