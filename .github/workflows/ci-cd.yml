@@ -135,10 +135,31 @@ jobs:
         run: |
           sed -i "s|image: .*oficina-mecanica-api:.*|image: ${{ env.IMAGE_NAME }}:${{ github.sha }}|g" k8s/api-deployment.yaml
 
+      - name: Generate Kubernetes Secret file
+        if: ${{ secrets.KUBECONFIG != '' }}
+        run: |
+          cat <<EOF > k8s/secret.yaml
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: oficina-mecanica-secrets
+          type: Opaque
+          stringData:
+            APP_KEY: "${{ secrets.APP_KEY }}"
+            DB_USERNAME: "${{ secrets.DB_USERNAME }}"
+            DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+            DB_DATABASE: "${{ secrets.DB_DATABASE }}"
+            JWT_SECRET: "${{ secrets.JWT_SECRET }}"
+            MAIL_USERNAME: "${{ secrets.MAIL_USERNAME }}"
+            MAIL_PASSWORD: "${{ secrets.MAIL_PASSWORD }}"
+            DEFAULT_USER_PASSWORD: "${{ secrets.DEFAULT_USER_PASSWORD }}"
+          EOF
+          sed -i 's/^          //' k8s/secret.yaml
+
       - name: Apply K8s manifests
         if: ${{ secrets.KUBECONFIG != '' }}
         run: |
-          # TODO: Futuramente, o secret.yaml deverá ser gerado dinamicamente a partir dos GitHub Secrets antes do apply.
+          kubectl apply -f k8s/secret.yaml
           kubectl apply -f k8s/configmap.yaml
           kubectl apply -f k8s/postgres-service.yaml
           kubectl apply -f k8s/postgres-deployment.yaml
