@@ -23,3 +23,11 @@ yarn-error.log
 /.zed
 .scannerwork/
 docker-compose.override.yml
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+terraform/*.tfplan
+terraform/*.tfstate
+terraform/*.tfstate.*
