@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oficina-postgres
+  labels:
+    app: oficina-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oficina-postgres
+  template:
+    metadata:
+      labels:
+        app: oficina-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: oficina-mecanica-secrets
+                  key: DB_DATABASE
+                  optional: true
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: oficina-mecanica-secrets
+                  key: DB_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: oficina-mecanica-secrets
+                  key: DB_PASSWORD
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
