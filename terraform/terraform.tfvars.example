@@ -1,0 +1,6 @@
+aws_region   = "us-east-1"
+cluster_name = "oficina-mecanica-cluster"
+lab_role_arn = "arn:aws:iam::123456789012:role/LabRole"
+subnet_ids   = ["subnet-xxxxxxxx", "subnet-yyyyyyyy"]
+db_username  = "admin"
+db_password  = "SenhaForte123!@#"
