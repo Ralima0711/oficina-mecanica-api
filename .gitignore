@@ -26,10 +26,10 @@ docker-compose.override.yml
 k8s/secret.yaml
 .env.testing
 
-# Terraform
-terraform/.terraform/
-terraform/.terraform.lock.hcl
-terraform/terraform.tfvars
-terraform/*.tfplan
-terraform/*.tfstate
-terraform/*.tfstate.*
+# Terraform (IaC em /infra)
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfvars
+infra/*.tfplan
+infra/*.tfstate
+infra/*.tfstate.*

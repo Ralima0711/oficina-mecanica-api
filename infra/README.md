@@ -125,7 +125,7 @@ Remove cluster, nodes, RDS e demais recursos criados pelo Terraform.
 ## Estrutura de arquivos
 
 ```
-terraform/
+infra/
 ├── main.tf                      # EKS, RDS, security groups
 ├── variables.tf                 # Variaveis de entrada
 ├── outputs.tf                   # Endpoints e credenciais de saida
