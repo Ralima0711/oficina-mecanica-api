@@ -58,6 +58,7 @@ class Servico implements \JsonSerializable
             'preco_base' => $this->precoBase,
             'duracao_estimada_minutos' => $this->duracaoEstimadaMinutos,
             'criado_em' => $this->criadoEm->format('Y-m-d H:i:s'),
+            'created_at' => $this->criadoEm->format('Y-m-d H:i:s'),
             'atualizado_em' => $this->atualizadoEm?->format('Y-m-d H:i:s'),
         ];
     }
