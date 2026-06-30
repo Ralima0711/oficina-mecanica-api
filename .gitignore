@@ -23,4 +23,5 @@ yarn-error.log
 /.zed
 .scannerwork/
 docker-compose.override.yml
+k8s/secret.yaml
 .env.testing

@@ -78,6 +78,46 @@ Acesse `http://localhost:8080/api/documentation` para visualizar os endpoints no
 - Email: configurado no `.env` via `DEFAULT_USER_EMAIL`
 - Senha: configurada no `.env` via `DEFAULT_USER_PASSWORD`
 
+### Como rodar no Kubernetes (K8s / Minikube)
+
+O projeto também conta com os manifestos necessários para ser executado em um cluster Kubernetes.
+
+**Pré-requisitos K8s:**
+- Minikube instalado
+- kubectl instalado
+
+**Setup:**
+
+1. Inicie o Minikube:
+```bash
+minikube start
+```
+
+2. Configure as credenciais no Kubernetes:
+Antes de aplicar os manifestos, copie o arquivo `k8s/secret.example.yaml` para `k8s/secret.yaml` e preencha os valores obrigatórios (`APP_KEY`, `DB_PASSWORD`, `JWT_SECRET` e `MAIL_PASSWORD`) com seus respectivos valores codificados em **base64**. Alternativamente, crie o secret via linha de comando (`kubectl create secret generic...`) para não versionar credenciais locais.
+
+3. Aplique os manifestos do Kubernetes (A imagem será baixada automaticamente do Docker Hub):
+```bash
+kubectl apply -f k8s/
+```
+
+4. Verifique o status dos pods e aguarde até que estejam rodando:
+```bash
+kubectl get pods
+```
+> O pod da API se encarrega de rodar as migrations automaticamente em sua inicialização e aguarda o PostgreSQL.
+
+5. Exponha o serviço da API para acesso local:
+```bash
+minikube service oficina-api-service
+```
+Isso abrirá uma nova aba no seu navegador. O Swagger pode ser acessado na rota `/api/documentation`.
+
+Para remover a implantação:
+```bash
+kubectl delete -f k8s/
+```
+
 ---
 
 ## Como Autenticar

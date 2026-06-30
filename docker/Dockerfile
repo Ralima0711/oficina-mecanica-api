@@ -20,21 +20,24 @@ RUN composer dump-autoload --optimize --no-dev
 FROM php:8.2-fpm AS production
 
 RUN apt-get update && apt-get install -y \
-    libpq-dev libzip-dev \
+    libpq-dev libzip-dev nginx \
     && docker-php-ext-install pdo pdo_pgsql zip opcache \
     && rm -rf /var/lib/apt/lists/*
 
-# Usuário não-root
-RUN groupadd -g 1000 appgroup && useradd -u 1000 -g appgroup -s /bin/sh -m appuser
-
 WORKDIR /var/www/html
 
-COPY --from=builder --chown=appuser:appgroup /var/www/html .
+COPY --from=builder --chown=www-data:www-data /var/www/html .
+
+# Ensure storage and cache directories exist and are owned by www-data
+RUN mkdir -p storage/logs bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 COPY docker/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker/nginx-k8s.conf /etc/nginx/sites-available/default
 
-USER appuser
+COPY docker/start.sh /usr/local/bin/start.sh
 
-EXPOSE 9000
+EXPOSE 80
 
-CMD ["php-fpm"]
+CMD ["/usr/local/bin/start.sh"]
