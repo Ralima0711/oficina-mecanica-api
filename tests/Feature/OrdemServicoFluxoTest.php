@@ -113,7 +113,7 @@ class OrdemServicoFluxoTest extends TestCase
             ]);
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'AGUARDANDO_APROVACAO']);
+        $response->assertJsonPath('ordem.status', 'AGUARDANDO_APROVACAO');
     }
 
     public function test_cliente_consulta_os_publico_sem_auth(): void
