@@ -1,24 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: oficina-mecanica-api
+  name: oficina-api
   labels:
-    app: oficina-mecanica-api
+    app: oficina-api
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: oficina-mecanica-api
+      app: oficina-api
   template:
     metadata:
       labels:
-        app: oficina-mecanica-api
+        app: oficina-api
     spec:
       containers:
         - name: api
-          image: oficina-mecanica-api:latest
+          image: dtavares99/oficina-mecanica-api:2.2
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 80
           envFrom:
             - configMapRef:
                 name: oficina-mecanica-config
@@ -34,12 +35,8 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
+              port: 80
           readinessProbe:
             httpGet:
               path: /api/health
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 5
+              port: 80
