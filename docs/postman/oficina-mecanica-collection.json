@@ -9,536 +9,1058 @@
       "name": "Auth",
       "item": [
         {
-           "name": "Login",
-           "event": [
-             {
-               "listen": "test",
-               "script": {
-                 "exec": [
-                   "if (pm.response.code === 200) {",
-                   "    pm.environment.set(\"token\", pm.response.json().access_token);",
-                   "}"
-                 ]
-               }
-             }
-           ],
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Content-Type",
-                 "value": "application/json"
-               }
-             ],
-             "body": {
-               "mode": "raw",
-               "raw": "{\"email\": \"admin@oficina.local\", \"password\": \"admin123\"}"
-             },
-             "url": {
-               "raw": "{{baseUrl}}/api/auth/login",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "auth", "login"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {
-                 "method": "POST",
-                 "header": [{"key": "Content-Type", "value": "application/json"}],
-                 "body": {"mode": "raw", "raw": "{\"email\": \"admin@oficina.local\", \"password\": \"admin123\"}"},
-                 "url": {"raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"]}
-               },
-               "status": "OK",
-               "code": 200,
-               "header": [{"key": "Content-Type", "value": "application/json"}],
-               "body": "{\"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...\", \"token_type\": \"bearer\", \"expires_in\": 3600}"
-             }
-           ]
-         },
-         {
-           "name": "Meu Perfil",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/auth/me",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "auth", "me"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"id\": 1, \"name\": \"Admin\", \"email\": \"admin@oficina.local\", \"role\": \"admin\"}"
-             }
-           ]
-         },
-         {
-           "name": "Refresh Token",
-           "event": [
-             {
-               "listen": "test",
-               "script": {
-                 "exec": [
-                   "if (pm.response.code === 200) {",
-                   "    pm.environment.set(\"token\", pm.response.json().access_token);",
-                   "}"
-                 ]
-               }
-             }
-           ],
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/auth/refresh",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "auth", "refresh"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "POST", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/auth/refresh", "host": ["{{baseUrl}}"], "path": ["api", "auth", "refresh"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...\", \"token_type\": \"bearer\", \"expires_in\": 3600}"
-             }
-           ]
-         },
-         {
-           "name": "Logout",
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/auth/logout",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "auth", "logout"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "POST", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/auth/logout", "host": ["{{baseUrl}}"], "path": ["api", "auth", "logout"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"message\": \"Logout realizado com sucesso\"}"
-             }
-           ]
-         }
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.environment.set(\"token\", pm.response.json().access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"admin@oficina.local\", \"password\": \"admin123\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"email\": \"admin@oficina.local\", \"password\": \"admin123\"}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...\", \"token_type\": \"bearer\", \"expires_in\": 3600}"
+            }
+          ]
+        },
+        {
+          "name": "Meu Perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"id\": 1, \"name\": \"Admin\", \"email\": \"admin@oficina.local\", \"role\": \"admin\"}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.environment.set(\"token\", pm.response.json().access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/refresh",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...\", \"token_type\": \"bearer\", \"expires_in\": 3600}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/auth/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"message\": \"Logout realizado com sucesso\"}"
+            }
+          ]
+        }
       ]
     },
     {
       "name": "Clientes",
       "item": [
-         {
-           "name": "Listar Clientes",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/clientes",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "clientes"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/clientes", "host": ["{{baseUrl}}"], "path": ["api", "clientes"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "[{\"id\": 1, \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}]"
-             }
-           ]
-         },
-         {
-           "name": "Criar Cliente",
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Content-Type",
-                 "value": "application/json"
-               },
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "body": {
-               "mode": "raw",
-               "raw": "{\"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
-             },
-             "url": {
-               "raw": "{{baseUrl}}/api/clientes",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "clientes"]
-             }
-           },
-           "response": [
-             {
-               "name": "201 Created",
-               "originalRequest": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}], "body": {"mode": "raw", "raw": "{\"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"}, "url": {"raw": "{{baseUrl}}/api/clientes", "host": ["{{baseUrl}}"], "path": ["api", "clientes"]}},
-               "status": "Created",
-               "code": 201,
-               "body": "{\"id\": 1, \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
-             }
-           ]
-         },
-         {
-           "name": "Consultar Cliente",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/clientes/1",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "clientes", "1"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/clientes/1", "host": ["{{baseUrl}}"], "path": ["api", "clientes", "1"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"id\": 1, \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
-             }
-           ]
-         },
-         {
-           "name": "Atualizar Cliente",
-           "request": {
-             "method": "PUT",
-             "header": [
-               {
-                 "key": "Content-Type",
-                 "value": "application/json"
-               },
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "body": {
-               "mode": "raw",
-               "raw": "{\"nome\": \"João Silva Santos\", \"email\": \"joao.novo@example.com\", \"telefone\": \"11988888888\"}"
-             },
-             "url": {
-               "raw": "{{baseUrl}}/api/clientes/1",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "clientes", "1"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "PUT", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}], "body": {"mode": "raw", "raw": "{\"nome\": \"João Silva Santos\", \"email\": \"joao.novo@example.com\", \"telefone\": \"11988888888\"}"}, "url": {"raw": "{{baseUrl}}/api/clientes/1", "host": ["{{baseUrl}}"], "path": ["api", "clientes", "1"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"id\": 1, \"nome\": \"João Silva Santos\", \"email\": \"joao.novo@example.com\", \"telefone\": \"11988888888\"}"
-             }
-           ]
-         },
-         {
-           "name": "Deletar Cliente",
-           "request": {
-             "method": "DELETE",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/clientes/1",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "clientes", "1"]
-             }
-           },
-           "response": [
-             {
-               "name": "204 No Content",
-               "originalRequest": {"method": "DELETE", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/clientes/1", "host": ["{{baseUrl}}"], "path": ["api", "clientes", "1"]}},
-               "status": "No Content",
-               "code": 204,
-               "body": ""
-             }
-           ]
-         }
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "clientes"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "[{\"id\": 1, \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}]"
+            }
+          ]
+        },
+        {
+          "name": "Criar Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clientes"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "clientes"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\"id\": 1, \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
+            }
+          ]
+        },
+        {
+          "name": "Consultar Cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/clientes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "clientes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"id\": 1, \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"11999999999\", \"cpf\": \"12345678900\"}"
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nome\": \"João Silva Santos\", \"email\": \"joao.novo@example.com\", \"telefone\": \"11988888888\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"nome\": \"João Silva Santos\", \"email\": \"joao.novo@example.com\", \"telefone\": \"11988888888\"}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/clientes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "clientes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"id\": 1, \"nome\": \"João Silva Santos\", \"email\": \"joao.novo@example.com\", \"telefone\": \"11988888888\"}"
+            }
+          ]
+        },
+        {
+          "name": "Deletar Cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clientes",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "204 No Content",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/clientes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "clientes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "body": ""
+            }
+          ]
+        }
       ]
     },
     {
       "name": "Veículos",
       "item": [
-         {
-           "name": "Listar Veículos",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/veiculos",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "veiculos"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/veiculos", "host": ["{{baseUrl}}"], "path": ["api", "veiculos"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "[{\"id\": 1, \"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}]"
-             }
-           ]
-         },
-         {
-           "name": "Criar Veículo",
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Content-Type",
-                 "value": "application/json"
-               },
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "body": {
-               "mode": "raw",
-               "raw": "{\"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
-             },
-             "url": {
-               "raw": "{{baseUrl}}/api/veiculos",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "veiculos"]
-             }
-           },
-           "response": [
-             {
-               "name": "201 Created",
-               "originalRequest": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}], "body": {"mode": "raw", "raw": "{\"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"}, "url": {"raw": "{{baseUrl}}/api/veiculos", "host": ["{{baseUrl}}"], "path": ["api", "veiculos"]}},
-               "status": "Created",
-               "code": 201,
-               "body": "{\"id\": 1, \"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
-             }
-           ]
-         },
-         {
-           "name": "Consultar Veículo",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/veiculos/1",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "veiculos", "1"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/veiculos/1", "host": ["{{baseUrl}}"], "path": ["api", "veiculos", "1"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"id\": 1, \"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
-             }
-           ]
-         }
+        {
+          "name": "Listar Veículos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/veiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "veiculos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/veiculos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "veiculos"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "[{\"id\": 1, \"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}]"
+            }
+          ]
+        },
+        {
+          "name": "Criar Veículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/veiculos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "veiculos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/veiculos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "veiculos"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\"id\": 1, \"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
+            }
+          ]
+        },
+        {
+          "name": "Consultar Veículo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/veiculos/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "veiculos",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/veiculos/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "veiculos",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"id\": 1, \"cliente_id\": 1, \"placa\": \"ABC1234\", \"marca\": \"Toyota\", \"modelo\": \"Corolla\", \"ano\": 2020, \"cor\": \"Preto\"}"
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Veículo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cliente_id\": 1,\n    \"placa\": \"ABC1234\",\n    \"marca\": \"Volkswagen\",\n    \"modelo\": \"Gol\",\n    \"ano\": 2021\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/veiculos/{{veiculo_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "veiculos",
+                "{{veiculo_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Veículo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/veiculos/{{veiculo_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "veiculos",
+                "{{veiculo_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
       ]
     },
     {
       "name": "Ordem de Serviço",
       "item": [
-         {
-           "name": "Criar Ordem de Serviço",
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Content-Type",
-                 "value": "application/json"
-               },
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "body": {
-               "mode": "raw",
-               "raw": "{\"cliente_id\": 1, \"veiculo_id\": 1, \"descricao_problema\": \"Carro não liga\"}"
-             },
-             "url": {
-               "raw": "{{baseUrl}}/api/ordens-servico",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "ordens-servico"]
-             }
-           },
-           "response": [
-             {
-               "name": "201 Created",
-               "originalRequest": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}], "body": {"mode": "raw", "raw": "{\"cliente_id\": 1, \"veiculo_id\": 1, \"descricao_problema\": \"Carro não liga\"}"}, "url": {"raw": "{{baseUrl}}/api/ordens-servico", "host": ["{{baseUrl}}"], "path": ["api", "ordens-servico"]}},
-               "status": "Created",
-               "code": 201,
-               "body": "{\"id\": 1, \"cliente_id\": 1, \"veiculo_id\": 1, \"status\": \"em_diagnostico\", \"descricao_problema\": \"Carro não liga\", \"valor_total\": 0.00}"
-             }
-           ]
-         },
-         {
-           "name": "Listar Ordens de Serviço",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/ordens-servico",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "ordens-servico"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/ordens-servico", "host": ["{{baseUrl}}"], "path": ["api", "ordens-servico"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "[{\"id\": 1, \"cliente_id\": 1, \"veiculo_id\": 1, \"status\": \"em_diagnostico\", \"descricao_problema\": \"Carro não liga\", \"valor_total\": 0.00}]"
-             }
-           ]
-         },
-         {
-           "name": "Consultar Ordem de Serviço",
-           "request": {
-             "method": "GET",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/ordens-servico/1",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "ordens-servico", "1"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/ordens-servico/1", "host": ["{{baseUrl}}"], "path": ["api", "ordens-servico", "1"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"id\": 1, \"cliente_id\": 1, \"veiculo_id\": 1, \"status\": \"em_diagnostico\", \"descricao_problema\": \"Carro não liga\", \"valor_total\": 0.00}"
-             }
-           ]
-         },
-         {
-           "name": "Iniciar Diagnóstico",
-           "request": {
-             "method": "PATCH",
-             "header": [
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "url": {
-               "raw": "{{baseUrl}}/api/ordens-servico/1/iniciar-diagnostico",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "ordens-servico", "1", "iniciar-diagnostico"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "PATCH", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": {"raw": "{{baseUrl}}/api/ordens-servico/1/iniciar-diagnostico", "host": ["{{baseUrl}}"], "path": ["api", "ordens-servico", "1", "iniciar-diagnostico"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"message\": \"Diagnóstico iniciado com sucesso\"}"
-             }
-           ]
-         },
-         {
-           "name": "Submeter Orçamento",
-           "request": {
-             "method": "POST",
-             "header": [
-               {
-                 "key": "Content-Type",
-                 "value": "application/json"
-               },
-               {
-                 "key": "Authorization",
-                 "value": "Bearer {{token}}"
-               }
-             ],
-             "body": {
-               "mode": "raw",
-               "raw": "{\"diagnostico\": \"Bobina do motor queimada\", \"mao_de_obra\": 250.00, \"pecas\": [{\"peca_id\": 1, \"quantidade\": 2}], \"insumos\": [{\"insumo_id\": 1, \"quantidade\": 1.5}]}"
-             },
-             "url": {
-               "raw": "{{baseUrl}}/api/ordens-servico/1/submeter-orcamento",
-               "host": ["{{baseUrl}}"],
-               "path": ["api", "ordens-servico", "1", "submeter-orcamento"]
-             }
-           },
-           "response": [
-             {
-               "name": "200 OK",
-               "originalRequest": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}], "body": {"mode": "raw", "raw": "{\"diagnostico\": \"Bobina do motor queimada\", \"mao_de_obra\": 250.00, \"pecas\": [{\"peca_id\": 1, \"quantidade\": 2}], \"insumos\": [{\"insumo_id\": 1, \"quantidade\": 1.5}]}"}, "url": {"raw": "{{baseUrl}}/api/ordens-servico/1/submeter-orcamento", "host": ["{{baseUrl}}"], "path": ["api", "ordens-servico", "1", "submeter-orcamento"]}},
-               "status": "OK",
-               "code": 200,
-               "body": "{\"message\": \"Orçamento submetido com sucesso\", \"valor_total\": 500.00}"
-             }
-           ]
-         },
+        {
+          "name": "Criar Ordem de Serviço",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"cliente_id\": 1, \"veiculo_id\": 1, \"descricao_problema\": \"Carro não liga\"}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ordens-servico",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"cliente_id\": 1, \"veiculo_id\": 1, \"descricao_problema\": \"Carro não liga\"}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/ordens-servico",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ordens-servico"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\"id\": 1, \"cliente_id\": 1, \"veiculo_id\": 1, \"status\": \"em_diagnostico\", \"descricao_problema\": \"Carro não liga\", \"valor_total\": 0.00}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Ordens de Serviço",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordens-servico",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ordens-servico",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ordens-servico"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "[{\"id\": 1, \"cliente_id\": 1, \"veiculo_id\": 1, \"status\": \"em_diagnostico\", \"descricao_problema\": \"Carro não liga\", \"valor_total\": 0.00}]"
+            }
+          ]
+        },
+        {
+          "name": "Consultar Ordem de Serviço",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordens-servico/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ordens-servico/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ordens-servico",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"id\": 1, \"cliente_id\": 1, \"veiculo_id\": 1, \"status\": \"em_diagnostico\", \"descricao_problema\": \"Carro não liga\", \"valor_total\": 0.00}"
+            }
+          ]
+        },
+        {
+          "name": "Iniciar Diagnóstico",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordens-servico/1/iniciar-diagnostico",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "1",
+                "iniciar-diagnostico"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/ordens-servico/1/iniciar-diagnostico",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ordens-servico",
+                    "1",
+                    "iniciar-diagnostico"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"message\": \"Diagnóstico iniciado com sucesso\"}"
+            }
+          ]
+        },
+        {
+          "name": "Submeter Orçamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"diagnostico\": \"Bobina do motor queimada\", \"mao_de_obra\": 250.00, \"pecas\": [{\"peca_id\": 1, \"quantidade\": 2}], \"insumos\": [{\"insumo_id\": 1, \"quantidade\": 1.5}]}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ordens-servico/1/submeter-orcamento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "1",
+                "submeter-orcamento"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"diagnostico\": \"Bobina do motor queimada\", \"mao_de_obra\": 250.00, \"pecas\": [{\"peca_id\": 1, \"quantidade\": 2}], \"insumos\": [{\"insumo_id\": 1, \"quantidade\": 1.5}]}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/ordens-servico/1/submeter-orcamento",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ordens-servico",
+                    "1",
+                    "submeter-orcamento"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\"message\": \"Orçamento submetido com sucesso\", \"valor_total\": 500.00}"
+            }
+          ]
+        },
         {
           "name": "Consultar Ordem Pública",
           "request": {
@@ -546,8 +1068,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/public/ordens-servico/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "public", "ordens-servico", "1"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "ordens-servico",
+                "1"
+              ]
             }
           },
           "response": []
@@ -559,8 +1088,17 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/public/ordens-servico/1/aprovar/TOKEN_AQUI",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "public", "ordens-servico", "1", "aprovar", "TOKEN_AQUI"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "ordens-servico",
+                "1",
+                "aprovar",
+                "TOKEN_AQUI"
+              ]
             }
           },
           "response": []
@@ -572,8 +1110,17 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/public/ordens-servico/1/reprovar/TOKEN_AQUI",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "public", "ordens-servico", "1", "reprovar", "TOKEN_AQUI"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "public",
+                "ordens-servico",
+                "1",
+                "reprovar",
+                "TOKEN_AQUI"
+              ]
             }
           },
           "response": []
@@ -590,8 +1137,15 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/ordens-servico/1/iniciar-execucao",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "ordens-servico", "1", "iniciar-execucao"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "1",
+                "iniciar-execucao"
+              ]
             }
           },
           "response": []
@@ -608,8 +1162,15 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/ordens-servico/1/finalizar",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "ordens-servico", "1", "finalizar"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "1",
+                "finalizar"
+              ]
             }
           },
           "response": []
@@ -626,8 +1187,15 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/ordens-servico/1/entregar",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "ordens-servico", "1", "entregar"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "1",
+                "entregar"
+              ]
             }
           },
           "response": []
@@ -649,8 +1217,15 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/ordens-servico/metricas/tempo-medio",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "ordens-servico", "metricas", "tempo-medio"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "ordens-servico",
+                "metricas",
+                "tempo-medio"
+              ]
             }
           },
           "response": []
@@ -672,8 +1247,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/notificacoes/minhas",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "notificacoes", "minhas"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notificacoes",
+                "minhas"
+              ]
             }
           },
           "response": []
@@ -690,8 +1271,15 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/notificacoes/1/lida",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "notificacoes", "1", "lida"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notificacoes",
+                "1",
+                "lida"
+              ]
             }
           },
           "response": []
@@ -709,6 +1297,10 @@
       "key": "token",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "veiculo_id",
+      "value": "1"
     }
   ]
 }
