@@ -131,40 +131,48 @@ class OrdemServicoSwagger
     )]
     public function iniciarDiagnosticoDoc(): void {}
 
-    #[OA\Post(
-        path: '/api/ordens-servico/{id}/submeter-orcamento',
-        tags: ['Ordens de Servico'],
-        summary: 'Submete orçamento — status muda para aguardando_aprovacao',
-        security: [['bearerAuth' => []]],
-        parameters: [
-            new OA\Parameter(name: 'id', in: 'path', required: true, description: 'ID da OS', schema: new OA\Schema(type: 'integer', example: 1)),
-        ],
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\JsonContent(
-                required: ['valor_total', 'itens'],
-                properties: [
-                    new OA\Property(property: 'valor_total', type: 'number', format: 'float', example: 350.00),
-                    new OA\Property(
-                        property: 'itens',
-                        type: 'array',
-                        items: new OA\Items(properties: [
-                            new OA\Property(property: 'peca_id', type: 'integer', example: 1),
-                            new OA\Property(property: 'quantidade', type: 'integer', example: 2),
-                            new OA\Property(property: 'valor_unitario', type: 'number', example: 50.00),
-                        ])
-                    ),
-                ]
-            )
-        ),
-        responses: [
-            new OA\Response(response: 200, description: 'Orçamento submetido com sucesso'),
-            new OA\Response(response: 404, description: 'OS não encontrada'),
-            new OA\Response(response: 422, description: 'Erro de validação'),
-            new OA\Response(response: 401, description: 'Não autenticado'),
-        ]
-    )]
-    public function submeterOrcamentoDoc(): void {}
+     #[OA\Post(
+         path: '/api/ordens-servico/{id}/submeter-orcamento',
+         tags: ['Ordens de Servico'],
+         summary: 'Submete orçamento — status muda para aguardando_aprovacao',
+         security: [['bearerAuth' => []]],
+         parameters: [
+             new OA\Parameter(name: 'id', in: 'path', required: true, description: 'ID da OS', schema: new OA\Schema(type: 'integer', example: 1)),
+         ],
+         requestBody: new OA\RequestBody(
+             required: true,
+             content: new OA\JsonContent(
+                 required: ['diagnostico', 'mao_de_obra'],
+                 properties: [
+                     new OA\Property(property: 'diagnostico', type: 'string', maxLength: 5000, example: 'Bobina do motor queimada'),
+                     new OA\Property(property: 'mao_de_obra', type: 'number', format: 'double', example: 250.00),
+                     new OA\Property(
+                         property: 'pecas',
+                         type: 'array',
+                         items: new OA\Items(properties: [
+                             new OA\Property(property: 'peca_id', type: 'integer', example: 1),
+                             new OA\Property(property: 'quantidade', type: 'integer', example: 2),
+                         ])
+                     ),
+                     new OA\Property(
+                         property: 'insumos',
+                         type: 'array',
+                         items: new OA\Items(properties: [
+                             new OA\Property(property: 'insumo_id', type: 'integer', example: 1),
+                             new OA\Property(property: 'quantidade', type: 'number', format: 'double', example: 1.5),
+                         ])
+                     ),
+                 ]
+             )
+         ),
+         responses: [
+             new OA\Response(response: 200, description: 'Orçamento submetido com sucesso'),
+             new OA\Response(response: 404, description: 'OS não encontrada'),
+             new OA\Response(response: 422, description: 'Erro de validação'),
+             new OA\Response(response: 401, description: 'Não autenticado'),
+         ]
+     )]
+     public function submeterOrcamentoDoc(): void {}
 
     #[OA\Get(
         path: '/api/public/ordens-servico/{id}/aprovar/{token}',
@@ -243,4 +251,56 @@ class OrdemServicoSwagger
         ]
     )]
     public function entregarDoc(): void {}
+
+    #[OA\Get(
+        path: '/api/public/ordens-servico/{id}',
+        tags: ['Ordens de Servico'],
+        summary: 'Consulta pública da OS pelo cliente (sem autenticação)',
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, description: 'ID da OS', schema: new OA\Schema(type: 'integer', example: 1)),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'OS encontrada',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer', example: 1),
+                        new OA\Property(property: 'status', type: 'string', example: 'AGUARDANDO_APROVACAO'),
+                        new OA\Property(property: 'descricao_problema', type: 'string', example: 'Carro não liga'),
+                        new OA\Property(property: 'diagnostico', type: 'string', example: 'Bobina do motor queimada'),
+                        new OA\Property(property: 'valor_total', type: 'number', format: 'float', example: 350.00),
+                        new OA\Property(property: 'iniciada_em', type: 'string', format: 'date-time', example: '2026-06-30 10:00:00'),
+                        new OA\Property(property: 'concluida_em', type: 'string', format: 'date-time', nullable: true, example: null),
+                        new OA\Property(property: 'criada_em', type: 'string', format: 'date-time', example: '2026-06-30 09:00:00'),
+                    ]
+                )
+            ),
+            new OA\Response(response: 404, description: 'OS não encontrada'),
+        ]
+    )]
+    public function consultarPublicoDoc(): void {}
+
+    #[OA\Get(
+        path: '/api/ordens-servico/metricas/tempo-medio',
+        tags: ['Ordens de Servico'],
+        summary: 'Retorna métricas de tempo médio (admin)',
+        security: [['bearerAuth' => []]],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Métricas retornadas com sucesso',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'media_minutos', type: 'number', format: 'double', example: 120.5),
+                        new OA\Property(property: 'total_concluidas', type: 'integer', example: 15),
+                    ]
+                )
+            ),
+            new OA\Response(response: 403, description: 'Acesso negado - apenas admins'),
+            new OA\Response(response: 401, description: 'Não autenticado'),
+        ]
+    )]
+    public function metricasTempoMedioDoc(): void {}
 }
+
