@@ -12,7 +12,7 @@
                     "Auth"
                 ],
                 "summary": "Realiza login e retorna o JWT",
-                "operationId": "1ba18e09c782c70198d0e94008dfe280",
+                "operationId": "0dfcde7509bd952cbc4d37d66190412e",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -79,7 +79,7 @@
                     "Auth"
                 ],
                 "summary": "Retorna o usuario autenticado",
-                "operationId": "7ab2af69baa268c9d6d597187f66d1f5",
+                "operationId": "1043a44fe0c09beeb32e6fe6bfab4a6e",
                 "responses": {
                     "200": {
                         "description": "Usuario autenticado"
@@ -101,7 +101,7 @@
                     "Auth"
                 ],
                 "summary": "Invalida o token JWT atual",
-                "operationId": "855330c42a806f52601d2e6cdd52d545",
+                "operationId": "fdd248fc4d976a2b092e281d15ddf037",
                 "responses": {
                     "200": {
                         "description": "Logout realizado com sucesso"
@@ -123,7 +123,7 @@
                     "Auth"
                 ],
                 "summary": "Gera um novo token JWT a partir do token atual",
-                "operationId": "1f3b7487512915e0f40684dd98be26f1",
+                "operationId": "6dbc6ccc0ce86991096187cb23216b64",
                 "responses": {
                     "200": {
                         "description": "Token renovado com sucesso",
@@ -166,7 +166,7 @@
                     "Clientes"
                 ],
                 "summary": "Lista todos os clientes",
-                "operationId": "3bb45b611231b07b1ecde6d162bf0dce",
+                "operationId": "a55ee9f291462ea73429e95a8c84e93d",
                 "responses": {
                     "200": {
                         "description": "Lista de clientes retornada com sucesso",
@@ -226,7 +226,7 @@
                     "Clientes"
                 ],
                 "summary": "Cria um novo cliente",
-                "operationId": "0581cf9c60ea7ff237ea606e68db1c55",
+                "operationId": "a5f01c06cfb50a1afb2b66f93e79bf4b",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -295,7 +295,7 @@
                     "Clientes"
                 ],
                 "summary": "Busca um cliente pelo ID",
-                "operationId": "822e7019259f505b95da5644515c5278",
+                "operationId": "4159e742ed59de70c313640d65d2dca5",
                 "parameters": [
                     {
                         "name": "id",
@@ -330,7 +330,7 @@
                     "Clientes"
                 ],
                 "summary": "Atualiza um cliente",
-                "operationId": "3bd8ce628f6f411f73df4f23d725eecb",
+                "operationId": "85b22b61709a35a200c9018df81d015e",
                 "parameters": [
                     {
                         "name": "id",
@@ -405,7 +405,7 @@
                     "Clientes"
                 ],
                 "summary": "Remove um cliente",
-                "operationId": "9e4a745c17a934d177d849bfea03551f",
+                "operationId": "2a55da15cbafceaba515deefb1b2f27f",
                 "parameters": [
                     {
                         "name": "id",
@@ -442,7 +442,7 @@
                     "Insumos"
                 ],
                 "summary": "Lista todos os insumos",
-                "operationId": "9fb4f7d5277b252d0bf2a4b2987b534a",
+                "operationId": "9cb46e3498871d52bdd4f1ea31ab0442",
                 "responses": {
                     "200": {
                         "description": "Lista de insumos retornada com sucesso",
@@ -501,7 +501,7 @@
                     "Insumos"
                 ],
                 "summary": "Cadastra um novo insumo",
-                "operationId": "cd73a9a2a3e986de0a8d88a1f5eaeb2b",
+                "operationId": "673a2ae67b77c56b733d0e2364bf69b3",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -609,7 +609,7 @@
                     "Insumos"
                 ],
                 "summary": "Busca um insumo pelo ID",
-                "operationId": "7126180d0adf768d2b8e2c0e40ebd9f9",
+                "operationId": "a9f9fe9b31bab2a7390a30a4dd54c8fe",
                 "parameters": [
                     {
                         "name": "id",
@@ -679,7 +679,7 @@
                     "Insumos"
                 ],
                 "summary": "Atualiza um insumo existente",
-                "operationId": "ad8d13d2c7c912d0c1afb99749ef4d2c",
+                "operationId": "beb0de99d3ea6e9fd314f70beac926bd",
                 "parameters": [
                     {
                         "name": "id",
@@ -799,7 +799,7 @@
                     "Insumos"
                 ],
                 "summary": "Remove um insumo",
-                "operationId": "445ac5bbf3c5c80ad3511113f89902ca",
+                "operationId": "0a89c0ec8769a93c364edb7c7e7f87b2",
                 "parameters": [
                     {
                         "name": "id",
@@ -835,7 +835,7 @@
                     "Notificacoes"
                 ],
                 "summary": "Lista as notificações do usuário autenticado",
-                "operationId": "d3452424165a0045bb235919761b1d18",
+                "operationId": "01e4be358965fdbfd149d77f85921799",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -914,7 +914,7 @@
                     "Notificacoes"
                 ],
                 "summary": "Marca uma notificação como lida",
-                "operationId": "dfe39b7fbdd56bbd95f4f23e400ad8e9",
+                "operationId": "d38c34520e3555c9d8050613cc6a20f3",
                 "parameters": [
                     {
                         "name": "id",
@@ -968,7 +968,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Lista todas as ordens de serviço",
-                "operationId": "fd23457d2284e6c9aba32f32d737724e",
+                "operationId": "a97d41d623fc809f13ce7ed964255b3d",
                 "responses": {
                     "200": {
                         "description": "Lista de OS retornada com sucesso",
@@ -1038,7 +1038,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Cria uma nova ordem de serviço",
-                "operationId": "f9cf944ca331a51ce6617828f613c954",
+                "operationId": "fe25758aa46f347e9932087632d05b9a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1092,7 +1092,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Busca uma OS pelo ID",
-                "operationId": "511d00ac3e587bac026a5f901d0c893b",
+                "operationId": "cc01d49d79b0681bb38e7aa7d7d19eb7",
                 "parameters": [
                     {
                         "name": "id",
@@ -1127,7 +1127,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Atualiza uma OS",
-                "operationId": "d4199378b4dbf6b5004b022db4c66368",
+                "operationId": "564aa02f27081d118358fd24557f9dda",
                 "parameters": [
                     {
                         "name": "id",
@@ -1178,7 +1178,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Remove uma OS",
-                "operationId": "d2dc16639eab2bcdfc56e26d96d8bbe3",
+                "operationId": "59cd0d3282fc4c63c53f6f03ce555ef8",
                 "parameters": [
                     {
                         "name": "id",
@@ -1215,7 +1215,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Inicia o diagnóstico — status muda para em_diagnostico",
-                "operationId": "b9d9ffba752a6fd9575087df63c23d56",
+                "operationId": "f32f9e55426765d57ece23e995854bc7",
                 "parameters": [
                     {
                         "name": "id",
@@ -1255,7 +1255,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Submete orçamento — status muda para aguardando_aprovacao",
-                "operationId": "58c9ca080c81e5c245f286149d293cfc",
+                "operationId": "47b66b2edc7b0871d9dcfa193eea79f4",
                 "parameters": [
                     {
                         "name": "id",
@@ -1274,16 +1274,21 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "valor_total",
-                                    "itens"
+                                    "diagnostico",
+                                    "mao_de_obra"
                                 ],
                                 "properties": {
-                                    "valor_total": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 350
+                                    "diagnostico": {
+                                        "type": "string",
+                                        "example": "Bobina do motor queimada",
+                                        "maxLength": 5000
                                     },
-                                    "itens": {
+                                    "mao_de_obra": {
+                                        "type": "number",
+                                        "format": "double",
+                                        "example": 250
+                                    },
+                                    "pecas": {
                                         "type": "array",
                                         "items": {
                                             "properties": {
@@ -1294,10 +1299,23 @@
                                                 "quantidade": {
                                                     "type": "integer",
                                                     "example": 2
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "insumos": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "insumo_id": {
+                                                    "type": "integer",
+                                                    "example": 1
                                                 },
-                                                "valor_unitario": {
+                                                "quantidade": {
                                                     "type": "number",
-                                                    "example": 50
+                                                    "format": "double",
+                                                    "example": 1.5
                                                 }
                                             },
                                             "type": "object"
@@ -1336,7 +1354,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Aprovação pública da OS pelo cliente via link de e-mail",
-                "operationId": "85669677ccb9349bc19bc1e8dac29230",
+                "operationId": "b20e8b9ee584ec630c38cf849ac69308",
                 "parameters": [
                     {
                         "name": "id",
@@ -1375,7 +1393,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Reprovação pública da OS pelo cliente via link de e-mail",
-                "operationId": "9191c6574f77da4bfc4bf806503b8175",
+                "operationId": "5b0f98c6a4d7a0fcf5663176633cfef5",
                 "parameters": [
                     {
                         "name": "id",
@@ -1414,7 +1432,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Inicia execução — status muda para em_execucao",
-                "operationId": "b7e83e25e8271a16c148ecdd93030726",
+                "operationId": "216bdb35e19abce4181264efe63acdf1",
                 "parameters": [
                     {
                         "name": "id",
@@ -1451,7 +1469,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Finaliza a OS — status muda para finalizada",
-                "operationId": "3f10f058ffb7f9a0f895b4902d1ea1cb",
+                "operationId": "46f18ae5f28c95144b0045f0db0970d6",
                 "parameters": [
                     {
                         "name": "id",
@@ -1488,7 +1506,7 @@
                     "Ordens de Servico"
                 ],
                 "summary": "Registra entrega do veículo — status muda para entregue",
-                "operationId": "23d3f17ac7c726c099e3bd3a4516ec6b",
+                "operationId": "514176f19d601529170a4eb4cb34afcb",
                 "parameters": [
                     {
                         "name": "id",
@@ -1519,13 +1537,131 @@
                 ]
             }
         },
+        "/api/public/ordens-servico/{id}": {
+            "get": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Consulta pública da OS pelo cliente (sem autenticação)",
+                "operationId": "f648a50027017f91ad64a6d2bd4ee71c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da OS",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OS encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "AGUARDANDO_APROVACAO"
+                                        },
+                                        "descricao_problema": {
+                                            "type": "string",
+                                            "example": "Carro não liga"
+                                        },
+                                        "diagnostico": {
+                                            "type": "string",
+                                            "example": "Bobina do motor queimada"
+                                        },
+                                        "valor_total": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 350
+                                        },
+                                        "iniciada_em": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-06-30 10:00:00"
+                                        },
+                                        "concluida_em": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": null,
+                                            "nullable": true
+                                        },
+                                        "criada_em": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-06-30 09:00:00"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "OS não encontrada"
+                    }
+                }
+            }
+        },
+        "/api/ordens-servico/metricas/tempo-medio": {
+            "get": {
+                "tags": [
+                    "Ordens de Servico"
+                ],
+                "summary": "Retorna métricas de tempo médio (admin)",
+                "operationId": "9ab683adefe1f67a4c4ee1d6ddff4170",
+                "responses": {
+                    "200": {
+                        "description": "Métricas retornadas com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "media_minutos": {
+                                            "type": "number",
+                                            "format": "double",
+                                            "example": 120.5
+                                        },
+                                        "total_concluidas": {
+                                            "type": "integer",
+                                            "example": 15
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado - apenas admins"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/pecas": {
             "get": {
                 "tags": [
                     "Pecas"
                 ],
                 "summary": "Lista todas as pecas",
-                "operationId": "612737d4d36dbddcf22ba284a10c5fe6",
+                "operationId": "3476139c41713306ba1668a9e6d396cf",
                 "responses": {
                     "200": {
                         "description": "Lista de pecas retornada com sucesso",
@@ -1587,7 +1723,7 @@
                     "Pecas"
                 ],
                 "summary": "Cadastra uma nova peca",
-                "operationId": "e9aaa44ec481bd480e2047925eccb9de",
+                "operationId": "e262a7180afbe4b9aa8bd2cf3f7fe1a9",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1702,7 +1838,7 @@
                     "Pecas"
                 ],
                 "summary": "Busca uma peca pelo ID",
-                "operationId": "633873b12ecd9bdb2b9da277dcf2c40f",
+                "operationId": "7f7fa7dfb1afa05bae715b3d50cbed57",
                 "parameters": [
                     {
                         "name": "id",
@@ -1775,7 +1911,7 @@
                     "Pecas"
                 ],
                 "summary": "Atualiza uma peca existente",
-                "operationId": "b834939e28f2922a1c6eda01fc784381",
+                "operationId": "8b818b342a7325223659f12bb6655b3b",
                 "parameters": [
                     {
                         "name": "id",
@@ -1902,7 +2038,7 @@
                     "Pecas"
                 ],
                 "summary": "Remove uma peca",
-                "operationId": "25ddd855a625190fee10b1e23c0a5661",
+                "operationId": "27f3833cef70a3b35175f1ac0062fa98",
                 "parameters": [
                     {
                         "name": "id",
@@ -1938,7 +2074,7 @@
                     "Usuarios"
                 ],
                 "summary": "Lista todos os usuários",
-                "operationId": "cbd20e4757c81aa20f9b08211bb76b9a",
+                "operationId": "d36e9302f8a807dff3341691d4bc7b99",
                 "responses": {
                     "200": {
                         "description": "Lista de usuários retornada com sucesso",
@@ -1995,7 +2131,7 @@
                     "Usuarios"
                 ],
                 "summary": "Cria um novo usuário",
-                "operationId": "c4250ac2742d6d5784d18adf8e1424ed",
+                "operationId": "8c168356270b0e2c08c657243a912b86",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2061,7 +2197,7 @@
                     "Usuarios"
                 ],
                 "summary": "Busca um usuário pelo ID",
-                "operationId": "b00e061a8405676c9d510919f69b8f26",
+                "operationId": "6c1f4a6c05494a35809e42487e75da3f",
                 "parameters": [
                     {
                         "name": "id",
@@ -2096,7 +2232,7 @@
                     "Usuarios"
                 ],
                 "summary": "Atualiza um usuário",
-                "operationId": "7a2b622ad09833c6c8f92be6eddfe3cc",
+                "operationId": "65f3e35b7cc6d006997e6a22f172ec49",
                 "parameters": [
                     {
                         "name": "id",
@@ -2169,7 +2305,7 @@
                     "Usuarios"
                 ],
                 "summary": "Remove um usuário",
-                "operationId": "8f552d2a3ff12de489e79d6850cd608e",
+                "operationId": "813df1579b0ab2438c04a27bf2977e52",
                 "parameters": [
                     {
                         "name": "id",
@@ -2206,7 +2342,7 @@
                     "Veiculos"
                 ],
                 "summary": "Lista todos os veículos",
-                "operationId": "e57625eb59fd0cf8bcbdf08755046283",
+                "operationId": "f7739d121d32947a1d8816f7a436c9b9",
                 "responses": {
                     "200": {
                         "description": "Lista de veículos retornada com sucesso",
@@ -2266,7 +2402,7 @@
                     "Veiculos"
                 ],
                 "summary": "Cadastra um novo veículo",
-                "operationId": "481fd67f9eb3d1eedd61f5f30aeddec4",
+                "operationId": "418075cd41dbb20a810b9a97c5e87b31",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2334,7 +2470,7 @@
                     "Veiculos"
                 ],
                 "summary": "Busca um veículo pelo ID",
-                "operationId": "cf1daa01872799c0847cf7b3b0a4a896",
+                "operationId": "401825fe41bee67118f200d3ba577bf7",
                 "parameters": [
                     {
                         "name": "id",
@@ -2369,7 +2505,7 @@
                     "Veiculos"
                 ],
                 "summary": "Atualiza um veículo",
-                "operationId": "247fc69e35d0115b247bb6f72d87691d",
+                "operationId": "05c77d2b53989b38d3a35220fe02dc36",
                 "parameters": [
                     {
                         "name": "id",
@@ -2443,7 +2579,7 @@
                     "Veiculos"
                 ],
                 "summary": "Remove um veículo",
-                "operationId": "fb4829b546b403dbcb24655a3f22c26e",
+                "operationId": "830b48834d44f4f748e42553f1ce6816",
                 "parameters": [
                     {
                         "name": "id",
