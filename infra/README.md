@@ -34,7 +34,7 @@ Scripts Terraform para provisionar a infraestrutura da aplicacao na AWS:
 ### 1. Configurar variaveis
 
 ```bash
-cd terraform
+cd infra
 cp terraform.tfvars.example terraform.tfvars
 ```
 
