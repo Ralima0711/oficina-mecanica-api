@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 // Checagem de saude (pública)
 Route::get('health', function () {
     return response()->json([
-        'status' => 'ok'
+        'status' => 'ok' 
     ]);
 });
 
