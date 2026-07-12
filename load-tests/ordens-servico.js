@@ -4,7 +4,7 @@ import { Trend, Rate, Counter } from 'k6/metrics';
 
 // =============================================================================
 // Teste de escalabilidade / carga da API de Ordens de Serviço
-// Rodar com k6 (via container Docker — não precisa instalar nada):
+// Rodar com k6:
 //   docker run --rm -i --network=host grafana/k6 run - < load-tests/ordens-servico.js
 // Variáveis de ambiente:
 //   BASE_URL   (default http://localhost:8080/api)
@@ -23,35 +23,27 @@ const criarOsDuration = new Trend('criar_os_duration', true);
 const listarOsDuration = new Trend('listar_os_duration', true);
 const errosNegocio = new Rate('erros_negocio');
 
-// -----------------------------------------------------------------------------
-// Perfis de carga: escolha via --stage/scenario. Aqui usamos "ramping" que sobe
-// gradualmente para você observar o comportamento sob crescimento de carga.
-// -----------------------------------------------------------------------------
 export const options = {
   scenarios: {
     carga_crescente: {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 10 },  // aquecimento
-        { duration: '1m', target: 50 },   // sobe a carga
-        { duration: '2m', target: 100 },  // pico sustentado (dispara HPA no k8s)
-        { duration: '30s', target: 0 },   // desaceleração
+        { duration: '30s', target: 10 }, 
+        { duration: '1m', target: 50 },  
+        { duration: '2m', target: 100 }, 
+        { duration: '30s', target: 0 },  
       ],
       gracefulRampDown: '10s',
     },
   },
   thresholds: {
-    http_req_duration: ['p(95)<800'],   // 95% das reqs abaixo de 800ms
-    http_req_failed: ['rate<0.05'],     // menos de 5% de falhas HTTP
+    http_req_duration: ['p(95)<800'], 
+    http_req_failed: ['rate<0.05'],    
     erros_negocio: ['rate<0.05'],
   },
 };
 
-// -----------------------------------------------------------------------------
-// Gera um CPF válido (com dígitos verificadores) — necessário porque o VO Cpf
-// valida o checksum ao criar o cliente.
-// -----------------------------------------------------------------------------
 function gerarCpf() {
   const n = () => Math.floor(Math.random() * 9);
   const d = Array.from({ length: 9 }, n);
@@ -75,10 +67,6 @@ function gerarPlaca() {
   return `${L()}${L()}${L()}${N()}${L()}${N()}${N()}`;
 }
 
-// -----------------------------------------------------------------------------
-// setup(): roda 1x antes do teste. Faz login e cria 1 cliente + 1 veículo
-// que serão reutilizados por todos os VUs para criar as OS.
-// -----------------------------------------------------------------------------
 export function setup() {
   const loginRes = http.post(
     `${BASE_URL}/auth/login`,
@@ -130,9 +118,6 @@ export function setup() {
   return { token, clienteId, veiculoId };
 }
 
-// -----------------------------------------------------------------------------
-// Fluxo executado por cada VU repetidamente durante o teste.
-// -----------------------------------------------------------------------------
 export default function (data) {
   const authHeaders = {
     headers: {
@@ -164,5 +149,5 @@ export default function (data) {
     check(res, { 'lista OK (200)': (r) => r.status === 200 });
   });
 
-  sleep(1); // pausa simulando comportamento de usuário real
+  sleep(1); 
 }
