@@ -424,7 +424,7 @@ docker compose exec app php artisan l5-swagger:generate   # regenerar Swagger
 
 ## Vídeo demonstrativo
 
-> 🎬 Link do vídeo: **[a publicar]**
+> 🎬 Link do vídeo: **[https://www.youtube.com/watch?v=QUL29ETFD5g&feature=youtu.be](https://www.youtube.com/watch?v=QUL29ETFD5g&feature=youtu.be)**
 
 O vídeo demonstra o ambiente em execução, cobrindo:
 1. Visão geral da arquitetura
