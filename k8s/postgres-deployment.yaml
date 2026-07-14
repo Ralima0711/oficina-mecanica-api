@@ -36,6 +36,13 @@ spec:
                 secretKeyRef:
                   name: oficina-mecanica-secrets
                   key: DB_PASSWORD
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
