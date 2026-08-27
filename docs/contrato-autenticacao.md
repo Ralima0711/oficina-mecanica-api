@@ -1,8 +1,8 @@
 # Contrato de Autenticação — Fase 3
 
-**SOAT Pós-Tech FIAP · Grupo 32**
+**SOAT Pós-Tech FIAP · Grupo 183**
 **Autor: Roberta (Tech Lead / Segurança & Identidade)**
-**rev.1 — 11/08/2026 · rev.2 — 18/08/2026 (separação cliente × staff)**
+**rev.1 — 11/08/2026 · rev.2 — 18/08/2026 (separação cliente × staff) · rev.3 — 18/08/2026 (API Gateway = Kong no EKS)**
 **Status: Aprovado para implementação — Johny (Lambda + rotas) e Gustavo (API Gateway) codificam contra este contrato**
 
 > Objetivo: fixar a interface de autenticação para que Lambda, API Gateway e API Laravel sejam desenvolvidos em paralelo, sem um esperar o outro.
@@ -63,7 +63,7 @@ Cliente ──GET /public/ordens-servico/{id} (Authorization: Bearer <token>)─
 
 ## 3. Endpoint da Lambda de autenticação
 
-**`POST /auth`** (exposto via API Gateway; rota **pública**)
+**`POST /auth`** (exposto via API Gateway **Kong**, rodando no EKS; rota **pública**)
 
 ### Request
 ```json
@@ -151,9 +151,9 @@ A Fase 2 já tem o guard `auth:api` (tymon, HS256) para **staff**. Ele **permane
 
 - **Johny (Lambda):** `POST /auth` conforme seções 3, 4 e 7 — pode desenvolver com mock da consulta antes do RDS existir.
 - **Johny (API):** criar o guard `cliente` (seção 5) e aplicá-lo **só** ao grupo `public/ordens-servico/*` com escopo por CPF (seção 6). Não encostar nas rotas de staff.
-- **Gustavo (API Gateway):** `/auth` pública; rotas de cliente exigindo Bearer token; roteamento conforme seção 2.
+- **Gustavo (API Gateway / Kong no EKS):** `/auth` pública; rotas de cliente exigindo Bearer token; roteamento conforme seção 2. A validação do JWT pode ficar no plugin de auth do Kong e/ou na API.
 - **Roberta:** transformar as seções 0/1 em ADR-0004 (RS256) e ADR-0005 (separação cliente × staff); usar seções 2 e 3 no Diagrama de Sequência.
 
 ---
 
-*Grupo 32 · FIAP SOAT Pós-Tech · Fase 3 · Contrato de Autenticação · rev.2 · 18/08/2026*
+*Grupo 183 · FIAP SOAT Pós-Tech · Fase 3 · Contrato de Autenticação · rev.2 · 18/08/2026*
