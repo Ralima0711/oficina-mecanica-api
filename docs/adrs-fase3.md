@@ -7,7 +7,7 @@
 Índice:
 - ADR-0001 — Segregação em 4 repositórios
 - ADR-0002 — Escalabilidade automática com HPA
-- ADR-0003 — API Gateway = AWS API Gateway
+- ADR-0003 — API Gateway = Kong (no EKS)
 - ADR-0004 — Assinatura do JWT do cliente em RS256
 - ADR-0005 — Separação de domínios de identidade (cliente × staff)
 
