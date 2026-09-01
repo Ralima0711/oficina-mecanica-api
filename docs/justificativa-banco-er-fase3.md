@@ -17,8 +17,7 @@ Justificativa formal da escolha do banco de dados e da modelagem relacional, com
 
 **Por que um banco relacional (e não NoSQL).** O domínio é fortemente **transacional e relacional**: uma ordem de serviço referencia cliente, veículo e mecânico, e agrega itens de peças e insumos que precisam ser consistentes (o `valor_total` deriva dos subtotais). Isso exige **integridade referencial** (chaves estrangeiras) e **transações ACID** — garantias que o modelo relacional entrega de forma natural.
 
-**Por que gerenciado (RDS).** O RDS PostgreSQL entrega **backups automáticos, alta disponibilidade (Multi-AZ), patching e monitoramento** sem operação manual, alinhado ao objetivo de "operação corporativa" da Fase 3. O provisionamento é feito por Terraform, isolado no repositório `oficina-infra-database` (ADR-0001), em subnets privadas com acesso restrito à VPC.
-
+**Por que gerenciado (RDS).** O RDS PostgreSQL entrega **backups automáticos, patching e monitoramento** sem operação manual. O RDS ainda suporta **alta disponibilidade Multi-AZ** como caminho de evolução (no laboratório usamos uma instância single-AZ `db.t3.micro`). Alinhado ao objetivo de "operação corporativa" da Fase 3. O provisionamento é feito por Terraform, isolado no repositório `oficina-infra-database` (ADR-0001), em subnets privadas com acesso restrito à VPC.
 ---
 
 ## 2. Modelo Relacional (ER)
