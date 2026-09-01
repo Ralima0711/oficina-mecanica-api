@@ -59,7 +59,7 @@ class OrdemServicoFluxoTest extends TestCase
         $now = new \DateTimeImmutable();
 
         return $config->builder()
-            ->withHeader('typ', 'cliente')
+            ->withClaim('typ', 'cliente')
             ->issuedBy('oficina-lambda-auth')
             ->permittedFor('oficina-mecanica-api')
             ->issuedAt($now)
