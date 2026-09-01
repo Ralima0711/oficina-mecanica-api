@@ -53,7 +53,7 @@ class ClienteAuthMiddlewareTest extends TestCase
         $now = new \DateTimeImmutable();
 
         $builder = $config->builder()
-            ->withHeader('typ', $typ)
+            ->withClaim('typ', $typ)
             ->issuedBy('oficina-lambda-auth')
             ->permittedFor('oficina-mecanica-api')
             ->issuedAt($now)
@@ -129,7 +129,7 @@ class ClienteAuthMiddlewareTest extends TestCase
 
         $now = new \DateTimeImmutable();
         $token = $config->builder()
-            ->withHeader('typ', 'staff')
+            ->withClaim('typ', 'staff')
             ->issuedBy('oficina-lambda-auth')
             ->permittedFor('oficina-mecanica-api')
             ->issuedAt($now)

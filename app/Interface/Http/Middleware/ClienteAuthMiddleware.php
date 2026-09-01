@@ -81,15 +81,15 @@ class ClienteAuthMiddleware
 
         $parsed = $config->parser()->parse($token);
 
-        // Valida o header typ = cliente.
-        $header = $parsed->headers()->all();
-        if (($header['typ'] ?? null) !== self::TYP) {
+        $config->validator()->assert($parsed, ...$config->validationConstraints());
+
+        // Valida o claim typ = cliente (domínio do token, conforme o contrato).
+        $claims = $parsed->claims()->all();
+        if (($claims['typ'] ?? null) !== self::TYP) {
             throw new \RuntimeException('Tipo de token inválido.');
         }
 
-        $config->validator()->assert($parsed, ...$config->validationConstraints());
-
-        return $parsed->claims()->all();
+        return $claims;
     }
 
     /**
