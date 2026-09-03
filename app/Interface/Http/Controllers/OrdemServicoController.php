@@ -3,6 +3,7 @@
 namespace App\Interface\Http\Controllers;
 
 use App\Application\Services\OrdemServicoService;
+use App\Domain\OrdemServico\Entities\OrdemServico;
 use App\Interface\Http\Requests\OrdemServicoRequest;
 use App\Interface\Http\Requests\SubmeterOrcamentoRequest;
 use Illuminate\Http\JsonResponse;
@@ -97,9 +98,12 @@ class OrdemServicoController extends Controller
         }
     }
 
-    public function aprovarPublico(int $id, string $token): JsonResponse
+    public function aprovarPublico(Request $request, int $id, string $token): JsonResponse
     {
         try {
+            $os = $this->service->buscarPorId($id);
+            $this->autorizarCliente($request, $os);
+
             $os = $this->service->aprovarPublico($id, $token);
 
             return response()->json([
@@ -110,9 +114,12 @@ class OrdemServicoController extends Controller
         }
     }
 
-    public function reprovarPublico(int $id, string $token): JsonResponse
+    public function reprovarPublico(Request $request, int $id, string $token): JsonResponse
     {
         try {
+            $os = $this->service->buscarPorId($id);
+            $this->autorizarCliente($request, $os);
+
             $os = $this->service->reprovarPublico($id, $token);
 
             return response()->json([
@@ -156,10 +163,11 @@ class OrdemServicoController extends Controller
      * Consulta pública da OS pelo cliente (sem autenticação).
      * Permite acompanhar o progresso da OS pelo número.
      */
-    public function consultarPublico(int $id): JsonResponse
+    public function consultarPublico(Request $request, int $id): JsonResponse
     {
         try {
             $os = $this->service->buscarPorId($id);
+            $this->autorizarCliente($request, $os);
             return response()->json([
                 'id'                 => $os->getId(),
                 'status'             => (string) $os->getStatus(),
@@ -170,8 +178,8 @@ class OrdemServicoController extends Controller
                 'concluida_em'       => $os->getConcluidaEm()?->format('Y-m-d H:i:s'),
                 'criada_em'          => $os->getCriadaEm()->format('Y-m-d H:i:s'),
             ]);
-        } catch (\RuntimeException $e) {
-            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Throwable $e) {
+            return $this->handleException($e);
         }
     }
 
@@ -187,8 +195,27 @@ class OrdemServicoController extends Controller
         }
     }
 
+    /**
+     * Escopo por CPF: garante que a OS pertence ao cliente autenticado.
+     * Se não bater → 403.
+     */
+    private function autorizarCliente(Request $request, OrdemServico $os): void
+    {
+        $cliente = $request->attributes->get('cliente');
+
+        $clientId = is_array($cliente) ? (int) ($cliente['client_id'] ?? 0) : 0;
+
+        if ($clientId <= 0 || $os->getClienteId() !== $clientId) {
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Acesso nao autorizado a esta Ordem de Servico.');
+        }
+    }
+
     private function handleException(\Throwable $e): JsonResponse
     {
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
+            return response()->json(['message' => $e->getMessage()], 403);
+        }
+
         if ($e instanceof \RuntimeException) {
             return response()->json(['message' => $e->getMessage()], 404);
         }
