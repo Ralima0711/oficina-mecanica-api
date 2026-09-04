@@ -96,15 +96,15 @@ Route::middleware(['auth:api', 'role:mecanico'])->prefix('ordens-servico')->name
         ->name('finalizar');
 });
 
-//Cliente - Rotas publicas de aprovação/reprovação e acompanhamento.
-Route::prefix('public/ordens-servico')->name('public.ordens-servico.')->group(function () {
+//Cliente - Rotas de aprovação/reprovação e acompanhamento (guard de cliente + escopo por CPF).
+Route::middleware('cliente')->prefix('public/ordens-servico')->name('public.ordens-servico.')->group(function () {
     Route::get('{id}/aprovar/{token}', [OrdemServicoController::class, 'aprovarPublico'])
         ->name('aprovar');
 
     Route::get('{id}/reprovar/{token}', [OrdemServicoController::class, 'reprovarPublico'])
         ->name('reprovar');
 
-    // Consulta pública da OS pelo cliente (sem autenticação)
+    // Consulta da OS pelo cliente (autenticado por CPF)
     Route::get('{id}', [OrdemServicoController::class, 'consultarPublico'])
         ->name('consultar');
 });
