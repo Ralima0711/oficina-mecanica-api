@@ -213,34 +213,20 @@ kubectl top pods    # ver consumo de CPU/memória
 
 ## Como provisionar a infraestrutura com Terraform
 
-Os scripts Terraform estão em `/infra` e provisionam o ambiente completo na AWS:
+Na Fase 3 o Terraform saiu deste repositório (split do monorepo):
 
-| Recurso | Descrição |
+| Repositório | Conteúdo |
 |---|---|
-| `aws_eks_cluster` | Cluster Kubernetes gerenciado (EKS) |
-| `aws_eks_node_group` | Node group com 1–4 instâncias `t3.medium` |
-| `aws_db_instance` | PostgreSQL 15 no RDS (`db.t3.micro`, 20 GB) |
-| `aws_security_group` | Security group do RDS (porta 5432 restrita à VPC) |
+| [oficina-infra-database](https://github.com/Ralima0711/oficina-infra-database) | RDS PostgreSQL 15 |
+| [oficina-infra-k8s](https://github.com/Ralima0711/oficina-infra-k8s) | EKS + Kong (API Gateway) |
 
-Consulte [`infra/README.md`](infra/README.md) para instruções completas.
-
-```bash
-cd infra
-cp terraform.tfvars.example terraform.tfvars
-# edite terraform.tfvars com region, cluster_name, lab_role_arn, subnet_ids, db_password
-
-terraform init
-terraform plan -out=tfplan
-terraform apply tfplan
-```
-
-> **AWS Academy:** copie o ARN da role `LabRole` e os IDs das subnets da VPC do laboratório. Nunca faça commit de `terraform.tfvars`.
+Os manifestos da aplicação continuam em `k8s/`. Detalhes: [`infra/README.md`](infra/README.md).
 
 ---
 
 ## Pipeline CI/CD
 
-O pipeline roda automaticamente a cada push em `develop` ou `main`:
+O pipeline roda automaticamente a cada push em `develop`, `homolog` ou `main` (deploy de homologação e produção):
 
 ```
 push
