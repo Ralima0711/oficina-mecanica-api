@@ -14,7 +14,7 @@
 
 ## RFC-001 — Escolha da nuvem
 
-**Status:** Proposta · **Data:** 18/08/2026
+**Status:** Aceito · **Data:** 18/08/2026
 
 ### Contexto
 A Fase 3 exige infraestrutura como código, cluster Kubernetes gerenciado, banco gerenciado, Function serverless e API Gateway. Precisamos de uma nuvem que atenda os quatro com bom suporte de Terraform e que minimize retrabalho em relação à Fase 2.
@@ -38,7 +38,7 @@ Roadmap da Fase 3; consolidado da Fase 2 (EKS + RDS via Terraform).
 
 ## RFC-002 — Escolha do banco de dados
 
-**Status:** Proposta · **Data:** 18/08/2026
+**Status:** Aceito · **Data:** 18/08/2026
 
 ### Contexto
 O desafio pede um **banco de dados gerenciado** e uma justificativa formal da escolha, além de ajustes no modelo relacional. A Fase 2 já usa PostgreSQL 15.
@@ -62,7 +62,7 @@ README da Fase 2 (seção "Por que PostgreSQL"); diagrama ER (dbdiagram.io).
 
 ## RFC-003 — Estratégia de autenticação
 
-**Status:** Proposta · **Data:** 18/08/2026
+**Status:** Aceito · **Data:** 18/08/2026
 
 ### Contexto
 O desafio exige proteger rotas sensíveis com **autenticação via CPF** e uma **Function serverless** que valida o CPF, consulta o cliente e devolve um JWT. A aplicação já tinha JWT (HS256) para o staff.
@@ -88,7 +88,7 @@ O desafio exige proteger rotas sensíveis com **autenticação via CPF** e uma *
 
 ## RFC-004 — Ferramenta de observabilidade
 
-**Status:** Proposta · **Data:** 18/08/2026
+**Status:** Aceito · **Data:** 18/08/2026
 
 ### Contexto
 O desafio pede monitorar latência das APIs, consumo de CPU/memória do Kubernetes, healthchecks/uptime, alertas para falhas em ordens de serviço, logs estruturados JSON com correlação e dashboards. O conteúdo do curso cobre Zabbix, Prometheus+Grafana, OpenTelemetry, Datadog e New Relic.
@@ -112,7 +112,7 @@ PDF do desafio (Monitoramento e Observabilidade); aulas de OpenTelemetry, New Re
 
 ## RFC-005 — API Gateway
 
-**Status:** Proposta · **Data:** 18/08/2026 (revisada após validação do conteúdo das aulas)
+**Status:** Aceito · **Data:** 18/08/2026 (revisada após validação do conteúdo das aulas)
 
 ### Contexto
 É necessário um **API Gateway** para roteamento e para proteger as rotas com o token emitido pela Lambda. Validando contra as aulas da Fase 3, os gateways **ensinados** são o **Kong** (3 aulas: Conhecendo o Kong, Serviços e Rotas, Consumers) e o **Azure API Management**. O **AWS API Gateway não é coberto** por nenhuma fase do curso.
