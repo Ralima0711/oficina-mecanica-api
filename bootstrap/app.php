@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Interface\Http\Middleware\RoleMiddleware::class,
             'cliente' => \App\Interface\Http\Middleware\ClienteAuthMiddleware::class,
         ]);
+
+        // Correlação de requisições + span de tracing em todas as rotas da API.
+        $middleware->api(prepend: [
+            \App\Interface\Http\Middleware\CorrelacaoRequisicaoMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Garante respostas JSON para todas as rotas da API, mesmo sem Accept header.
