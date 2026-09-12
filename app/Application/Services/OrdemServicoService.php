@@ -11,6 +11,7 @@ use App\Domain\OrdemServico\Entities\OrdemServico;
 use App\Domain\OrdemServico\ValueObjects\StatusOrdem;
 use App\Domain\Veiculo\Repositories\VeiculoRepositoryInterface;
 use App\Domain\Mecanico\Repositories\MecanicoRepositoryInterface;
+use App\Infrastructure\Observability\Tracing;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -48,6 +49,42 @@ class OrdemServicoService
     }
 
     public function criar(array $data, ?string $abertoPorRole = null): OrdemServico
+    {
+        $span = Tracing::iniciar('OrdemServicoService::criar', [
+            'os.cliente_id' => $data['cliente_id'] ?? null,
+            'os.veiculo_id' => $data['veiculo_id'] ?? null,
+        ]);
+
+        try {
+            $os = $this->criarOrdem($data, $abertoPorRole);
+
+            $span?->setAttribute('os.id', $os->getId());
+            $span?->setAttribute('os.status', (string) $os->getStatus());
+
+            Tracing::sucesso($span);
+
+            Log::info('ordem_servico_criada', [
+                'os.id'         => $os->getId(),
+                'os.cliente_id' => $os->getClienteId(),
+                'os.status'     => (string) $os->getStatus(),
+            ]);
+
+            return $os;
+        } catch (\Throwable $e) {
+            Tracing::erro($span, $e);
+
+            Log::error('falha_ao_criar_ordem_servico', [
+                'os.cliente_id' => $data['cliente_id'] ?? null,
+                'erro'          => $e->getMessage(),
+            ]);
+
+            throw $e;
+        } finally {
+            Tracing::finalizar($span);
+        }
+    }
+
+    private function criarOrdem(array $data, ?string $abertoPorRole = null): OrdemServico
     {
         $clienteId = null;
 
@@ -126,6 +163,43 @@ class OrdemServicoService
     }
 
     public function submeterOrcamento(int $id, int $mecanicoId, array $dados): OrdemServico
+    {
+        $span = Tracing::iniciar('OrdemServicoService::submeterOrcamento', [
+            'os.id'          => $id,
+            'os.mecanico_id' => $mecanicoId,
+        ]);
+
+        try {
+            $ordem = $this->submeterOrcamentoInterno($id, $mecanicoId, $dados);
+
+            $span?->setAttribute('os.status', (string) $ordem->getStatus());
+            $span?->setAttribute('os.valor_total', $ordem->getValorTotal());
+
+            Tracing::sucesso($span);
+
+            Log::info('orcamento_submetido', [
+                'os.id'          => $id,
+                'os.mecanico_id' => $mecanicoId,
+                'os.status'      => (string) $ordem->getStatus(),
+                'os.valor_total' => $ordem->getValorTotal(),
+            ]);
+
+            return $ordem;
+        } catch (\Throwable $e) {
+            Tracing::erro($span, $e);
+
+            Log::error('falha_ao_submeter_orcamento', [
+                'os.id' => $id,
+                'erro'  => $e->getMessage(),
+            ]);
+
+            throw $e;
+        } finally {
+            Tracing::finalizar($span);
+        }
+    }
+
+    private function submeterOrcamentoInterno(int $id, int $mecanicoId, array $dados): OrdemServico
     {
 
         $diagnostico = trim((string) ($dados['diagnostico'] ?? ''));
