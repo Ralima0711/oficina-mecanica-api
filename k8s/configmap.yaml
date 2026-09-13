@@ -6,7 +6,7 @@ data:
   APP_ENV: "production"
   APP_URL: "http://oficina-mecanica-api-service"
   DB_CONNECTION: "pgsql"
-  DB_HOST: "postgres-service"
+  DB_HOST: "oficina-mecanica-db.cuxkwk68u4bq.us-east-1.rds.amazonaws.com"
   DB_PORT: "5432"
   DB_DATABASE: "oficina_mecanica"
   LOG_CHANNEL: "stdout_json"
@@ -17,3 +17,4 @@ data:
   DEFAULT_USER_EMAIL: "admin@oficina.local"
   DEFAULT_USER_ROLE: "admin"
   L5_SWAGGER_USE_ABSOLUTE_PATH: "false"
+  NEW_RELIC_APP_NAME: "oficina-mecanica-api"
