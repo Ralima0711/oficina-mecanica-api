@@ -144,8 +144,10 @@ class OrdemServicoService
     public function iniciarDiagnostico(int $id, int $mecanicoId): OrdemServico
     {
         $os = $this->buscarPorId($id);
+        [$statusAnterior, $desde] = $this->marcarInicioTransicao($os);
         $os->iniciarDiagnostico($mecanicoId);
         $salva = $this->repository->save($os);
+        $this->registrarTransicao($salva, $statusAnterior, $desde);
         $this->notificarMudancaStatus($salva);
 
         return $salva;
@@ -286,8 +288,10 @@ class OrdemServicoService
     public function iniciarExecucao(int $id): OrdemServico
     {
         $os = $this->buscarPorId($id);
+        [$statusAnterior, $desde] = $this->marcarInicioTransicao($os);
         $os->iniciarExecucao();
         $salva = $this->repository->save($os);
+        $this->registrarTransicao($salva, $statusAnterior, $desde);
         $this->notificarMudancaStatus($salva);
 
         return $salva;
@@ -303,8 +307,10 @@ class OrdemServicoService
             throw new \DomainException('Não e possível finalizar sem valor_total definido no orçamento.');
         }
 
+        [$statusAnterior, $desde] = $this->marcarInicioTransicao($os);
         $os->finalizarServico($valorAtual);
         $salva = $this->repository->save($os);
+        $this->registrarTransicao($salva, $statusAnterior, $desde);
         $this->notificarMudancaStatus($salva);
         $this->notificarSistema(
             fn() => $this->sistemaNotificacaoService->notificarOsFinalizadaParaAtendentes($salva),
@@ -323,8 +329,10 @@ class OrdemServicoService
     public function entregar(int $id): OrdemServico
     {
         $os = $this->buscarPorId($id);
+        [$statusAnterior, $desde] = $this->marcarInicioTransicao($os);
         $os->entregarVeiculo();
         $salva = $this->repository->save($os);
+        $this->registrarTransicao($salva, $statusAnterior, $desde);
         $this->notificarMudancaStatus($salva);
 
         return $salva;
@@ -339,6 +347,40 @@ class OrdemServicoService
     public function tempoMedioExecucao(): array
     {
         return $this->repository->tempoMedioExecucao();
+    }
+
+    /**
+     * Captura, ANTES da transição, o status que vai terminar e desde quando a OS
+     * está nele. `atualizada_em` carrega o carimbo da transição anterior; na
+     * primeira transição, vale a criação.
+     *
+     * @return array{0: string, 1: \DateTimeInterface}
+     */
+    private function marcarInicioTransicao(OrdemServico $os): array
+    {
+        return [
+            (string) $os->getStatus(),
+            $os->getAtualizadaEm() ?? $os->getCriadaEm(),
+        ];
+    }
+
+    /**
+     * Log estruturado da transição de status.
+     *
+     * Alimenta o widget "tempo médio de execução por status" do dashboard:
+     * SELECT average(os.duracao_segundos) FROM Log FACET os.status_anterior
+     *
+     * `os.duracao_segundos` é quanto tempo a OS permaneceu no status que acabou
+     * de terminar (por isso o FACET é pelo status anterior).
+     */
+    private function registrarTransicao(OrdemServico $os, string $statusAnterior, \DateTimeInterface $desde): void
+    {
+        Log::info('os_transicao_status', [
+            'os.id'               => $os->getId(),
+            'os.status_anterior'  => $statusAnterior,
+            'os.status_novo'      => (string) $os->getStatus(),
+            'os.duracao_segundos' => max(0, time() - $desde->getTimestamp()),
+        ]);
     }
 
     private function gerarLinksAprovacao(OrdemServico $ordem): array
