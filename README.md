@@ -1,11 +1,21 @@
 # Oficina Mecânica API
 
 Sistema de gestão de oficina mecânica — back-end RESTful desenvolvido como  
-**Tech Challenge · SOAT Pós-Tech FIAP · Fase 2**
+**Tech Challenge · SOAT Pós-Tech FIAP · Fase 3**
 
 ---
 
-## Objetivos da Fase 2
+## Objetivos da Fase 3
+
+A Fase 3 elevou a aplicação a **nível de operação corporativa**, com foco em segurança de acesso, observabilidade e organização em múltiplos repositórios:
+
+- **Autenticação de cliente por CPF** via Function Serverless (AWS Lambda), com JWT **RS256** — a aplicação apenas valida, nunca emite o token do cliente
+- **API Gateway (Kong)** roteando e protegendo as rotas sensíveis
+- **Observabilidade completa**: OpenTelemetry, logs JSON com correlação de requisições, dashboards e alertas no New Relic
+- **Quatro repositórios** com CI/CD independente, branch protegida e Pull Request obrigatório
+- **Documentação arquitetural**: diagramas de componentes e sequência, RFCs, ADRs e justificativa formal do banco com ER revisado
+
+### Objetivos da Fase 2 (consolidados)
 
 A Fase 2 evoluiu o MVP da Fase 1 para um sistema **pronto para produção**, adicionando:
 
@@ -281,6 +291,7 @@ Na Fase 3 o Terraform saiu deste repositório (split do monorepo):
 
 | Repositório | Conteúdo |
 |---|---|
+| [oficina-lambda-auth](https://github.com/Ralima0711/oficina-lambda-auth) | Function Serverless de autenticação por CPF (SAM) |
 | [oficina-infra-database](https://github.com/Ralima0711/oficina-infra-database) | RDS PostgreSQL 15 |
 | [oficina-infra-k8s](https://github.com/Ralima0711/oficina-infra-k8s) | EKS + Kong (API Gateway) |
 
@@ -320,6 +331,17 @@ A collection Postman cobre 28 endpoints organizados em 6 pastas (Auth, Clientes,
 ---
 
 ## Como autenticar
+
+> **Dois domínios de identidade independentes** (ADR-0005). O contrato completo está em [`docs/contrato-autenticacao.md`](docs/contrato-autenticacao.md).
+
+| Domínio | Quem | Como obtém o token | Algoritmo | O que acessa |
+|---|---|---|---|---|
+| **Cliente** | Cliente da oficina | `POST /auth` com o CPF, na [Lambda de autenticação](https://github.com/Ralima0711/oficina-lambda-auth) | RS256 (chave pública no Secret do K8s) | Apenas `public/ordens-servico/*`, **com escopo por CPF** — 403 na OS de outro cliente |
+| **Staff** | Admin, atendente, mecânico | `POST /auth/login` com e-mail e senha, nesta API | HS256 | Rotas de staff, conforme o papel (`role`) |
+
+Um token de cliente nunca acessa operação de staff, e vice-versa. O guard `cliente`
+(`app/Interface/Http/Middleware/ClienteAuthMiddleware.php`) valida assinatura, `exp`,
+`iss`, `aud` e o claim `typ = cliente`.
 
 ### Usuários disponíveis após o seed
 
