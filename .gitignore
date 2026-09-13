@@ -37,4 +37,6 @@ infra/*.tfstate.*
 *.tfplan
 *.tfstate
 *.tfstate.*
+tfplan
+tfstate
 .terraform/
