@@ -40,8 +40,8 @@ class CorrelacaoRequisicaoMiddleware
             'http.route'  => $request->path(),
         ];
 
-        $spanContext = $span->getContext();
-        if ($spanContext->isValid()) {
+        $spanContext = $span?->getContext();
+        if ($spanContext !== null && $spanContext->isValid()) {
             $contexto['trace.id'] = $spanContext->getTraceId();
             $contexto['span.id']  = $spanContext->getSpanId();
         }
@@ -53,23 +53,23 @@ class CorrelacaoRequisicaoMiddleware
         try {
             $response = $next($request);
         } catch (\Throwable $e) {
-            $span->recordException($e);
-            $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
-            $span->end();
+            $span?->recordException($e);
+            $span?->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
+            $span?->end();
 
             throw $e;
         }
 
         $duracaoMs = round((microtime(true) - $inicio) * 1000, 2);
 
-        $span->setAttribute('http.status_code', $response->getStatusCode());
-        $span->setAttribute('http.duration_ms', $duracaoMs);
+        $span?->setAttribute('http.status_code', $response->getStatusCode());
+        $span?->setAttribute('http.duration_ms', $duracaoMs);
 
         if ($response->getStatusCode() >= 500) {
-            $span->setStatus(StatusCode::STATUS_ERROR);
+            $span?->setStatus(StatusCode::STATUS_ERROR);
         }
 
-        $span->end();
+        $span?->end();
 
         $response->headers->set(self::HEADER, $requestId);
 
@@ -94,20 +94,33 @@ class CorrelacaoRequisicaoMiddleware
     }
 
     /**
-     * Abre o span de servidor do request. Se o SDK do OpenTelemetry não estiver
-     * instalado/ativo, devolve um span no-op (não quebra a aplicação).
+     * Envia a fila de spans depois que a resposta já foi entregue ao cliente.
+     * Sem isto o BatchSpanProcessor pode morrer com o processo sem exportar nada.
      */
-    private function iniciarSpan(Request $request): \OpenTelemetry\API\Trace\SpanInterface
+    public function terminate(Request $request, Response $response): void
+    {
+        OpenTelemetryProvider::flush();
+    }
+
+    /**
+     * Abre o span de servidor do request. Se o SDK do OpenTelemetry não estiver
+     * instalado/ativo, devolve null e a requisição segue sem tracing.
+     */
+    private function iniciarSpan(Request $request): ?\OpenTelemetry\API\Trace\SpanInterface
     {
         if (!class_exists(Span::class)) {
-            return Span::getInvalid();
+            return null;
         }
 
+        // Usa o padrão da rota (ordens-servico/{id}) em vez do caminho concreto,
+        // para não criar uma operação diferente por id no APM.
+        $rota = $request->route()?->uri() ?? $request->path();
+
         $builder = OpenTelemetryProvider::tracer()
-            ->spanBuilder(sprintf('%s %s', $request->method(), $request->path()))
+            ->spanBuilder(sprintf('%s /%s', $request->method(), ltrim($rota, '/')))
             ->setSpanKind(SpanKind::KIND_SERVER)
             ->setAttribute('http.method', $request->method())
-            ->setAttribute('http.route', $request->path())
+            ->setAttribute('http.route', $rota)
             ->setAttribute('http.target', $request->getRequestUri());
 
         $parent = Span::fromContext(Context::getCurrent())->getContext();
