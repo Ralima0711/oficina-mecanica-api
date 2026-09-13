@@ -33,6 +33,10 @@ infra/terraform.tfvars
 infra/*.tfplan
 infra/*.tfstate
 infra/*.tfstate.*
-
+# Terraform (nunca versionar plano/estado - contem credenciais)
+*.tfplan
+*.tfstate
+*.tfstate.*
 tfplan
 tfstate
+.terraform/
