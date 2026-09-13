@@ -8,6 +8,7 @@ use App\Interface\Http\Requests\OrdemServicoRequest;
 use App\Interface\Http\Requests\SubmeterOrcamentoRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * CAMADA DE INTERFACE
@@ -223,6 +224,14 @@ class OrdemServicoController extends Controller
         if ($e instanceof \DomainException || $e instanceof \InvalidArgumentException) {
             return response()->json(['message' => $e->getMessage()], 422);
         }
+
+        // Falha no processamento de OS — base do alerta de falhas (observabilidade).
+        Log::error('falha_processamento_ordem_servico', [
+            'erro'      => $e->getMessage(),
+            'exception' => get_class($e),
+            'arquivo'   => $e->getFile(),
+            'linha'     => $e->getLine(),
+        ]);
 
         return response()->json(['message' => 'Erro interno ao processar Ordem de Serviço.'], 500);
     }

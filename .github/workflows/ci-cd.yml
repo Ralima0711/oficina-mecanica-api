@@ -169,6 +169,7 @@ jobs:
             DB_DATABASE: "${{ secrets.DB_DATABASE }}"
             JWT_SECRET: "${{ secrets.JWT_SECRET }}"
             JWT_PUBLIC_KEY: "${{ secrets.JWT_PUBLIC_KEY }}"
+            OTEL_EXPORTER_OTLP_HEADERS: "${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}"
             MAIL_USERNAME: "${{ secrets.MAIL_USERNAME }}"
             MAIL_PASSWORD: "${{ secrets.MAIL_PASSWORD }}"
             DEFAULT_USER_PASSWORD: "${{ secrets.DEFAULT_USER_PASSWORD }}"

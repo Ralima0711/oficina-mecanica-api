@@ -10,6 +10,7 @@
 - ADR-0003 — API Gateway = Kong (no EKS)
 - ADR-0004 — Assinatura do JWT do cliente em RS256
 - ADR-0005 — Separação de domínios de identidade (cliente × staff)
+- ADR-0006 — Estratégia de deploy em ambiente efêmero (AWS Academy)
 
 ---
 
@@ -78,6 +79,23 @@ O JWT do **cliente** é assinado em **RS256**: a Lambda assina com a **chave pri
 - (+) Rotação de chave sem redeploy sincronizado dos dois serviços.
 - (−) Gestão de par de chaves RSA; setup um pouco maior que HS256 (que fica como plano B se o prazo apertar).
 
+### Exceção operacional (AWS Academy) — 11/09/2026
+Com a Lambda dentro da VPC, sem NAT nem VPC endpoint, a chamada ao SSM não
+completa: ela pendura até o timeout e o `POST /auth` devolve 500. O parâmetro
+`/oficina/auth/jwt-private-key` existe, mas é inalcançável a partir da função
+no laboratório.
+
+Enquanto o endpoint `com.amazonaws.us-east-1.ssm` não estiver aplicado (o
+Terraform dele já está escrito, em PR no repositório `oficina-infra-database`),
+a chave privada é injetada na função por parâmetro `NoEcho` (`JwtPrivateKeyB64`,
+em base64), lido pelo handler quando presente.
+
+**A decisão do ADR permanece inalterada:** RS256, com emissor e validador
+separados, e a API nunca vê a chave privada. O que muda é apenas *de onde a
+Lambda lê a chave* — SSM no destino, parâmetro no laboratório. Aplicado o
+endpoint, basta remover o secret: o código volta sozinho a ler do SSM, que é o
+caminho padrão.
+
 ---
 
 ## ADR-0005 — Separação de domínios de identidade (cliente × staff)
@@ -99,4 +117,33 @@ Tratar **cliente** e **staff** como **dois domínios de identidade distintos e i
 
 ---
 
-*Grupo 183 · FIAP SOAT Pós-Tech · Fase 3 · ADRs · 18/08/2026*
+## ADR-0006 — Estratégia de deploy em ambiente efêmero (AWS Academy)
+
+**Status:** Aceito · **Data:** 11/09/2026
+
+### Contexto
+Todo o projeto roda no AWS Academy Learner Lab, que tem duas características determinantes para a estratégia de deploy:
+
+- as credenciais (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`) são **temporárias** e mudam a cada sessão;
+- o ambiente é **derrubado automaticamente** após um período — o cluster EKS não permanece no ar entre sessões de trabalho.
+
+Um pipeline que faça `deploy`/`apply` a cada merge pressupõe credenciais estáveis e ambiente permanente. Nenhuma das duas premissas existe aqui: o pipeline falharia na maior parte das execuções, por credencial expirada ou ambiente inexistente, e o vermelho constante esconderia falhas reais.
+
+### Decisão
+Separar **validação contínua** de **aplicação sob demanda**:
+
+- **Em todo push e pull request:** build, testes unitários, `sam build` e `terraform fmt`/`validate`/`plan`. É o que garante que código e infraestrutura estão sempre implantáveis.
+- **Na janela de laboratório:** as credenciais da sessão são publicadas nos secrets dos quatro repositórios (uma execução do script `atualiza-chaves-aws.sh` cobre os quatro) e o deploy é disparado pelo mesmo pipeline — o workflow é idêntico, muda apenas o gatilho.
+
+Os pipelines detectam a ausência de credenciais e **pulam a etapa de deploy com mensagem explícita**, em vez de falhar.
+
+### Consequências
+- (+) O pipeline permanece verde e confiável: vermelho passa a significar defeito real, não credencial expirada.
+- (+) O mesmo workflow serve os dois modos; migrar para um ambiente permanente exige apenas credenciais de longa duração, sem mudança de código.
+- (+) Nenhuma credencial de longa duração precisa existir, o que é desejável por si só.
+- (−) O deploy não é disparado automaticamente pelo merge: exige a janela de laboratório aberta.
+- (−) Demonstrações e testes ponta-a-ponta precisam ser concentrados numa única janela, enquanto o ambiente está de pé.
+
+---
+
+*Grupo 183 · FIAP SOAT Pós-Tech · Fase 3 · ADRs · atualizado em 11/09/2026*
