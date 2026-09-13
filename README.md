@@ -157,7 +157,8 @@ Acesse `http://localhost:8080/api/documentation` para o Swagger UI.
 
 ```bash
 cp k8s/secret.example.yaml k8s/secret.yaml
-# edite k8s/secret.yaml com APP_KEY, DB_PASSWORD, JWT_SECRET e MAIL_PASSWORD
+# edite k8s/secret.yaml com APP_KEY, DB_PASSWORD, JWT_SECRET, MAIL_PASSWORD
+# e NEW_RELIC_LICENSE_KEY (observabilidade — ver seção "Observabilidade")
 ```
 
 > Alternativamente, crie o secret via CLI para não manter o arquivo localmente:
@@ -166,7 +167,8 @@ cp k8s/secret.example.yaml k8s/secret.yaml
 >   --from-literal=APP_KEY=<valor> \
 >   --from-literal=DB_PASSWORD=<valor> \
 >   --from-literal=JWT_SECRET=<valor> \
->   --from-literal=MAIL_PASSWORD=<valor>
+>   --from-literal=MAIL_PASSWORD=<valor> \
+>   --from-literal=NEW_RELIC_LICENSE_KEY=<valor>
 > ```
 
 2. Aplique todos os manifestos:
@@ -210,6 +212,68 @@ kubectl top pods    # ver consumo de CPU/memória
 | Memória | 80% | 2 pods | 10 pods |
 
 ---
+
+## Observabilidade
+
+A aplicação exporta **traces** (OpenTelemetry) e **logs estruturados em JSON** com correlação entre requisições.
+
+### Logs estruturados (JSON)
+
+O canal `stdout_json` (`config/logging.php`) escreve JSON no **stdout** — formato consumido pelo New Relic e por coletores em Kubernetes. Em produção o `LOG_CHANNEL` é definido no `k8s/configmap.yaml`:
+
+```yaml
+LOG_CHANNEL: "stdout_json"
+LOG_LEVEL: "info"
+```
+
+Cada log carrega o contexto de correlação injetado pelo `CorrelacaoRequisicaoMiddleware`:
+
+```json
+{
+  "message": "requisicao_processada",
+  "context": {
+    "request.id": "dd1d9f94-bb4e-4e2e-acb9-9ad5225c107d",
+    "trace.id": "abc123...",
+    "span.id": "def456...",
+    "http.method": "GET",
+    "http.route": "api/health",
+    "http.status_code": 200,
+    "http.duration_ms": 12.5
+  },
+  "level_name": "INFO"
+}
+```
+
+Os campos `trace.id` e `span.id` são o que permite o **logs in context** do New Relic: do log, clica-se direto para o trace.
+
+### Correlação de requisições
+
+O middleware `CorrelacaoRequisicaoMiddleware` (registrado em `bootstrap/app.php` via `$middleware->api(prepend: [...])`):
+
+- reaproveita o `X-Request-Id` recebido ou gera um novo (UUID);
+- abre um **span de servidor** por request;
+- injeta `request.id`, `trace.id` e `span.id` no contexto de todos os logs da requisição;
+- devolve o `X-Request-Id` no header da resposta.
+
+### Traces (OpenTelemetry → New Relic)
+
+A instrumentação é feita via **SDK manual** (`open-telemetry/sdk` + `open-telemetry/exporter-otlp`), sem extensão PHP — a imagem `php:8.2-fpm` não tem `pecl`.
+
+Além do span de request, há spans de negócio em `OrdemServicoService::criar` e `OrdemServicoService::submeterOrcamento` (helper `App\Infrastructure\Observability\Tracing`).
+
+Configuração por variáveis de ambiente (no K8s vêm do **Secret**, nunca do ConfigMap):
+
+| Variável | Valor |
+|---|---|
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | `https://otlp.nr-data.net:4318` |
+| `OTEL_EXPORTER_OTLP_HEADERS` | `api-key=<NEW_RELIC_LICENSE_KEY>` |
+| `OTEL_SERVICE_NAME` | `oficina-mecanica-api` |
+
+> Sem `OTEL_EXPORTER_OTLP_ENDPOINT` configurado, o provider vira **no-op**: a aplicação funciona normalmente, apenas sem exportar traces.
+
+### Alertas
+
+Falhas no processamento de OS emitem `Log::error('falha_processamento_ordem_servico', ...)` no `handleException` do `OrdemServicoController` — é o evento em que o alerta de falhas é montado.
 
 ## Como provisionar a infraestrutura com Terraform
 
