@@ -11,6 +11,7 @@ use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
+use OpenTelemetry\Context\ScopeInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,6 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
 class CorrelacaoRequisicaoMiddleware
 {
     public const HEADER = 'X-Request-Id';
+
+    /** Escopo do span de request enquanto ele estiver corrente. */
+    private ?ScopeInterface $escopo = null;
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -55,6 +59,7 @@ class CorrelacaoRequisicaoMiddleware
         } catch (\Throwable $e) {
             $span?->recordException($e);
             $span?->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
+            $this->desativarSpan();
             $span?->end();
 
             throw $e;
@@ -69,6 +74,7 @@ class CorrelacaoRequisicaoMiddleware
             $span?->setStatus(StatusCode::STATUS_ERROR);
         }
 
+        $this->desativarSpan();
         $span?->end();
 
         $response->headers->set(self::HEADER, $requestId);
@@ -125,9 +131,26 @@ class CorrelacaoRequisicaoMiddleware
 
         $parent = Span::fromContext(Context::getCurrent())->getContext();
         if ($parent->isValid()) {
-            $builder->setParent($parent);
+            $builder->setParent(Context::getCurrent());
         }
 
-        return $builder->startSpan();
+        $span = $builder->startSpan();
+
+        // Torna o span de request corrente: sem isto os spans de negócio
+        // (Tracing::iniciar) nascem como raiz, em outro trace.
+        $this->escopo = $span->activate();
+
+        return $span;
+    }
+
+    /**
+     * Desfaz a ativação do span de request — o SDK alerta se o escopo ficar aberto.
+     */
+    private function desativarSpan(): void
+    {
+        if ($this->escopo instanceof ScopeInterface) {
+            $this->escopo->detach();
+            $this->escopo = null;
+        }
     }
 }
