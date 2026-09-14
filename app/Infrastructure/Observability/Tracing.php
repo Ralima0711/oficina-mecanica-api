@@ -46,7 +46,7 @@ class Tracing
 
         $parent = Span::fromContext(Context::getCurrent())->getContext();
         if ($parent->isValid()) {
-            $builder->setParent($parent);
+            $builder->setParent(Context::getCurrent());
         }
 
         $span = $builder->startSpan();
