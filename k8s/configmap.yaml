@@ -18,3 +18,6 @@ data:
   DEFAULT_USER_ROLE: "admin"
   L5_SWAGGER_USE_ABSOLUTE_PATH: "false"
   NEW_RELIC_APP_NAME: "oficina-mecanica-api"
+  # Popula staff, clientes e ordens de servico no boot. Necessario no lab,
+  # onde o RDS e recriado e o banco sobe vazio. Seeders sao idempotentes.
+  SEED_DEMO: "true"
