@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: dtavares99/oficina-mecanica-api:2.2
+          image: dtavares99/oficina-mecanica-api:2.3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

@@ -20,9 +20,15 @@ RUN composer dump-autoload --optimize --no-dev
 FROM php:8.2-fpm AS production
 
 RUN apt-get update && apt-get install -y \
-    libpq-dev libzip-dev nginx \
+    libpq-dev libzip-dev nginx curl \
     && docker-php-ext-install pdo pdo_pgsql zip opcache \
     && rm -rf /var/lib/apt/lists/*
+
+# New Relic PHP APM agent
+RUN curl -sL https://download.newrelic.com/php_agent/release/newrelic-php5-12.10.0.39-linux.tar.gz -o /tmp/newrelic.tar.gz \
+    && mkdir -p /tmp/newrelic && tar -xzf /tmp/newrelic.tar.gz -C /tmp/newrelic --strip-components=1 \
+    && NR_INSTALL_USE_CP_NOT_LN=1 NR_INSTALL_SILENT=1 /tmp/newrelic/newrelic-install install \
+    && rm -rf /tmp/newrelic /tmp/newrelic.tar.gz
 
 WORKDIR /var/www/html
 
