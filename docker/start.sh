@@ -14,6 +14,14 @@ fi
 # Run migrations
 php artisan migrate --force
 
+# Massa de demonstracao (staff, clientes e ordens de servico).
+# O ambiente do lab e efemero: quando o RDS e recriado o banco sobe vazio e a
+# Lambda nao encontra CPF nenhum. Os seeders sao idempotentes, entao rodar a
+# cada boot nao duplica registros. Controlado por SEED_DEMO no ConfigMap.
+if [ "$SEED_DEMO" = "true" ]; then
+  php artisan db:seed --force || echo "Seed falhou; a aplicacao sobe mesmo assim."
+fi
+
 php-fpm -D
 
 # Start Nginx in foreground
