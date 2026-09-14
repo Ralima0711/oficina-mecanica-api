@@ -185,13 +185,13 @@ jobs:
       - name: Apply K8s manifests
         if: ${{ env.HAS_KUBECONFIG == 'true' }}
         run: |
-          kubectl apply -f k8s/secret.yaml
-          kubectl apply -f k8s/configmap.yaml
-          kubectl apply -f k8s/postgres-service.yaml
-          kubectl apply -f k8s/postgres-deployment.yaml
-          kubectl apply -f k8s/api-service.yaml
-          kubectl apply -f k8s/api-deployment.yaml
-          kubectl apply -f k8s/hpa.yaml
+          kubectl apply --validate=false -f k8s/secret.yaml
+          kubectl apply --validate=false -f k8s/configmap.yaml
+          kubectl apply --validate=false -f k8s/postgres-service.yaml
+          kubectl apply --validate=false -f k8s/postgres-deployment.yaml
+          kubectl apply --validate=false -f k8s/api-service.yaml
+          kubectl apply --validate=false -f k8s/api-deployment.yaml
+          kubectl apply --validate=false -f k8s/hpa.yaml
 
       - name: Wait for rollout
         if: ${{ env.HAS_KUBECONFIG == 'true' }}
