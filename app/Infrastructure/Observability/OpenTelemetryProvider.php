@@ -7,6 +7,7 @@ use OpenTelemetry\API\Trace\TracerProviderInterface;
 use OpenTelemetry\Contrib\Otlp\OtlpHttpTransportFactory;
 use OpenTelemetry\Contrib\Otlp\SpanExporter;
 use OpenTelemetry\SDK\Common\Attribute\Attributes;
+use OpenTelemetry\SDK\Common\Time\ClockFactory;
 use OpenTelemetry\SDK\Resource\ResourceInfo;
 use OpenTelemetry\SDK\Resource\ResourceInfoFactory;
 use OpenTelemetry\SDK\Trace\Sampler\AlwaysOnSampler;
@@ -71,7 +72,7 @@ class OpenTelemetryProvider
         );
 
         self::$provider = new TracerProvider(
-            [new BatchSpanProcessor(new SpanExporter($transport))],
+            [new BatchSpanProcessor(new SpanExporter($transport), ClockFactory::getDefault())],
             new AlwaysOnSampler(),
             $resource
         );
